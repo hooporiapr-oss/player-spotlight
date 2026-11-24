@@ -47,6 +47,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--orange);box-shadow:0 
 .prow .x{min-height:44px;width:44px;padding:0;border-radius:10px;border:1px solid var(--line);background:none;color:var(--mut);font-size:1.2rem}
 .phead{display:grid;grid-template-columns:28px 1fr 78px 44px;gap:8px;margin-bottom:6px}
 .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.lock{opacity:.75}
 .err{color:var(--bad);font-weight:700;font-size:.88rem;margin-top:10px;min-height:1.2em}
 .sent{border-color:rgba(52,211,153,.45)}
 .linkbox{word-break:break-all;background:var(--navy2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:.8rem;color:var(--mut);margin:10px 0}
@@ -186,6 +187,11 @@ $('#copy').onclick=async()=>{try{await navigator.clipboard.writeText(LINK);toast
 
 for(let i=0;i<3;i++)addRow();
 applyLang();
+/* prefilled from the studio's Request roster button: team and category are fixed */
+(function(){const q=new URLSearchParams(location.search);const tm=(q.get('team')||'').trim().slice(0,40),ct=(q.get('cat')||'').trim().slice(0,30);
+  if(tm){const i=$('#team');i.value=tm;i.readOnly=true;i.classList.add('lock')}
+  if(ct){const sel=$('#cat');if(CATS.includes(ct))sel.value=ct;else{sel.value='__other';$('#catOther').value=ct;$('#catOther').readOnly=true;$('#catOther').classList.add('lock');$('#catOtherWrap').classList.remove('hidden')}sel.disabled=true;sel.classList.add('lock')}
+  if(tm&&ct){const f=$('.prow .pn');if(f)setTimeout(()=>f.focus(),150)}})();
 })();
 </script>
 </body>

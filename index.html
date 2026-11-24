@@ -354,6 +354,7 @@ canvas.pv:active{cursor:grabbing}
     <label class="f"><span class="lbl" data-i="pdRoster">Roster (optional)</span>
       <textarea id="pdRoster" class="roster" maxlength="6000" data-ip="pdRosterPh" placeholder="Juan Pérez 12&#10;María Rivera 7&#10;Luis Torres" autocomplete="off" spellcheck="false"></textarea></label>
     <p class="muted" style="margin:-4px 0 14px"><span data-i="pdRosterHint">One player per line, jersey number after the name. Saved for this team and category on this device.</span> <b id="pdRosterN"></b></p>
+    <button type="button" class="btn sm w" id="pdReq" style="margin:-4px 0 14px"><span data-i="pdReq">Request roster from coach</span></button>
     <label class="toggle" style="margin-bottom:14px"><input type="checkbox" id="pdAuto"><span data-i="pdAutoBg">Remove background automatically</span></label>
     <button type="button" class="btn pri w" id="pdStart" style="min-height:58px;font-size:1.05rem"><span data-i="pdStart">Start Photo Day</span></button>
   </div>
@@ -670,7 +671,7 @@ tMem:'This browser is not letting the app store data — nothing will be kept af
 mPhoto:'photo',mName:'name',mTeam:'team',mCat:'category',
 phName:'Player Name',phTeam:'Team',phCat:'Category',
 pdTitle:'Photo Day',pdIntro:'Photograph a whole team fast: choose the team once, then photo, name, number, save — next player.',pdStart:'Start Photo Day',pdChange:'Change team',pdSaveNext:'Save & Next Player',pdCount:'Saved this session',pdNext:'Saved — ready for the next player',pdNeedSetup:'Choose a team and a category first',
-pdAutoBg:'Remove background automatically',rlT:'Add roster?',rlText:'Add {n} players for {what}?',rlReplace:'This replaces the roster already saved for this team and category.',rlAdd:'Add roster',rlDone:'Roster added — {n} players',rlBad:'This roster link is damaged. Ask for it to be sent again.',pdRoster:'Roster (optional)',pdRosterPh:'Juan Pérez 12\nMaría Rivera 7\nLuis Torres',pdRosterHint:'One player per line, jersey number after the name. Saved for this team and category on this device.',pdRosterN:'{n} players',pdRosterTap:'Tap a player, then take the photo',pdRDone:'{d} of {n} done',pdAutoShort:'Automatic',
+pdAutoBg:'Remove background automatically',rlT:'Add roster?',rlText:'Add {n} players for {what}?',rlText1:'Add 1 player for {what}?',rlReplace:'This replaces the roster already saved for this team and category.',rlAdd:'Add roster',rlDone:'Roster added — {n} players',rlBad:'This roster link is damaged. Ask for it to be sent again.',pdRoster:'Roster (optional)',pdRosterPh:'Juan Pérez 12\nMaría Rivera 7\nLuis Torres',pdRosterHint:'One player per line, jersey number after the name. Saved for this team and category on this device.',pdRosterN:'{n} players',pdRosterTap:'Tap a player, then take the photo',pdReq:'Request roster from coach',pdReqMsg:'Please fill in the roster for {what}',tLinkCopied:'Link copied — paste it in a message to the coach',pdRDone:'{d} of {n} done',pdAutoShort:'Automatic',
 plSearch:'Search by name',allTeams:'All teams',allCats:'All categories',plEmpty:'No players yet. Create one or start a Photo Day.',plNone:'No players match',bulkDel:'Delete these {n} players',bulkDel1:'Delete this player',bulkDelT:'Delete these players?',bulkDelText:'Delete {n} players ({what})? This cannot be undone.',tBulkDeleted:'{n} players deleted',bulkDelText1:'Delete 1 player ({what})? This cannot be undone.',
 edit:'Edit',regenerate:'Regenerate',delete:'Delete',cancel:'Cancel',close:'Close',ok:'OK',apply:'Apply',
 confirmDeleteT:'Delete player?',confirmDelete:'Delete {name}? This cannot be undone.',
@@ -714,7 +715,7 @@ tMem:'Este navegador no deja guardar datos — nada se guardará al cerrar',tPho
 mPhoto:'foto',mName:'nombre',mTeam:'equipo',mCat:'categoría',
 phName:'Nombre del Jugador',phTeam:'Equipo',phCat:'Categoría',
 pdTitle:'Día de Fotos',pdIntro:'Fotografía un equipo completo rápido: escoge el equipo una vez, luego foto, nombre, número, guardar — siguiente jugador.',pdStart:'Empezar Día de Fotos',pdChange:'Cambiar equipo',pdSaveNext:'Guardar y Siguiente',pdCount:'Guardados en esta sesión',pdNext:'Guardado — listo para el siguiente jugador',pdNeedSetup:'Escoge primero un equipo y una categoría',
-pdAutoBg:'Quitar el fondo automáticamente',rlT:'¿Añadir lista?',rlText:'¿Añadir {n} jugadores para {what}?',rlReplace:'Esto reemplaza la lista ya guardada para este equipo y categoría.',rlAdd:'Añadir lista',rlDone:'Lista añadida — {n} jugadores',rlBad:'Este enlace de lista está dañado. Pide que lo envíen de nuevo.',pdRoster:'Lista de jugadores (opcional)',pdRosterPh:'Juan Pérez 12\nMaría Rivera 7\nLuis Torres',pdRosterHint:'Un jugador por línea, número después del nombre. Se guarda para este equipo y categoría en este dispositivo.',pdRosterN:'{n} jugadores',pdRosterTap:'Toca un jugador y luego toma la foto',pdRDone:'{d} de {n} listos',pdAutoShort:'Automático',
+pdAutoBg:'Quitar el fondo automáticamente',rlT:'¿Añadir lista?',rlText:'¿Añadir {n} jugadores para {what}?',rlText1:'¿Añadir 1 jugador para {what}?',rlReplace:'Esto reemplaza la lista ya guardada para este equipo y categoría.',rlAdd:'Añadir lista',rlDone:'Lista añadida — {n} jugadores',rlBad:'Este enlace de lista está dañado. Pide que lo envíen de nuevo.',pdRoster:'Lista de jugadores (opcional)',pdRosterPh:'Juan Pérez 12\nMaría Rivera 7\nLuis Torres',pdRosterHint:'Un jugador por línea, número después del nombre. Se guarda para este equipo y categoría en este dispositivo.',pdRosterN:'{n} jugadores',pdRosterTap:'Toca un jugador y luego toma la foto',pdReq:'Pedir la lista al coach',pdReqMsg:'Por favor llena la lista de {what}',tLinkCopied:'Enlace copiado — pégalo en un mensaje al coach',pdRDone:'{d} de {n} listos',pdAutoShort:'Automático',
 plSearch:'Buscar por nombre',allTeams:'Todos los equipos',allCats:'Todas las categorías',plEmpty:'Aún no hay jugadores. Crea uno o empieza un Día de Fotos.',plNone:'Ningún jugador coincide',bulkDel:'Borrar estos {n} jugadores',bulkDel1:'Borrar este jugador',bulkDelT:'¿Borrar estos jugadores?',bulkDelText:'¿Borrar {n} jugadores ({what})? No se puede deshacer.',tBulkDeleted:'{n} jugadores borrados',bulkDelText1:'¿Borrar 1 jugador ({what})? No se puede deshacer.',
 edit:'Editar',regenerate:'Regenerar',delete:'Borrar',cancel:'Cancelar',close:'Cerrar',ok:'OK',apply:'Aplicar',
 confirmDeleteT:'¿Borrar jugador?',confirmDelete:'¿Borrar a {name}? No se puede deshacer.',
@@ -1332,7 +1333,12 @@ const rosterText=list=>list.map(r=>r.name+(r.number?' '+r.number:'')).join('\n')
 function curRoster(){return(PD.team&&PD.category&&ROSTERS[rKey(PD.team,PD.category)])||[]}
 function rosterDone(r){const k=norm(r.name);return PLAYERS.some(p=>p.team===PD.team&&p.category===PD.category&&norm(p.name)===k)}
 function saveRosters(){DB.set('rosters',ROSTERS).catch(()=>{})}
-function pdRosterLoad(){const ta=$('#pdRoster');const ok=!!(PD.team&&PD.category);ta.disabled=!ok;ta.value=rosterText(curRoster());pdRosterN()}
+function pdRosterLoad(){const ta=$('#pdRoster');const ok=!!(PD.team&&PD.category);ta.disabled=!ok;$('#pdReq').disabled=!ok;ta.value=rosterText(curRoster());pdRosterN()}
+$('#pdReq').onclick=async()=>{if(!PD.team||!PD.category){toast(t('pdNeedSetup'),true);return}
+  const u=new URL('roster.html',location.href);u.hash='';u.search='';u.searchParams.set('team',PD.team);u.searchParams.set('cat',PD.category);
+  const link=u.href,msg=t('pdReqMsg',{what:PD.team+' · '+PD.category});
+  if(navigator.share){try{await navigator.share({title:msg,text:msg,url:link});return}catch(e){if(e&&e.name==='AbortError')return}}
+  try{await navigator.clipboard.writeText(msg+'\n'+link);toast(t('tLinkCopied'))}catch(e){await ask({title:t('pdReq'),input:true,value:link,buttons:[{label:t('close'),value:null}]})}};
 function pdRosterN(){const n=curRoster().length;$('#pdRosterN').textContent=n?t('pdRosterN',{n}):''}
 let rT=0;$('#pdRoster').oninput=e=>{if(!PD.team||!PD.category)return;const v=e.target.value;clearTimeout(rT);rT=setTimeout(()=>{const list=parseRoster(v);const k=rKey(PD.team,PD.category);if(list.length)ROSTERS[k]=list;else delete ROSTERS[k];saveRosters();pdRosterN()},350)};
 $('#pdRoster').onblur=e=>{if(!PD.team||!PD.category)return;clearTimeout(rT);const list=parseRoster(e.target.value);const k=rKey(PD.team,PD.category);if(list.length)ROSTERS[k]=list;else delete ROSTERS[k];saveRosters();pdRosterN()};
@@ -1352,7 +1358,7 @@ async function importRosterLink(){if(!/[#&]roster=/.test(location.hash))return;c
   try{history.replaceState(null,'',location.pathname+location.search)}catch(e){location.hash=''}
   if(!r){toast(t('rlBad'),true);return}
   const k=rKey(r.team,r.cat),had=!!(ROSTERS[k]&&ROSTERS[k].length);
-  const ok=await ask({title:t('rlT'),text:t('rlText',{n:r.list.length,what:r.team+' · '+r.cat})+(had?' '+t('rlReplace'):''),buttons:[{label:t('cancel'),value:null},{label:t('rlAdd'),value:true,cls:'pri'}]});if(!ok)return;
+  const ok=await ask({title:t('rlT'),text:t(r.list.length===1?'rlText1':'rlText',{n:r.list.length,what:r.team+' · '+r.cat})+(had?' '+t('rlReplace'):''),buttons:[{label:t('cancel'),value:null},{label:t('rlAdd'),value:true,cls:'pri'}]});if(!ok)return;
   let ch=false;if(!S.teams.some(x=>x.name===r.team)){S.teams.push({name:r.team});S.teams.sort((a,b)=>a.name.localeCompare(b.name));ch=true}
   if(!allCats().includes(r.cat)){S.cats.push(r.cat);ch=true}if(ch)await saveS();
   ROSTERS[k]=r.list;saveRosters();PD.team=r.team;PD.category=r.cat;PD.started=false;savePD();
