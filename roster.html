@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101C2A">
+<title>Team Roster · Player Spotlight Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#101C2A;--navy2:#0b1522;--navy3:#1a2c42;--orange:#FF7A18;--white:#fff;--char:#151515;--mut:#9fb0c4;--line:rgba(255,255,255,.10);--line2:rgba(255,255,255,.18);--bad:#f87171;--ok:#34d399}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--char);color:var(--white);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100vh;padding-bottom:calc(40px + env(safe-area-inset-bottom))}
+button,input,select,textarea{font-family:inherit}
+button{cursor:pointer}
+header{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top));background:rgba(16,28,42,.96);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand b{font-family:Oswald,'Arial Narrow',Arial,sans-serif;font-weight:700;font-size:1.05rem;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand b em{font-style:normal;color:var(--orange)}
+.lang{display:flex;gap:4px;background:var(--navy2);border-radius:999px;padding:3px;flex:none}
+.lang button{border:0;background:none;color:var(--mut);font-weight:800;font-size:.78rem;padding:7px 11px;border-radius:999px;min-width:40px}
+.lang button.on{background:var(--orange);color:#111}
+main{max-width:620px;margin:0 auto;padding:16px}
+.card{background:var(--navy);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px}
+h1{font-family:Oswald,'Arial Narrow',Arial,sans-serif;text-transform:uppercase;letter-spacing:.05em;font-size:1.35rem;margin-bottom:6px}
+.note{color:var(--mut);font-size:.88rem;line-height:1.5}
+.lbl{display:block;font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-bottom:6px}
+.f{display:block;margin-bottom:14px}
+input[type=text],select,textarea{width:100%;min-height:50px;border-radius:12px;border:1px solid var(--line2);background:var(--navy2);color:var(--white);padding:0 14px;font-size:1rem;font-weight:500;outline:none;-webkit-appearance:none;appearance:none}
+select{background-image:linear-gradient(45deg,transparent 50%,#9fb0c4 50%),linear-gradient(135deg,#9fb0c4 50%,transparent 50%);background-position:calc(100% - 20px) 22px,calc(100% - 14px) 22px;background-size:6px 6px;background-repeat:no-repeat;padding-right:36px}
+textarea{padding:10px 14px;min-height:130px;line-height:1.5;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,122,24,.2)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:420px){.row2{grid-template-columns:1fr}}
+.hidden{display:none!important}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 16px;border-radius:12px;border:1px solid var(--line2);background:var(--navy3);color:var(--white);font-weight:700;font-size:.95rem}
+.btn{text-decoration:none}
+.btn.pri{background:var(--orange);color:#111;border-color:var(--orange)}
+.btn.ghost{background:transparent}
+.btn.w{width:100%}
+.btn.sm{min-height:40px;font-size:.84rem;padding:0 12px;border-radius:10px}
+.prow{display:grid;grid-template-columns:28px 1fr 78px 44px;gap:8px;align-items:center;margin-bottom:8px}
+.prow .n{color:var(--mut);font-weight:800;font-size:.84rem;text-align:right}
+.prow input{min-height:48px}
+.prow .x{min-height:44px;width:44px;padding:0;border-radius:10px;border:1px solid var(--line);background:none;color:var(--mut);font-size:1.2rem}
+.phead{display:grid;grid-template-columns:28px 1fr 78px 44px;gap:8px;margin-bottom:6px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.err{color:var(--bad);font-weight:700;font-size:.88rem;margin-top:10px;min-height:1.2em}
+.sent{border-color:rgba(52,211,153,.45)}
+.linkbox{word-break:break-all;background:var(--navy2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:.8rem;color:var(--mut);margin:10px 0}
+.acts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+@media (max-width:420px){.acts{grid-template-columns:1fr}}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:var(--navy3);border:1px solid var(--line2);color:var(--white);padding:12px 16px;border-radius:12px;font-weight:700;font-size:.9rem;transition:.2s;z-index:50;max-width:92vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14.5" fill="#FF7A18"/><path d="M16 1.5v29M1.5 16h29M5.5 6.2c4.6 4.2 4.6 15.4 0 19.6M26.5 6.2c-4.6 4.2-4.6 15.4 0 19.6" stroke="#151515" stroke-width="1.8" fill="none"/></svg>
+    <b>Player <em>Spotlight</em> Studio</b>
+  </div>
+  <div class="lang" role="group" aria-label="Language">
+    <button type="button" data-lang="es">ES</button>
+    <button type="button" data-lang="en">EN</button>
+  </div>
+</header>
+
+<main>
+  <div class="card">
+    <h1 data-i="title">Team Roster</h1>
+    <p class="note" data-i="intro">Fill in your team for Photo Day, then tap Send. Your roster travels inside the link you send — nothing is stored online.</p>
+  </div>
+
+  <div class="card">
+    <label class="f"><span class="lbl" data-i="team">Team *</span><input type="text" id="team" maxlength="40" autocomplete="off" data-ip="teamPh" placeholder="Team name"></label>
+    <div class="row2">
+      <label class="f"><span class="lbl" data-i="cat">Category *</span><select id="cat"></select></label>
+      <label class="f hidden" id="catOtherWrap"><span class="lbl" data-i="catOther">Category name</span><input type="text" id="catOther" maxlength="30" autocomplete="off"></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="phead"><span></span><span class="lbl" style="margin:0" data-i="pName">Player name</span><span class="lbl" style="margin:0" data-i="pNum">Jersey #</span><span></span></div>
+    <div id="rows"></div>
+    <div class="tools">
+      <button type="button" class="btn sm" id="add"><span data-i="add">+ Add player</span></button>
+      <button type="button" class="btn sm ghost" id="pasteBtn"><span data-i="paste">Paste a list</span></button>
+    </div>
+    <div id="pasteBox" class="hidden" style="margin-top:12px">
+      <textarea id="pasteTa" data-ip="pastePh" placeholder="Juan Pérez 12&#10;María Rivera 7"></textarea>
+      <p class="note" style="margin:6px 0 8px" data-i="pasteHint">One player per line, jersey number after the name.</p>
+      <button type="button" class="btn sm pri" id="pasteGo"><span data-i="pasteGo">Add these players</span></button>
+    </div>
+  </div>
+
+  <button type="button" class="btn pri w" id="send" style="min-height:60px;font-size:1.08rem"><span data-i="send">Send roster</span></button>
+  <div class="err" id="err"></div>
+
+  <div class="card sent hidden" id="done" style="margin-top:8px">
+    <h1 style="font-size:1.1rem" data-i="doneT">Roster link ready</h1>
+    <p class="note" data-i="doneNote">Send this link to the person running Photo Day. They open it on the device they use for photos.</p>
+    <div class="linkbox" id="link"></div>
+    <div class="acts">
+      <button type="button" class="btn sm" id="copy"><span data-i="copy">Copy link</span></button>
+      <a class="btn sm" id="sms" href="#"><span data-i="sms">Text message</span></a>
+      <a class="btn sm" id="mail" href="#"><span data-i="mail">Email</span></a>
+    </div>
+  </div>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const CATS=['Pre-Mini','Mini','Infantil','Juvenil','Junior'];
+const I18N={
+en:{title:'Team Roster',intro:'Fill in your team for Photo Day, then tap Send. Your roster travels inside the link you send — nothing is stored online.',
+team:'Team *',teamPh:'Team name',cat:'Category *',chooseCat:'Choose category',other:'Other…',catOther:'Category name',
+pName:'Player name',pNum:'Jersey #',add:'+ Add player',paste:'Paste a list',pastePh:'Juan Pérez 12\nMaría Rivera 7',pasteHint:'One player per line, jersey number after the name.',pasteGo:'Add these players',
+send:'Send roster',doneT:'Roster link ready',doneNote:'Send this link to the person running Photo Day. They open it on the device they use for photos.',
+copy:'Copy link',sms:'Text message',mail:'Email',copied:'Link copied',remove:'Remove',
+eTeam:'Enter the team name',eCat:'Choose a category',ePlayers:'Add at least one player',
+msg:'Roster {team} · {cat} — {n} players',added:'{n} players added'},
+es:{title:'Lista del Equipo',intro:'Llena tu equipo para el Día de Fotos y toca Enviar. La lista viaja dentro del enlace que envías — no se guarda nada en línea.',
+team:'Equipo *',teamPh:'Nombre del equipo',cat:'Categoría *',chooseCat:'Escoge la categoría',other:'Otra…',catOther:'Nombre de la categoría',
+pName:'Nombre del jugador',pNum:'Número',add:'+ Añadir jugador',paste:'Pegar una lista',pastePh:'Juan Pérez 12\nMaría Rivera 7',pasteHint:'Un jugador por línea, número después del nombre.',pasteGo:'Añadir estos jugadores',
+send:'Enviar lista',doneT:'Enlace listo',doneNote:'Envía este enlace a quien hace el Día de Fotos. Lo abre en el dispositivo que usa para las fotos.',
+copy:'Copiar enlace',sms:'Mensaje de texto',mail:'Email',copied:'Enlace copiado',remove:'Quitar',
+eTeam:'Escribe el nombre del equipo',eCat:'Escoge una categoría',ePlayers:'Añade al menos un jugador',
+msg:'Lista {team} · {cat} — {n} jugadores',added:'{n} jugadores añadidos'}};
+let LANG='en';try{LANG=localStorage.getItem('pss-lang')||((navigator.language||'en').toLowerCase().startsWith('es')?'es':'en')}catch(e){}
+const t=(k,v)=>{let s=(I18N[LANG]||I18N.en)[k];if(s===undefined)s=I18N.en[k]||k;if(v)for(const x in v)s=s.split('{'+x+'}').join(v[x]);return s};
+let toastT=0;function toast(m){const el=$('#toast');el.textContent=m;el.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('on'),2400)}
+
+function fillCats(){const sel=$('#cat'),cur=sel.value;sel.innerHTML='';const add=(v,l)=>{const o=document.createElement('option');o.value=v;o.textContent=l;sel.appendChild(o)};
+  add('',t('chooseCat'));CATS.forEach(c=>add(c,c));add('__other',t('other'));sel.value=cur||''}
+function applyLang(){document.documentElement.lang=LANG;$$('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));$$('[data-ip]').forEach(e=>e.placeholder=t(e.dataset.ip));
+  $$('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.lang===LANG));fillCats();$$('.prow .x').forEach(b=>{b.title=t('remove');b.setAttribute('aria-label',t('remove'))});renumber()}
+$$('.lang button').forEach(b=>b.onclick=()=>{LANG=b.dataset.lang;try{localStorage.setItem('pss-lang',LANG)}catch(e){}applyLang()});
+$('#cat').onchange=()=>{const o=$('#cat').value==='__other';$('#catOtherWrap').classList.toggle('hidden',!o);if(o)$('#catOther').focus()};
+
+/* player rows */
+function renumber(){$$('.prow').forEach((r,i)=>r.querySelector('.n').textContent=i+1)}
+function addRow(name,num,focus){const r=document.createElement('div');r.className='prow';
+  r.innerHTML='<span class="n"></span><input type="text" class="pn" maxlength="60" autocomplete="off" autocapitalize="words"><input type="text" class="pj" maxlength="3" inputmode="numeric" autocomplete="off"><button type="button" class="x">×</button>';
+  const pn=r.querySelector('.pn'),pj=r.querySelector('.pj'),x=r.querySelector('.x');pn.value=name||'';pj.value=num||'';x.title=t('remove');x.setAttribute('aria-label',t('remove'));
+  pj.oninput=()=>{pj.value=pj.value.replace(/[^0-9]/g,'').slice(0,3)};
+  pn.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();pj.focus()}};
+  pj.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();const next=r.nextElementSibling;if(next)next.querySelector('.pn').focus();else addRow('','',true)}};
+  x.onclick=()=>{if($$('.prow').length>1)r.remove();else{pn.value='';pj.value=''}renumber()};
+  $('#rows').appendChild(r);renumber();if(focus)pn.focus();return r}
+$('#add').onclick=()=>addRow('','',true);
+
+/* paste a list — same reading as the studio's Roster box */
+function parseList(txt){const out=[];(txt||'').split(/\r?\n/).forEach(l=>{l=l.trim();if(!l)return;let name=l,number='',m;
+  if((m=l.match(/^(.*?)[\s,;#-]+#?(\d{1,3})$/))&&m[1].trim()){name=m[1];number=m[2]}else if((m=l.match(/^#?(\d{1,3})[\s,;.)-]+(.+)$/))){number=m[1];name=m[2]}
+  name=name.replace(/[\s,;#-]+$/,'').trim().slice(0,60);if(name)out.push([name,number])});return out}
+$('#pasteBtn').onclick=()=>{$('#pasteBox').classList.toggle('hidden');if(!$('#pasteBox').classList.contains('hidden'))$('#pasteTa').focus()};
+$('#pasteGo').onclick=()=>{const list=parseList($('#pasteTa').value);if(!list.length)return;
+  $$('.prow').forEach(r=>{if(!r.querySelector('.pn').value.trim()&&!r.querySelector('.pj').value.trim())r.remove()});
+  const have=new Set($$('.prow .pn').map(i=>i.value.trim().toLowerCase()).filter(Boolean));let n=0;
+  list.forEach(([nm,j])=>{const k=nm.toLowerCase();if(have.has(k))return;have.add(k);addRow(nm,j);n++});if(!$$('.prow').length)addRow();
+  $('#pasteTa').value='';$('#pasteBox').classList.add('hidden');toast(t('added',{n}))};
+
+/* link */
+function b64url(str){const bytes=new TextEncoder().encode(str);let bin='';bytes.forEach(b=>bin+=String.fromCharCode(b));return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function collect(){const team=$('#team').value.trim().slice(0,40);const cv=$('#cat').value;const cat=(cv==='__other'?$('#catOther').value:cv).trim().slice(0,30);
+  const seen=new Set(),p=[];$$('.prow').forEach(r=>{const n=r.querySelector('.pn').value.trim().slice(0,60),j=r.querySelector('.pj').value.trim();if(!n)return;const k=n.toLowerCase();if(seen.has(k))return;seen.add(k);p.push(j?[n,j]:[n])});
+  return{team,cat,p}}
+let LINK='',MSG='';
+$('#send').onclick=async()=>{const{team,cat,p}=collect();const err=$('#err');err.textContent='';
+  if(!team){err.textContent=t('eTeam');$('#team').focus();return}
+  if(!cat){err.textContent=t('eCat');$('#cat').focus();return}
+  if(!p.length){err.textContent=t('ePlayers');const f=$('.prow .pn');if(f)f.focus();return}
+  LINK=new URL('./',location.href).href+'#roster='+b64url(JSON.stringify({v:1,t:team,c:cat,p}));
+  MSG=t('msg',{team,cat,n:p.length});
+  $('#link').textContent=LINK;$('#sms').href='sms:?&body='+encodeURIComponent(MSG+'\n'+LINK);$('#mail').href='mailto:?subject='+encodeURIComponent(MSG)+'&body='+encodeURIComponent(MSG+'\n\n'+LINK);
+  $('#done').classList.remove('hidden');
+  if(navigator.share){try{await navigator.share({title:MSG,text:MSG,url:LINK});return}catch(e){}}
+  $('#done').scrollIntoView({behavior:'smooth',block:'center'})};
+$('#copy').onclick=async()=>{try{await navigator.clipboard.writeText(LINK);toast(t('copied'))}catch(e){const r=document.createRange();r.selectNodeContents($('#link'));const s=getSelection();s.removeAllRanges();s.addRange(r)}};
+
+for(let i=0;i<3;i++)addRow();
+applyLang();
+})();
+</script>
+</body>
+</html>
