@@ -430,6 +430,11 @@ canvas.pv:active{cursor:grabbing}
     </div>
     <button type="button" class="btn pri w" id="bxGo" style="margin-top:12px"><span data-i="batchBtn">Download ZIP</span></button>
     <div class="status" id="bxInfo"></div>
+    <div style="border-top:1px solid var(--line);margin:16px 0 12px"></div>
+    <span class="lbl" data-i="tpT">Team page for websites</span>
+    <p class="note" data-i="tpHint">One web page with the team's graphics, your logo and colors. Upload it to the program's website. Choose a team above.</p>
+    <label class="toggle" style="margin-bottom:12px"><input type="checkbox" id="tpFirst" checked><span data-i="tpFirst">First name and number only</span></label>
+    <button type="button" class="btn w" id="tpGo" disabled><span data-i="tpBtn">Download team page</span></button>
   </div>
   <div class="card">
     <div class="filters">
@@ -675,7 +680,7 @@ pdAutoBg:'Remove background automatically',rlT:'Add roster?',rlText:'Add {n} new
 plSearch:'Search by name',allTeams:'All teams',allCats:'All categories',plEmpty:'No players yet. Create one or start a Photo Day.',plNone:'No players match',bulkDel:'Delete these {n} players',bulkDel1:'Delete this player',bulkDelT:'Delete these players?',bulkDelText:'Delete {n} players ({what})? This cannot be undone.',tBulkDeleted:'{n} players deleted',bulkDelText1:'Delete 1 player ({what})? This cannot be undone.',
 edit:'Edit',regenerate:'Regenerate',delete:'Delete',cancel:'Cancel',close:'Close',ok:'OK',apply:'Apply',
 confirmDeleteT:'Delete player?',confirmDelete:'Delete {name}? This cannot be undone.',
-batchT:'Batch export',batchHint:'Download every graphic for a team and category in one ZIP file.',batchBtn:'Download ZIP',bxInfo:'{p} players · {g} graphics',bxSkip:' · {s} without photo permission or logo will be skipped',
+batchT:'Batch export',tpT:'Team page for websites',tpHint:'One web page with the team\'s graphics, your logo and colors. Upload it to the program\'s website. Choose a team above.',tpFirst:'First name and number only',tpBtn:'Download team page',tpWorking:'Building team page {i} of {n}…',tpDone:'Team page downloaded — {n} players',tpNeedTeam:'Choose a team first',tpFail:'The team page could not be made. Try again.',tpPlayers:'{n} players',batchHint:'Download every graphic for a team and category in one ZIP file.',batchBtn:'Download ZIP',bxInfo:'{p} players · {g} graphics',bxSkip:' · {s} without photo permission or logo will be skipped',
 bxNoFmt:'Choose at least one size',bxWorking:'Creating {i} of {n}…',tBatchNone:'No players here can be exported yet (photo permission and logo are required)',tBatchDone:'ZIP downloaded: {n} graphics',tBatchSkipped:' · {n} players skipped',tBatchFail:'The ZIP could not be created — try fewer sizes at a time',
 tplIntro:'Every template uses your logo and colors. Choose the one for new graphics.',useTpl:'Use this template',isDefault:'In use',
 d_spotlight:'Dark stage, dramatic light and bold type.',d_elite:'Recruiting style with elegant type and metallic accents.',d_hardwood:'Court wood, warm tones and athletic banners.',d_energy:'Dynamic shapes in your team colors.',d_signature:'Clean and minimal — the player is the focus.',
@@ -719,7 +724,7 @@ pdAutoBg:'Quitar el fondo automáticamente',rlT:'¿Añadir lista?',rlText:'¿Añ
 plSearch:'Buscar por nombre',allTeams:'Todos los equipos',allCats:'Todas las categorías',plEmpty:'Aún no hay jugadores. Crea uno o empieza un Día de Fotos.',plNone:'Ningún jugador coincide',bulkDel:'Borrar estos {n} jugadores',bulkDel1:'Borrar este jugador',bulkDelT:'¿Borrar estos jugadores?',bulkDelText:'¿Borrar {n} jugadores ({what})? No se puede deshacer.',tBulkDeleted:'{n} jugadores borrados',bulkDelText1:'¿Borrar 1 jugador ({what})? No se puede deshacer.',
 edit:'Editar',regenerate:'Regenerar',delete:'Borrar',cancel:'Cancelar',close:'Cerrar',ok:'OK',apply:'Aplicar',
 confirmDeleteT:'¿Borrar jugador?',confirmDelete:'¿Borrar a {name}? No se puede deshacer.',
-batchT:'Exportar en lote',batchHint:'Descarga todos los gráficos de un equipo y categoría en un solo archivo ZIP.',batchBtn:'Descargar ZIP',bxInfo:'{p} jugadores · {g} gráficos',bxSkip:' · se omitirán {s} sin permiso de foto o sin logo',
+batchT:'Exportar en lote',tpT:'Página del equipo para sitios web',tpHint:'Una página web con los gráficos del equipo, tu logo y colores. Súbela al sitio web del programa. Escoge un equipo arriba.',tpFirst:'Solo primer nombre y número',tpBtn:'Descargar página del equipo',tpWorking:'Creando página del equipo {i} de {n}…',tpDone:'Página del equipo descargada — {n} jugadores',tpNeedTeam:'Escoge un equipo primero',tpFail:'No se pudo crear la página del equipo. Inténtalo de nuevo.',tpPlayers:'{n} jugadores',batchHint:'Descarga todos los gráficos de un equipo y categoría en un solo archivo ZIP.',batchBtn:'Descargar ZIP',bxInfo:'{p} jugadores · {g} gráficos',bxSkip:' · se omitirán {s} sin permiso de foto o sin logo',
 bxNoFmt:'Escoge al menos un tamaño',bxWorking:'Creando {i} de {n}…',tBatchNone:'Ningún jugador aquí se puede exportar todavía (se requiere permiso de foto y logo)',tBatchDone:'ZIP descargado: {n} gráficos',tBatchSkipped:' · {n} jugadores omitidos',tBatchFail:'No se pudo crear el ZIP — prueba con menos tamaños a la vez',
 tplIntro:'Cada plantilla usa tu logo y tus colores. Escoge la de los gráficos nuevos.',useTpl:'Usar esta plantilla',isDefault:'En uso',
 d_spotlight:'Escenario oscuro, luz dramática y letra fuerte.',d_elite:'Estilo de reclutamiento con letra elegante y acentos metálicos.',d_hardwood:'Madera de cancha, tonos cálidos y banners atléticos.',d_energy:'Formas dinámicas con los colores del equipo.',d_signature:'Limpio y minimalista — el jugador es el centro.',
@@ -1413,7 +1418,7 @@ $('#plBulkDel').onclick=async()=>{const ft=$('#plTeam').value;if(!ft)return;cons
   if(n<list.length)toast(t('tSaveFail'),true);else toast(n===1?t('tDeleted'):t('tBulkDeleted',{n}));galleryDirty=true;renderGallery()};
 /* batch export */
 function bxList(){const tm=$('#bxTeam').value,ct=$('#bxCat').value;return PLAYERS.filter(p=>(!tm||p.team===tm)&&(!ct||p.category===ct)).sort((a,b)=>a.name.localeCompare(b.name))}
-function bxInfo(){const list=bxList(),okN=list.filter(p=>canExport(p,true)).length,f=$$('#bxFmts input:checked').length;$('#bxInfo').textContent=list.length?t('bxInfo',{p:okN,g:okN*f})+(list.length>okN?t('bxSkip',{s:list.length-okN}):''):'';$('#bxGo').disabled=!okN||!f}
+function bxInfo(){const list=bxList(),okN=list.filter(p=>canExport(p,true)).length,f=$$('#bxFmts input:checked').length;$('#bxInfo').textContent=list.length?t('bxInfo',{p:okN,g:okN*f})+(list.length>okN?t('bxSkip',{s:list.length-okN}):''):'';$('#bxGo').disabled=!okN||!f;$('#tpGo').disabled=!okN||!$('#bxTeam').value}
 $('#bxTeam').onchange=bxInfo;$('#bxCat').onchange=bxInfo;$$('#bxFmts input').forEach(i=>i.onchange=bxInfo);
 $('#bxGo').onclick=async()=>{const fmts=$$('#bxFmts input:checked').map(i=>i.value);if(!fmts.length){toast(t('bxNoFmt'),true);return}
   const list=bxList(),okL=list.filter(p=>canExport(p,true));if(!okL.length){toast(t('tBatchNone'),true);return}
@@ -1423,6 +1428,44 @@ $('#bxGo').onclick=async()=>{const fmts=$$('#bxFmts input:checked').map(i=>i.val
       let nm=`${slug(p.name)}${p.number?'-'+p.number:''}-${f}`,k=2,base=nm;while(used.has(nm))nm=base+'-'+(k++);used.add(nm);await zip.add(`${folder}/${nm}.png`,b);await tick()}
     saveBlob(zip.blob(),`${folder}-graphics.zip`);toast(t('tBatchDone',{n:i})+(list.length>okL.length?t('tBatchSkipped',{n:list.length-okL.length}):''))}
   catch(e){toast(t('tBatchFail'),true)}finally{busy(false)}};
+/* team page: one self-contained HTML file for the program's website */
+async function pageImg(p){const F=FORMATS.portrait,sc=2/3;await fontsReady;const R=await buildR(p);const cv=document.createElement('canvas');cv.width=Math.round(F.w*sc);cv.height=Math.round(F.h*sc);render(cv.getContext('2d'),'portrait',R,sc);
+  const d=cv.toDataURL('image/jpeg',.86);cv.width=cv.height=0;return d}
+$('#tpGo').onclick=async()=>{const tm=$('#bxTeam').value,ct=$('#bxCat').value;if(!tm){toast(t('tpNeedTeam'),true);return}
+  const list=bxList().filter(p=>canExport(p,true));if(!list.length){toast(t('tBatchNone'),true);return}
+  const first=$('#tpFirst').checked,B=liveBrand(tm),items=[];busy(true,t('tpWorking',{i:0,n:list.length}));
+  try{for(let i=0;i<list.length;i++){$('#busyText').textContent=t('tpWorking',{i:i+1,n:list.length});const p=clone(list[i]);
+      if(first)p.name=(p.name||'').trim().split(/\s+/)[0]||p.name;items.push({src:await pageImg(p),name:p.name,number:p.number||''});await tick()}
+    const title=[tm,ct].filter(Boolean).join(' · ');const prog=B.program||'';const pri=B.primary||'#FF7A18',sec=B.secondary||'#F2C14E';
+    const cards=items.map(x=>`<figure><img src="${x.src}" alt="${esc(x.name)}" loading="lazy"><figcaption><b>${esc(x.name)}</b>${x.number?`<span>#${esc(x.number)}</span>`:''}</figcaption></figure>`).join('\n');
+    const html=`<!DOCTYPE html>
+<html lang="${LANG}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${esc(title)}${prog?' · '+esc(prog):''}</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;min-height:100vh}
+header{background:${pri};background:linear-gradient(135deg,${pri},${sec});padding:28px 18px;text-align:center}
+header img{max-height:90px;max-width:70%;display:block;margin:0 auto 12px}
+header .p{font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.85rem;opacity:.9}
+header h1{font-size:clamp(1.6rem,5vw,2.6rem);text-transform:uppercase;letter-spacing:.04em;margin-top:4px;text-shadow:0 2px 12px rgba(0,0,0,.3)}
+header .s{margin-top:6px;font-weight:600;opacity:.9}
+main{max-width:1200px;margin:0 auto;padding:22px 14px 40px;display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+figure{background:#1b1b1b;border-radius:14px;overflow:hidden;cursor:zoom-in}
+figure img{width:100%;aspect-ratio:4/5;display:block;object-fit:cover}
+figcaption{display:flex;justify-content:space-between;gap:8px;padding:9px 11px;font-size:.92rem}
+figcaption span{color:${sec};font-weight:800}
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;padding:16px;cursor:zoom-out;z-index:9}
+#lb.on{display:flex}#lb img{max-width:100%;max-height:100%;border-radius:10px}
+</style></head><body>
+<header>${B.logo?`<img src="${B.logo}" alt="">`:''}${prog?`<div class="p">${esc(prog)}</div>`:''}<h1>${esc(title)}</h1><div class="s">${esc(t('tpPlayers',{n:items.length}))}${B.season?' · '+esc(B.season):''}</div></header>
+<main>
+${cards}
+</main>
+<div id="lb"><img alt=""></div>
+<script>(function(){var lb=document.getElementById('lb'),im=lb.querySelector('img');document.querySelectorAll('figure img').forEach(function(i){i.parentNode.onclick=function(){im.src=i.src;im.alt=i.alt;lb.classList.add('on')}});lb.onclick=function(){lb.classList.remove('on')};document.onkeydown=function(e){if(e.key==='Escape')lb.classList.remove('on')}})();<\/script>
+</body></html>`;
+    saveBlob(new Blob([html],{type:'text/html'}),`${slug(tm)}${ct?'-'+slug(ct):''}-team-page.html`);toast(t('tpDone',{n:items.length}))}
+  catch(e){toast(t('tpFail'),true)}finally{busy(false)}};
 let MP=null;
 async function openPlayer(id){const rec=PLAYERS.find(p=>p.id===id);if(!rec)return;MP=clone(rec);$('#mpName').textContent=rec.name;segOn('#mpFmt',mpFmt,'fmt');
   tplChips($('#mpTpl'),()=>MP.template,async k=>{MP.template=k;if(await savePlayer(MP)){galleryDirty=true;drawMP()}});
