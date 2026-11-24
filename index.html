@@ -423,6 +423,7 @@ canvas.pv:active{cursor:grabbing}
       <select id="plTeam"></select>
       <select id="plCat"></select>
     </div>
+    <button type="button" class="btn danger w hidden" id="plBulkDel" style="margin-top:12px"><span id="plBulkDelT"></span></button>
   </div>
   <div class="pcount" id="plCount"></div>
   <div class="pgrid" id="plGrid"></div>
@@ -657,7 +658,7 @@ mPhoto:'photo',mName:'name',mTeam:'team',mCat:'category',
 phName:'Player Name',phTeam:'Team',phCat:'Category',
 pdTitle:'Photo Day',pdIntro:'Photograph a whole team fast: choose the team once, then photo, name, number, save — next player.',pdStart:'Start Photo Day',pdChange:'Change team',pdSaveNext:'Save & Next Player',pdCount:'Saved this session',pdNext:'Saved — ready for the next player',pdNeedSetup:'Choose a team and a category first',
 pdAutoBg:'Remove background automatically',pdAutoShort:'Automatic',
-plSearch:'Search by name',allTeams:'All teams',allCats:'All categories',plEmpty:'No players yet. Create one or start a Photo Day.',plNone:'No players match',
+plSearch:'Search by name',allTeams:'All teams',allCats:'All categories',plEmpty:'No players yet. Create one or start a Photo Day.',plNone:'No players match',bulkDel:'Delete these {n} players',bulkDel1:'Delete this player',bulkDelT:'Delete these players?',bulkDelText:'Delete {n} players ({what})? This cannot be undone.',tBulkDeleted:'{n} players deleted',bulkDelText1:'Delete 1 player ({what})? This cannot be undone.',
 edit:'Edit',regenerate:'Regenerate',delete:'Delete',cancel:'Cancel',close:'Close',ok:'OK',apply:'Apply',
 confirmDeleteT:'Delete player?',confirmDelete:'Delete {name}? This cannot be undone.',
 batchT:'Batch export',batchHint:'Download every graphic for a team and category in one ZIP file.',batchBtn:'Download ZIP',bxInfo:'{p} players · {g} graphics',bxSkip:' · {s} without photo permission or logo will be skipped',
@@ -701,7 +702,7 @@ mPhoto:'foto',mName:'nombre',mTeam:'equipo',mCat:'categoría',
 phName:'Nombre del Jugador',phTeam:'Equipo',phCat:'Categoría',
 pdTitle:'Día de Fotos',pdIntro:'Fotografía un equipo completo rápido: escoge el equipo una vez, luego foto, nombre, número, guardar — siguiente jugador.',pdStart:'Empezar Día de Fotos',pdChange:'Cambiar equipo',pdSaveNext:'Guardar y Siguiente',pdCount:'Guardados en esta sesión',pdNext:'Guardado — listo para el siguiente jugador',pdNeedSetup:'Escoge primero un equipo y una categoría',
 pdAutoBg:'Quitar el fondo automáticamente',pdAutoShort:'Automático',
-plSearch:'Buscar por nombre',allTeams:'Todos los equipos',allCats:'Todas las categorías',plEmpty:'Aún no hay jugadores. Crea uno o empieza un Día de Fotos.',plNone:'Ningún jugador coincide',
+plSearch:'Buscar por nombre',allTeams:'Todos los equipos',allCats:'Todas las categorías',plEmpty:'Aún no hay jugadores. Crea uno o empieza un Día de Fotos.',plNone:'Ningún jugador coincide',bulkDel:'Borrar estos {n} jugadores',bulkDel1:'Borrar este jugador',bulkDelT:'¿Borrar estos jugadores?',bulkDelText:'¿Borrar {n} jugadores ({what})? No se puede deshacer.',tBulkDeleted:'{n} jugadores borrados',bulkDelText1:'¿Borrar 1 jugador ({what})? No se puede deshacer.',
 edit:'Editar',regenerate:'Regenerar',delete:'Borrar',cancel:'Cancelar',close:'Cerrar',ok:'OK',apply:'Aplicar',
 confirmDeleteT:'¿Borrar jugador?',confirmDelete:'¿Borrar a {name}? No se puede deshacer.',
 batchT:'Exportar en lote',batchHint:'Descarga todos los gráficos de un equipo y categoría en un solo archivo ZIP.',batchBtn:'Descargar ZIP',bxInfo:'{p} jugadores · {g} gráficos',bxSkip:' · se omitirán {s} sin permiso de foto o sin logo',
@@ -1330,14 +1331,24 @@ let galleryDirty=true,gJob=0;
 const norm=s=>(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
 function fillFilters(){const teams=[...new Set(PLAYERS.map(p=>p.team).filter(Boolean))].sort((a,b)=>a.localeCompare(b));const cats=[...new Set(PLAYERS.map(p=>p.category).filter(Boolean))];
   for(const[id,fn,list]of[['#plTeam',fillTeam,teams],['#plCat',fillCat,cats],['#bxTeam',fillTeam,teams],['#bxCat',fillCat,cats]]){const sel=$(id),v=sel.value;fn(sel,'',{all:true,list});if(list.includes(v))sel.value=v}bxInfo()}
-async function renderGallery(){const job=++gJob;fillFilters();const q=norm($('#plSearch').value.trim());const ft=$('#plTeam').value,fc=$('#plCat').value;
-  const list=PLAYERS.filter(p=>(!q||norm(p.name).includes(q))&&(!ft||p.team===ft)&&(!fc||p.category===fc)).sort((a,b)=>a.name.localeCompare(b.name));
+function shownList(){const q=norm($('#plSearch').value.trim());const ft=$('#plTeam').value,fc=$('#plCat').value;
+  return PLAYERS.filter(p=>(!q||norm(p.name).includes(q))&&(!ft||p.team===ft)&&(!fc||p.category===fc)).sort((a,b)=>a.name.localeCompare(b.name))}
+async function renderGallery(){const job=++gJob;fillFilters();const ft=$('#plTeam').value;
+  const list=shownList();
+  const bd=$('#plBulkDel');bd.classList.toggle('hidden',!ft||!list.length);if(ft&&list.length)$('#plBulkDelT').textContent=list.length===1?t('bulkDel1'):t('bulkDel',{n:list.length});
   const grid=$('#plGrid');grid.innerHTML='';$('#plEmpty').classList.toggle('hidden',PLAYERS.length>0);
   $('#plCount').textContent=PLAYERS.length?(list.length?t('nPlayers')(list.length):t('plNone')):'';
   const cards=list.map(p=>{const b=document.createElement('button');b.type='button';b.className='pcard';b.dataset.id=p.id;const cv=document.createElement('canvas');cv.width=270;cv.height=337;b.appendChild(cv);
     const m=document.createElement('div');m.className='meta';m.innerHTML=`<b>${esc(p.name)}</b><span>${esc([p.team,p.category].filter(Boolean).join(' · '))}</span>`;b.appendChild(m);b.onclick=()=>openPlayer(p.id);grid.appendChild(b);return[cv,p]});
   galleryDirty=false;await fontsReady;for(const[cv,p]of cards){if(job!==gJob)return;await drawTo(cv,p,'portrait',.25);await tick()}}
 $('#plSearch').oninput=()=>renderGallery();$('#plTeam').onchange=()=>renderGallery();$('#plCat').onchange=()=>renderGallery();
+/* bulk delete — only when a team is chosen; deletes exactly the players shown */
+$('#plBulkDel').onclick=async()=>{const ft=$('#plTeam').value;if(!ft)return;const list=shownList();if(!list.length)return;
+  const q=$('#plSearch').value.trim();const what=[ft,$('#plCat').value,q?'"'+q+'"':''].filter(Boolean).join(' · ');
+  const ok=await ask({title:t('bulkDelT'),text:t(list.length===1?'bulkDelText1':'bulkDelText',{n:list.length,what}),buttons:[{label:t('cancel'),value:null},{label:t('delete'),value:true,cls:'danger'}]});if(!ok)return;
+  let n=0;busy(true,t('bulkDelT'));
+  try{for(const p of list){try{await DB.del(p.id)}catch(e){break}n++;PLAYERS=PLAYERS.filter(x=>x.id!==p.id);if(D.id===p.id){D.id=null;D.brand=null;dDirty=true;cStatus()}}}finally{busy(false)}
+  if(n<list.length)toast(t('tSaveFail'),true);else toast(n===1?t('tDeleted'):t('tBulkDeleted',{n}));galleryDirty=true;renderGallery()};
 /* batch export */
 function bxList(){const tm=$('#bxTeam').value,ct=$('#bxCat').value;return PLAYERS.filter(p=>(!tm||p.team===tm)&&(!ct||p.category===ct)).sort((a,b)=>a.name.localeCompare(b.name))}
 function bxInfo(){const list=bxList(),okN=list.filter(p=>canExport(p,true)).length,f=$$('#bxFmts input:checked').length;$('#bxInfo').textContent=list.length?t('bxInfo',{p:okN,g:okN*f})+(list.length>okN?t('bxSkip',{s:list.length-okN}):''):'';$('#bxGo').disabled=!okN||!f}
