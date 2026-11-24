@@ -154,6 +154,12 @@ canvas.pv:active{cursor:grabbing}
 .pdcount{background:var(--orange);color:#111;font-weight:800;border-radius:999px;padding:6px 12px;font-size:.84rem}
 .sess{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
 .sess canvas{width:72px;height:90px;border-radius:8px;flex:none;background:#0b1320}
+.roster{width:100%;min-height:150px;border-radius:12px;border:1px solid var(--line2);background:var(--navy2);color:var(--white);padding:10px 14px;font:inherit;font-size:1rem;line-height:1.5;outline:none;resize:vertical}
+.roster:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,122,24,.2)}
+.rlist{display:flex;flex-wrap:wrap;gap:6px;max-height:260px;overflow-y:auto}
+.rlist .btn{min-height:44px}
+.rlist .btn.done{opacity:.5}
+.rhead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
 .bigname{font-size:1.25rem!important;min-height:58px!important;font-weight:700!important}
 
 /* modals */
@@ -345,6 +351,9 @@ canvas.pv:active{cursor:grabbing}
     <div class="tchips" id="pdTplPick" style="margin-bottom:14px"></div>
     <label class="f"><span class="lbl" data-i="secHeading">Recognition heading</span><select id="pdHeading"></select></label>
     <input type="text" id="pdHeadText" class="hidden" maxlength="28" data-ip="hCustomPh" placeholder="Type the heading" autocomplete="off" style="margin:-4px 0 12px">
+    <label class="f"><span class="lbl" data-i="pdRoster">Roster (optional)</span>
+      <textarea id="pdRoster" class="roster" maxlength="6000" data-ip="pdRosterPh" placeholder="Juan Pérez 12&#10;María Rivera 7&#10;Luis Torres" autocomplete="off" spellcheck="false"></textarea></label>
+    <p class="muted" style="margin:-4px 0 14px"><span data-i="pdRosterHint">One player per line, jersey number after the name. Saved for this team and category on this device.</span> <b id="pdRosterN"></b></p>
     <label class="toggle" style="margin-bottom:14px"><input type="checkbox" id="pdAuto"><span data-i="pdAutoBg">Remove background automatically</span></label>
     <button type="button" class="btn pri w" id="pdStart" style="min-height:58px;font-size:1.05rem"><span data-i="pdStart">Start Photo Day</span></button>
   </div>
@@ -369,6 +378,10 @@ canvas.pv:active{cursor:grabbing}
         <div class="sl"><div class="top"><span class="lbl" data-i="zoom">Zoom</span><output id="pdZoomO"></output></div><input type="range" id="pdZoom" min="60" max="300" step="1" value="100"></div>
       </div>
       <div>
+        <div class="card hidden" id="pdRCard">
+          <div class="rhead"><span class="lbl" style="margin:0" data-i="pdRosterTap">Tap a player, then take the photo</span><b id="pdRDone"></b></div>
+          <div class="rlist" id="pdRList"></div>
+        </div>
         <div class="card">
           <div class="big2">
             <button type="button" class="big" id="pdTake"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span data-i="takePhoto">Take Photo</span></button>
@@ -657,7 +670,7 @@ tMem:'This browser is not letting the app store data — nothing will be kept af
 mPhoto:'photo',mName:'name',mTeam:'team',mCat:'category',
 phName:'Player Name',phTeam:'Team',phCat:'Category',
 pdTitle:'Photo Day',pdIntro:'Photograph a whole team fast: choose the team once, then photo, name, number, save — next player.',pdStart:'Start Photo Day',pdChange:'Change team',pdSaveNext:'Save & Next Player',pdCount:'Saved this session',pdNext:'Saved — ready for the next player',pdNeedSetup:'Choose a team and a category first',
-pdAutoBg:'Remove background automatically',pdAutoShort:'Automatic',
+pdAutoBg:'Remove background automatically',pdRoster:'Roster (optional)',pdRosterPh:'Juan Pérez 12\nMaría Rivera 7\nLuis Torres',pdRosterHint:'One player per line, jersey number after the name. Saved for this team and category on this device.',pdRosterN:'{n} players',pdRosterTap:'Tap a player, then take the photo',pdRDone:'{d} of {n} done',pdAutoShort:'Automatic',
 plSearch:'Search by name',allTeams:'All teams',allCats:'All categories',plEmpty:'No players yet. Create one or start a Photo Day.',plNone:'No players match',bulkDel:'Delete these {n} players',bulkDel1:'Delete this player',bulkDelT:'Delete these players?',bulkDelText:'Delete {n} players ({what})? This cannot be undone.',tBulkDeleted:'{n} players deleted',bulkDelText1:'Delete 1 player ({what})? This cannot be undone.',
 edit:'Edit',regenerate:'Regenerate',delete:'Delete',cancel:'Cancel',close:'Close',ok:'OK',apply:'Apply',
 confirmDeleteT:'Delete player?',confirmDelete:'Delete {name}? This cannot be undone.',
@@ -701,7 +714,7 @@ tMem:'Este navegador no deja guardar datos — nada se guardará al cerrar',tPho
 mPhoto:'foto',mName:'nombre',mTeam:'equipo',mCat:'categoría',
 phName:'Nombre del Jugador',phTeam:'Equipo',phCat:'Categoría',
 pdTitle:'Día de Fotos',pdIntro:'Fotografía un equipo completo rápido: escoge el equipo una vez, luego foto, nombre, número, guardar — siguiente jugador.',pdStart:'Empezar Día de Fotos',pdChange:'Cambiar equipo',pdSaveNext:'Guardar y Siguiente',pdCount:'Guardados en esta sesión',pdNext:'Guardado — listo para el siguiente jugador',pdNeedSetup:'Escoge primero un equipo y una categoría',
-pdAutoBg:'Quitar el fondo automáticamente',pdAutoShort:'Automático',
+pdAutoBg:'Quitar el fondo automáticamente',pdRoster:'Lista de jugadores (opcional)',pdRosterPh:'Juan Pérez 12\nMaría Rivera 7\nLuis Torres',pdRosterHint:'Un jugador por línea, número después del nombre. Se guarda para este equipo y categoría en este dispositivo.',pdRosterN:'{n} jugadores',pdRosterTap:'Toca un jugador y luego toma la foto',pdRDone:'{d} de {n} listos',pdAutoShort:'Automático',
 plSearch:'Buscar por nombre',allTeams:'Todos los equipos',allCats:'Todas las categorías',plEmpty:'Aún no hay jugadores. Crea uno o empieza un Día de Fotos.',plNone:'Ningún jugador coincide',bulkDel:'Borrar estos {n} jugadores',bulkDel1:'Borrar este jugador',bulkDelT:'¿Borrar estos jugadores?',bulkDelText:'¿Borrar {n} jugadores ({what})? No se puede deshacer.',tBulkDeleted:'{n} jugadores borrados',bulkDelText1:'¿Borrar 1 jugador ({what})? No se puede deshacer.',
 edit:'Editar',regenerate:'Regenerar',delete:'Borrar',cancel:'Cancelar',close:'Cerrar',ok:'OK',apply:'Aplicar',
 confirmDeleteT:'¿Borrar jugador?',confirmDelete:'¿Borrar a {name}? No se puede deshacer.',
@@ -755,6 +768,7 @@ let D=blank();          // Create draft
 let dDirty=false;
 let cFmt='portrait',pdFmt='portrait',tFmt='portrait',mpFmt='portrait';
 let PD={team:'',category:'',template:'spotlight',heading:'none',headingText:'',autoBg:false,started:false,count:0};
+let ROSTERS={};          // Photo Day rosters by team+category: {key:[{name,number}]}
 let P2=blank();         // Photo Day draft
 const clone=o=>JSON.parse(JSON.stringify(o));
 const uid=()=>'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
@@ -1298,9 +1312,10 @@ function pdButtons(){$('#pdTake span').textContent=P2.photo?t('retake'):t('takeP
   $('#pdBg').disabled=!P2.photo;$('#pdBg span').textContent=P2.adj.bg==='removed'?t('restoreBg'):t('removeBg');$('#pdAuto').checked=$('#pdAutoRun').checked=!!PD.autoBg}
 function pdShow(){const run=PD.started&&PD.team&&PD.category;$('#pdSetup').classList.toggle('hidden',!!run);$('#pdRun').classList.toggle('hidden',!run);
   fillTeam($('#pdTeam'),PD.team);fillCat($('#pdCat'),PD.category);markChips($('#pdTplPick'),PD.template);fillHeading($('#pdHeading'),PD.heading);$('#pdHeadText').value=PD.headingText||'';$('#pdHeadText').classList.toggle('hidden',PD.heading!=='custom');$('#pdAuto').checked=!!PD.autoBg;
-  if(run){$('#pdWho').textContent=PD.team;$('#pdWhoSub').textContent=PD.category+' · '+TPL_NAMES[PD.template]+(headingText(PD)?' · '+headingText(PD):'');$('#pdCount').textContent=PD.count;pdButtons();pdPv()}}
-bindTeam($('#pdTeam'),()=>PD,()=>{savePD()});
-bindCat($('#pdCat'),()=>PD.category,v=>{PD.category=v;savePD()});
+  pdRosterLoad();
+  if(run){pdRosterRun();$('#pdWho').textContent=PD.team;$('#pdWhoSub').textContent=PD.category+' · '+TPL_NAMES[PD.template]+(headingText(PD)?' · '+headingText(PD):'');$('#pdCount').textContent=PD.count;pdButtons();pdPv()}}
+bindTeam($('#pdTeam'),()=>PD,()=>{savePD();pdRosterLoad()});
+bindCat($('#pdCat'),()=>PD.category,v=>{PD.category=v;savePD();pdRosterLoad()});
 $('#pdHeading').onchange=e=>{PD.heading=e.target.value;$('#pdHeadText').classList.toggle('hidden',PD.heading!=='custom');savePD()};
 $('#pdHeadText').oninput=e=>{PD.headingText=e.target.value;savePD()};
 $('#pdAuto').onchange=e=>{PD.autoBg=e.target.checked;savePD()};
@@ -1308,13 +1323,31 @@ $('#pdAutoRun').onchange=e=>{PD.autoBg=e.target.checked;$('#pdAuto').checked=PD.
 $('#pdStart').onclick=()=>{if(!PD.team||!PD.category){toast(t('pdNeedSetup'),true);return}if(!S.logo){toast(t('tNeedLogo'),true);return}
   PD.started=true;PD.count=0;$('#pdSess').innerHTML='';savePD();pdFresh();pdShow()};
 $('#pdChange').onclick=()=>{PD.started=false;savePD();pdShow()};
+/* roster: typed ahead, tapped during Photo Day */
+const rKey=(tm,ct)=>tm+'\u0001'+ct;
+function parseRoster(txt){const out=[],seen=new Set();(txt||'').split(/\r?\n/).forEach(l=>{l=l.trim();if(!l)return;let name=l,number='',m;
+  if((m=l.match(/^(.*?)[\s,;#-]+#?(\d{1,3})$/))&&m[1].trim()){name=m[1];number=m[2]}else if((m=l.match(/^#?(\d{1,3})[\s,;.)-]+(.+)$/))){number=m[1];name=m[2]}
+  name=name.replace(/[\s,;#-]+$/,'').trim().slice(0,60);if(!name)return;const k=norm(name);if(seen.has(k))return;seen.add(k);out.push({name,number})});return out}
+const rosterText=list=>list.map(r=>r.name+(r.number?' '+r.number:'')).join('\n');
+function curRoster(){return(PD.team&&PD.category&&ROSTERS[rKey(PD.team,PD.category)])||[]}
+function rosterDone(r){const k=norm(r.name);return PLAYERS.some(p=>p.team===PD.team&&p.category===PD.category&&norm(p.name)===k)}
+function saveRosters(){DB.set('rosters',ROSTERS).catch(()=>{})}
+function pdRosterLoad(){const ta=$('#pdRoster');const ok=!!(PD.team&&PD.category);ta.disabled=!ok;ta.value=rosterText(curRoster());pdRosterN()}
+function pdRosterN(){const n=curRoster().length;$('#pdRosterN').textContent=n?t('pdRosterN',{n}):''}
+let rT=0;$('#pdRoster').oninput=e=>{if(!PD.team||!PD.category)return;const v=e.target.value;clearTimeout(rT);rT=setTimeout(()=>{const list=parseRoster(v);const k=rKey(PD.team,PD.category);if(list.length)ROSTERS[k]=list;else delete ROSTERS[k];saveRosters();pdRosterN()},350)};
+$('#pdRoster').onblur=e=>{if(!PD.team||!PD.category)return;clearTimeout(rT);const list=parseRoster(e.target.value);const k=rKey(PD.team,PD.category);if(list.length)ROSTERS[k]=list;else delete ROSTERS[k];saveRosters();pdRosterN()};
+function pdRosterRun(){const list=curRoster();$('#pdRCard').classList.toggle('hidden',!list.length);if(!list.length)return;
+  const rows=list.map(r=>({r,done:rosterDone(r)}));const d=rows.filter(x=>x.done).length;$('#pdRDone').textContent=t('pdRDone',{d,n:list.length});
+  rows.sort((a,b)=>a.done-b.done);const box=$('#pdRList');box.innerHTML='';const cur=norm(P2.name);
+  rows.forEach(({r,done})=>{const b=document.createElement('button');b.type='button';b.className='btn sm'+(done?' done':'')+(cur&&norm(r.name)===cur?' pri':'');b.textContent=(done?'✓ ':'')+r.name+(r.number?' #'+r.number:'');
+    b.onclick=()=>{P2.name=r.name;P2.number=r.number;$('#pdName').value=r.name;$('#pdNumber').value=r.number;pdPv();pdRosterRun()};box.appendChild(b)})}
 function savePD(){DB.set('photoday',{team:PD.team,category:PD.category,template:PD.template,heading:PD.heading,headingText:PD.headingText,autoBg:!!PD.autoBg}).catch(()=>{})}
 async function pdGotPhoto(d){newPhoto(P2,d,'input[name=pdConsent]');pdButtons();pdPv();
   if(PD.autoBg){await toggleBg(P2,()=>{pdButtons();pdPv()},true)}setTimeout(()=>$('#pdName').focus(),80)}
 $('#pdTake').onclick=()=>takePhoto(pdGotPhoto);
 $('#pdUpload').onclick=()=>uploadPhoto(pdGotPhoto);
 $('#pdBg').onclick=()=>toggleBg(P2,()=>{pdButtons();pdPv()});
-$('#pdName').oninput=e=>{P2.name=e.target.value;pdPv()};
+$('#pdName').oninput=e=>{P2.name=e.target.value;pdPv();if(curRoster().length)pdRosterRun()};
 $('#pdNumber').oninput=e=>{e.target.value=e.target.value.replace(/[^0-9]/g,'').slice(0,3);P2.number=e.target.value;pdPv()};
 $$('input[name=pdConsent]').forEach(i=>i.onchange=()=>{P2.consent=i.value});
 $('#pdZoom').oninput=e=>{P2.adj.zoom=e.target.value/100;$('#pdZoomO').textContent=e.target.value+'%';pdPv()};
@@ -1322,7 +1355,7 @@ attachDrag($('#pdPv'),()=>P2,()=>pdFmt,()=>{$('#pdZoom').value=Math.round(P2.adj
 $$('#pdFmt button').forEach(b=>b.onclick=()=>{pdFmt=b.dataset.fmt;segOn('#pdFmt',pdFmt,'fmt');pdPv()});
 $('#pdSave').onclick=async()=>{if(!canExport(P2))return;const rec=await savePlayer(P2);if(!rec)return;PD.count++;galleryDirty=true;
   const cv=document.createElement('canvas');cv.title=rec.name;$('#pdSess').prepend(cv);drawTo(cv,rec,'portrait',.12);while($('#pdSess').children.length>24)$('#pdSess').lastChild.remove();
-  $('#pdCount').textContent=PD.count;toast(DB.ok?t('pdNext'):t('tSavedSession'));pdFresh();window.scrollTo({top:0,behavior:'smooth'})};
+  $('#pdCount').textContent=PD.count;toast(DB.ok?t('pdNext'):t('tSavedSession'));pdFresh();pdRosterRun();window.scrollTo({top:0,behavior:'smooth'})};
 $('#pdDownload').onclick=()=>downloadP(P2,[pdFmt]);
 $('#pdShare').onclick=()=>shareP(P2,pdFmt);
 
@@ -1441,7 +1474,7 @@ function cleanPlayer(x){if(!x||typeof x!=='object'||typeof x.id!=='string'||!/^[
   const a=x.adj||{};const mask=isData(a.mask)?a.mask:null;
   p.adj=Object.assign(DEF_ADJ(),{crop:cleanCrop(a.crop),zoom:clampN(a.zoom,.6,3,1),ox:clampN(a.ox,-1,1,0),oy:clampN(a.oy,-1,1,-.4),bright:clampN(a.bright,50,160,100),contrast:clampN(a.contrast,50,160,100),mask,maskSig:mask&&typeof a.maskSig==='string'?a.maskSig:null,bg:a.bg==='removed'&&mask?'removed':'orig'});
   const sh=x.show||{};p.show=DEF_SHOW();Object.keys(p.show).forEach(k=>{if(typeof sh[k]==='boolean')p.show[k]=sh[k]});p.brand=cleanBrand(x.brand);return p}
-$('#sBackup').onclick=async()=>{busy(true,'');try{const players=await DB.all();const data={app:'player-spotlight-studio',version:2,exportedAt:new Date().toISOString(),settings:S,players};
+$('#sBackup').onclick=async()=>{busy(true,'');try{const players=await DB.all();const data={app:'player-spotlight-studio',version:2,exportedAt:new Date().toISOString(),settings:S,players,rosters:ROSTERS};
   saveBlob(new Blob([JSON.stringify(data)],{type:'application/json'}),`player-spotlight-backup-${new Date().toISOString().slice(0,10)}.json`);toast(t('tDownloaded'))}catch(e){toast(t('tExportFail'),true)}finally{busy(false)}};
 $('#sRestore').onclick=()=>{$('#fRestore').value='';$('#fRestore').click()};
 $('#fRestore').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;if(f.size>800*1048576){toast(t('tTooBig'),true);return}
@@ -1452,13 +1485,14 @@ $('#fRestore').addEventListener('change',async e=>{const f=e.target.files[0];if(
   players.forEach(p=>{if(!p.brand)p.brand=Object.assign(liveBrandFrom(settings,p.team))});
   const how=await ask({title:t('restoreT'),text:t('restoreHow',{n:players.length}),buttons:[{label:t('restoreReplace'),value:'replace',cls:'pri'},{label:t('restoreMerge'),value:'merge'},{label:t('cancel'),value:null}]});if(!how)return;
   let next;if(how==='replace'){next=settings;next.lang=LANG}else{next=clone(S);settings.teams.forEach(tp=>{if(!next.teams.some(x=>x.name===tp.name))next.teams.push(tp)});next.teams.sort((a,b)=>a.name.localeCompare(b.name));next.cats=[...new Set([...next.cats,...settings.cats])];if(!next.logo&&settings.logo)next.logo=settings.logo;if(!next.programName&&settings.programName)next.programName=settings.programName}
-  busy(true,'');try{await DB.batch({clear:how==='replace',kv:{settings:next},players})}catch(x){busy(false);toast(t('tRestoreFail'),true);return}
-  S=next;PLAYERS=await DB.all().catch(()=>PLAYERS);if(how==='replace'){D=blank();dDirty=false;PD.started=false}procCache.clear();busy(false);
+  const inR=(data.rosters&&typeof data.rosters==='object')?data.rosters:{};const nextR=how==='replace'?inR:Object.assign({},inR,ROSTERS);
+  busy(true,'');try{await DB.batch({clear:how==='replace',kv:{settings:next,rosters:nextR},players})}catch(x){busy(false);toast(t('tRestoreFail'),true);return}
+  S=next;ROSTERS=nextR;PLAYERS=await DB.all().catch(()=>PLAYERS);if(how==='replace'){D=blank();dDirty=false;PD.started=false}procCache.clear();busy(false);
   applyLang();loadSettingsForm();loadCreateForm();pdShow();galleryDirty=true;if(VIEW==='players')renderGallery();toast(t('tRestored',{n:players.length})+(damaged?t('tRestoreSkip',{m:damaged}):''))});
 function liveBrandFrom(st,team){const tp=st.teams.find(x=>x.name===team);return{program:st.programName,logo:st.logo,badge:st.logoBadge,logoScale:st.logoScale,logoPos:st.logoPos,primary:(tp&&tp.primary)||st.primary,secondary:(tp&&tp.secondary)||st.secondary,slogan:st.slogan,website:st.website,season:st.season}}
 $('#sWipe').onclick=async()=>{const ok=await ask({title:t('wipeT'),text:t('wipeText'),buttons:[{label:t('cancel'),value:null},{label:t('wipe'),value:true,cls:'danger'}]});if(!ok)return;
   const fresh=DEF_SETTINGS();fresh.lang=LANG;try{await DB.batch({clear:true,kv:{settings:fresh}})}catch(e){toast(t('tSaveFail'),true);return}
-  S=fresh;PLAYERS=[];D=blank();dDirty=false;PD={team:'',category:'',template:'spotlight',heading:'none',headingText:'',autoBg:false,started:false,count:0};procCache.clear();imgCache.clear();
+  S=fresh;ROSTERS={};PLAYERS=[];D=blank();dDirty=false;PD={team:'',category:'',template:'spotlight',heading:'none',headingText:'',autoBg:false,started:false,count:0};procCache.clear();imgCache.clear();
   loadSettingsForm();loadCreateForm();pdShow();galleryDirty=true;toast(t('tWiped'))};
 
 /* ───────── navigation + language ───────── */
@@ -1495,6 +1529,7 @@ async function startApp(){if(started){refreshAll();return}started=true;
   // graphics saved before branding was kept per player get today's branding, once, so they never shift again
   const legacy=PLAYERS.filter(p=>!p.brand);if(legacy.length){legacy.forEach(p=>{p.brand=liveBrand(p.team);if(!p.heading)p.heading='none'});DB.batch({players:legacy}).catch(()=>{})}
   try{const d=await DB.get('draft');if(d&&d.D){D=Object.assign(blank(),d.D,{adj:Object.assign(DEF_ADJ(),d.D.adj||{}),show:Object.assign(DEF_SHOW(),d.D.show||{})});dDirty=!!d.dDirty;if(D.id&&!PLAYERS.find(p=>p.id===D.id)){D.id=null;D.brand=null}if(!D.consent){D.photo=null}}}catch(e){}
+  try{const r=await DB.get('rosters');if(r&&typeof r==='object')ROSTERS=r}catch(e){}
   try{const pd=await DB.get('photoday');if(pd)Object.assign(PD,pd,{started:false})}catch(e){}
   if(!PD.template)PD.template=S.template;
   // Photo Day forgets a remembered team or category that was removed in Settings
