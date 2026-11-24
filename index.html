@@ -1397,10 +1397,10 @@ function refreshLists(){const tl=$('#sTeamList');tl.innerHTML=S.teams.length?'':
     d.innerHTML=`<span class="l"><span class="tlogo">${x.logo?`<img alt="" src="${x.logo}">`:''}</span><span class="tsw"><i style="background:${esc(x.primary||S.primary)}"></i><i style="background:${esc(x.secondary||S.secondary)}"></i></span><span>${esc(x.name)}</span></span>`;
     const bb=document.createElement('span');bb.className='b';const e=document.createElement('button');e.type='button';e.className='btn sm';e.textContent=t('edit');e.onclick=()=>openTeam(x.name);
     const r=document.createElement('button');r.type='button';r.className='btn sm ghost';r.textContent=t('remove');
-    r.onclick=async()=>{const ok=await ask({title:t('removeTeamT'),text:t('removeTeam',{name:x.name})});if(!ok)return;const prev=S.teams;S.teams=S.teams.filter(y=>y.name!==x.name);if(!(await saveS())){S.teams=prev}refreshLists();fillTeam($('#cTeam'),D.team);fillTeam($('#pdTeam'),PD.team)};
+    r.onclick=async()=>{const ok=await ask({title:t('removeTeamT'),text:t('removeTeam',{name:x.name})});if(!ok)return;const prev=S.teams;S.teams=S.teams.filter(y=>y.name!==x.name);if(!(await saveS())){S.teams=prev}else if(PD.team===x.name){PD.team='';PD.started=false;savePD();if(VIEW==='photoday')pdShow()}refreshLists();fillTeam($('#cTeam'),D.team);fillTeam($('#pdTeam'),PD.team)};
     bb.appendChild(e);bb.appendChild(r);d.appendChild(bb);tl.appendChild(d)});
   const cl=$('#sCatList');cl.innerHTML='';S.cats.forEach(x=>{const d=document.createElement('div');d.className='it';d.innerHTML=`<span>${esc(x)}</span>`;const b=document.createElement('button');b.type='button';b.className='btn sm ghost';b.textContent=t('remove');
-    b.onclick=()=>{S.cats=S.cats.filter(y=>y!==x);saveS();refreshLists();fillCat($('#cCat'),D.category);fillCat($('#pdCat'),PD.category)};d.appendChild(b);cl.appendChild(d)})}
+    b.onclick=()=>{S.cats=S.cats.filter(y=>y!==x);saveS();if(PD.category===x&&!allCats().includes(x)){PD.category='';PD.started=false;savePD();if(VIEW==='photoday')pdShow()}refreshLists();fillCat($('#cCat'),D.category);fillCat($('#pdCat'),PD.category)};d.appendChild(b);cl.appendChild(d)})}
 async function storage(){try{if(navigator.storage&&navigator.storage.estimate){const e=await navigator.storage.estimate();$('#sStorage').textContent=(e.usage/1048576).toFixed(1)+' MB'}}catch(e){}}
 const bindS=(id,key,cb)=>$(id).addEventListener('input',e=>{S[key]=e.target.value;saveSoon();if(cb)cb();refreshAllSoon()});
 bindS('#sProgram','programName');bindS('#sSlogan','slogan');bindS('#sWebsite','website');bindS('#sSeason','season',()=>{$('#cSeason').placeholder=brandOf(D).season||''});
@@ -1497,6 +1497,8 @@ async function startApp(){if(started){refreshAll();return}started=true;
   try{const d=await DB.get('draft');if(d&&d.D){D=Object.assign(blank(),d.D,{adj:Object.assign(DEF_ADJ(),d.D.adj||{}),show:Object.assign(DEF_SHOW(),d.D.show||{})});dDirty=!!d.dDirty;if(D.id&&!PLAYERS.find(p=>p.id===D.id)){D.id=null;D.brand=null}if(!D.consent){D.photo=null}}}catch(e){}
   try{const pd=await DB.get('photoday');if(pd)Object.assign(PD,pd,{started:false})}catch(e){}
   if(!PD.template)PD.template=S.template;
+  // Photo Day forgets a remembered team or category that was removed in Settings
+  if(PD.team&&!S.teams.some(x=>x.name===PD.team))PD.team='';if(PD.category&&!allCats().includes(PD.category))PD.category='';
   applyLang();
   tplChips($('#cTpl'),()=>D.template,k=>{D.template=k;touch()});
   tplChips($('#pdTplPick'),()=>PD.template,k=>{PD.template=k;savePD()});
