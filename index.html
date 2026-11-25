@@ -75,7 +75,7 @@ input[type=range]{width:100%;height:36px;accent-color:var(--orange);background:t
 .sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
 .sw label{display:flex;align-items:center;gap:10px;min-height:48px;padding:0 12px;border-radius:12px;background:var(--navy2);border:1px solid var(--line);font-weight:600;font-size:.9rem;cursor:pointer}
 .sw input{width:20px;height:20px;accent-color:var(--orange);flex:none}
-.tchips{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.tchips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .tchip{min-width:0;border:2px solid var(--line2);background:var(--navy2);color:var(--white);border-radius:12px;padding:5px 4px 7px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
 .tchip span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .tchip canvas{width:100%;border-radius:6px;display:block;background:#0b1320}
@@ -640,8 +640,8 @@ canvas.pv:active{cursor:grabbing}
 const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
 const FORMATS={portrait:{w:1080,h:1350},square:{w:1080,h:1080},story:{w:1080,h:1920}};
 const FMT_LIST=['portrait','square','story'];
-const TEMPLATES=['spotlight','elite','hardwood','energy','signature'];
-const TPL_NAMES={spotlight:'Spotlight',elite:'Elite',hardwood:'Hardwood',energy:'Energy',signature:'Signature'};
+const TEMPLATES=['spotlight','elite','hardwood','energy','signature','arena'];
+const TPL_NAMES={spotlight:'Spotlight',elite:'Elite',hardwood:'Hardwood',energy:'Energy',signature:'Signature',arena:'Arena'};
 const DEFAULT_CATS=['Pre-Mini','Mini','Infantil','Juvenil','Junior'];
 const SEG_URL='https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@0.1.1675465747/';
 const SB_URL='https://sdaphocueugzfvjovuxd.supabase.co';
@@ -690,7 +690,7 @@ confirmDeleteT:'Delete player?',confirmDelete:'Delete {name}? This cannot be und
 batchT:'Batch export',tpT:'Team page for websites',tpHint:'One web page with the team\'s graphics, your logo and colors. Upload it to the program\'s website. Choose a team above.',tpFirst:'First name and number only',tpBtn:'Download team page',tpWorking:'Building team page {i} of {n}…',tpDone:'Team page downloaded — {n} players',tpNeedTeam:'Choose a team first',tpFail:'The team page could not be made. Try again.',tpPlayers:'{n} players',batchHint:'Download every graphic for a team and category in one ZIP file.',batchBtn:'Download ZIP',bxInfo:'{p} players · {g} graphics',bxSkip:' · {s} without photo permission or logo will be skipped',
 bxNoFmt:'Choose at least one size',bxWorking:'Creating {i} of {n}…',tBatchNone:'No players here can be exported yet (photo permission and logo are required)',tBatchDone:'ZIP downloaded: {n} graphics',tBatchSkipped:' · {n} players skipped',tBatchFail:'The ZIP could not be created — try fewer sizes at a time',
 tplIntro:'Every template uses your logo and colors. Choose the one for new graphics.',useTpl:'Use this template',isDefault:'In use',
-d_spotlight:'Dark stage, dramatic light and bold type.',d_elite:'Recruiting style with elegant type and metallic accents.',d_hardwood:'Court wood, warm tones and athletic banners.',d_energy:'Dynamic shapes in your team colors.',d_signature:'Clean and minimal — the player is the focus.',
+d_spotlight:'Dark stage, dramatic light and bold type.',d_elite:'Recruiting style with elegant type and metallic accents.',d_hardwood:'Court wood, warm tones and athletic banners.',d_energy:'Dynamic shapes in your team colors.',d_signature:'Clean and minimal — the player is the focus.',d_arena:'Official trading card: arena lights, gold name plate and the player up close.',
 setBrand:'Program branding',sProgram:'Program name',sLogo:'Program logo (required)',noLogo:'No logo yet',uploadLogo:'Upload logo',sLogoHint:'PNG, JPG or SVG. It appears on every graphic, with its own proportions and transparency.',
 sLogoBadge:'Logo backing',badgeNone:'None',badgeLight:'Light',badgeDark:'Dark',sLogoSize:'Logo size',sLogoPos:'Logo position',sArt:'Background art',artNone:'Template',artHoops:'Basketball art',artHint:'Basketball art paints a game-night scene in your colors behind every player. It looks best with Photo Day background removal.',posAuto:'Template',posLeft:'Top left',posCenter:'Top center',posRight:'Top right',
 sPrimary:'Primary color',sSecondary:'Secondary color',sSlogan:'Slogan (optional)',sWebsite:'Website (optional)',sSeason:'Current season',
@@ -734,7 +734,7 @@ confirmDeleteT:'¿Borrar jugador?',confirmDelete:'¿Borrar a {name}? No se puede
 batchT:'Exportar en lote',tpT:'Página del equipo para sitios web',tpHint:'Una página web con los gráficos del equipo, tu logo y colores. Súbela al sitio web del programa. Escoge un equipo arriba.',tpFirst:'Solo primer nombre y número',tpBtn:'Descargar página del equipo',tpWorking:'Creando página del equipo {i} de {n}…',tpDone:'Página del equipo descargada — {n} jugadores',tpNeedTeam:'Escoge un equipo primero',tpFail:'No se pudo crear la página del equipo. Inténtalo de nuevo.',tpPlayers:'{n} jugadores',batchHint:'Descarga todos los gráficos de un equipo y categoría en un solo archivo ZIP.',batchBtn:'Descargar ZIP',bxInfo:'{p} jugadores · {g} gráficos',bxSkip:' · se omitirán {s} sin permiso de foto o sin logo',
 bxNoFmt:'Escoge al menos un tamaño',bxWorking:'Creando {i} de {n}…',tBatchNone:'Ningún jugador aquí se puede exportar todavía (se requiere permiso de foto y logo)',tBatchDone:'ZIP descargado: {n} gráficos',tBatchSkipped:' · {n} jugadores omitidos',tBatchFail:'No se pudo crear el ZIP — prueba con menos tamaños a la vez',
 tplIntro:'Cada plantilla usa tu logo y tus colores. Escoge la de los gráficos nuevos.',useTpl:'Usar esta plantilla',isDefault:'En uso',
-d_spotlight:'Escenario oscuro, luz dramática y letra fuerte.',d_elite:'Estilo de reclutamiento con letra elegante y acentos metálicos.',d_hardwood:'Madera de cancha, tonos cálidos y banners atléticos.',d_energy:'Formas dinámicas con los colores del equipo.',d_signature:'Limpio y minimalista — el jugador es el centro.',
+d_spotlight:'Escenario oscuro, luz dramática y letra fuerte.',d_elite:'Estilo de reclutamiento con letra elegante y acentos metálicos.',d_hardwood:'Madera de cancha, tonos cálidos y banners atléticos.',d_energy:'Formas dinámicas con los colores del equipo.',d_signature:'Limpio y minimalista — el jugador es el centro.',d_arena:'Tarjeta oficial: luces de arena, placa dorada y el jugador de cerca.',
 setBrand:'Identidad del programa',sProgram:'Nombre del programa',sLogo:'Logo del programa (obligatorio)',noLogo:'Sin logo',uploadLogo:'Subir logo',sLogoHint:'PNG, JPG o SVG. Sale en cada gráfico, con sus proporciones y transparencia.',
 sLogoBadge:'Fondo del logo',badgeNone:'Ninguno',badgeLight:'Claro',badgeDark:'Oscuro',sLogoSize:'Tamaño del logo',sLogoPos:'Posición del logo',sArt:'Arte de fondo',artNone:'Plantilla',artHoops:'Arte de baloncesto',artHint:'El arte de baloncesto pinta una escena de noche de juego con tus colores detrás de cada jugador. Se ve mejor con el fondo removido del Día de Fotos.',posAuto:'Plantilla',posLeft:'Arriba izq.',posCenter:'Arriba centro',posRight:'Arriba der.',
 sPrimary:'Color principal',sSecondary:'Color secundario',sSlogan:'Lema (opcional)',sWebsite:'Sitio web (opcional)',sSeason:'Temporada actual',
@@ -999,6 +999,52 @@ spotlight(c,R,W,H,fmt){
   info(c,R,teamCat(R),cx,L.info,L.nw,{size:fmt==='square'?30:36,track:.14,color:'rgba(255,255,255,.92)',align:L.align,wrap:fmt==='square'});
   chips(c,metaItems(R),cx,L.meta,L.nw,{size:fmt==='square'?22:25,stroke:rgba(acc,.85),fill:'rgba(255,255,255,.04)',color:'#fff',align:L.align,track:.1});
   foot(c,R,cx,L.foot,L.nw,{size:21,color:'rgba(255,255,255,.55)',align:L.align})},
+
+arena(c,R,W,H,fmt){
+  const P=R.p,glow=lift(P,.3),gold=lift(R.s,.42),deep=mix(sink(P,.08),'#04050a',.6);
+  const L={portrait:{logo:[40,30,320,150,'left'],ph:{x:40,y:96,w:1000,h:944},plate:[40,964,W-80,164],tab:64,info:1186,meta:1250,foot:1316,floor:1040,hoop:[W-210,250,1]},
+    square:{logo:[34,24,260,116,'left'],ph:{x:150,y:70,w:780,h:740},plate:[40,748,W-80,136],tab:54,info:928,meta:984,foot:1046,floor:800,hoop:[W-170,200,.8]},
+    story:{logo:[44,60,360,170,'left'],ph:{x:20,y:180,w:1040,h:1330},plate:[40,1428,W-80,190],tab:72,info:1694,meta:1772,foot:1866,floor:1500,hoop:[W-210,420,1.1]}}[fmt];
+  if(R.art)drawArt(c,R,W,H,fmt,L.ph,null);
+  else{let g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,mix(deep,'#000',.35));g.addColorStop(.6,deep);g.addColorStop(1,'#030306');c.fillStyle=g;c.fillRect(0,0,W,H);
+    let sd=31;const rnd=()=>{sd=(sd*16807)%2147483647;return(sd-1)/2147483646};
+    for(let i=0;i<9;i++){const x=rnd()*W,y=H*(.15+rnd()*.6),r=W*(.25+rnd()*.35);const hz=c.createRadialGradient(x,y,0,x,y,r);hz.addColorStop(0,rgba(glow,.20));hz.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=hz;c.fillRect(0,0,W,H)}
+    // stadium light bank (top right)
+    const lx=W-150,ly=fmt==='square'?60:80;let bl=c.createRadialGradient(lx,ly,0,lx,ly,W*.5);bl.addColorStop(0,'rgba(255,255,255,.35)');bl.addColorStop(.25,rgba(glow,.18));bl.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=bl;c.fillRect(0,0,W,H);
+    c.save();c.fillStyle='#ffffff';c.shadowColor='#ffffff';c.shadowBlur=26;for(let r=0;r<2;r++)for(let k=0;k<4;k++){c.beginPath();c.arc(lx-66+k*44+(r?22:0),ly-20+r*40,15,0,7);c.fill()}c.restore();
+    // hoop + backboard in neon outline
+    const[hx,hy,hs]=L.hoop;c.save();c.translate(hx,hy);c.scale(hs,hs);c.lineJoin='round';c.strokeStyle='rgba(255,255,255,.92)';c.shadowColor=glow;c.shadowBlur=24;c.lineWidth=7;c.strokeRect(-150,-110,300,190);c.lineWidth=5;c.strokeRect(-55,-40,110,80);
+    c.strokeStyle=glow;c.lineWidth=8;c.beginPath();c.ellipse(0,92,72,15,0,0,7);c.stroke();c.shadowBlur=8;c.strokeStyle='rgba(255,255,255,.7)';c.lineWidth=2.5;
+    for(let i=0;i<=8;i++){const a0=-68+i*17,a1=-38+i*9.5;c.beginPath();c.moveTo(a0,94);c.lineTo(a1,190);c.stroke()}for(let k=1;k<4;k++){c.beginPath();for(let i=0;i<=8;i++){const w=68-k*8,x=-w+i*w/4,y=94+k*24+(i%2?8:0);i?c.lineTo(x,y):c.moveTo(x,y)}c.stroke()}c.restore();
+    // big ball behind the player
+    const b0=L.ph,bx=b0.x+b0.w*.44,by=b0.y+b0.h*.42,BR=Math.min(b0.w,b0.h)*.36;c.save();c.shadowColor=rgba(glow,.8);c.shadowBlur=90;c.beginPath();c.arc(bx,by,BR,0,7);
+    const bg=c.createRadialGradient(bx-BR*.35,by-BR*.4,BR*.1,bx,by,BR);bg.addColorStop(0,'#f0a060');bg.addColorStop(.5,mix('#d2621e',P,.4));bg.addColorStop(1,mix(sink(P,.2),'#000',.45));c.fillStyle=bg;c.fill();c.restore();
+    c.save();c.beginPath();c.arc(bx,by,BR,0,7);c.clip();c.strokeStyle='rgba(20,8,4,.85)';c.lineWidth=BR*.035;c.beginPath();c.moveTo(bx-BR,by);c.bezierCurveTo(bx-BR*.4,by-BR*.12,bx+BR*.4,by-BR*.12,bx+BR,by);c.stroke();
+    c.beginPath();c.moveTo(bx,by-BR);c.bezierCurveTo(bx-BR*.2,by-BR*.4,bx-BR*.2,by+BR*.4,bx,by+BR);c.stroke();c.beginPath();c.arc(bx-BR*1.3,by,BR*.95,-.9,.9);c.stroke();c.beginPath();c.arc(bx+BR*1.3,by,BR*.95,Math.PI-.9,Math.PI+.9);c.stroke();c.restore();
+    // wood floor
+    c.save();c.beginPath();c.rect(0,L.floor,W,H-L.floor);c.clip();c.drawImage(wood(fmt,W,H),0,0);const fl=c.createLinearGradient(0,L.floor,0,H);fl.addColorStop(0,'rgba(0,0,0,.25)');fl.addColorStop(1,'rgba(0,0,0,.75)');c.fillStyle=fl;c.fillRect(0,L.floor,W,H-L.floor);c.restore();
+    c.strokeStyle=rgba(glow,.5);c.lineWidth=3;c.beginPath();c.moveTo(0,L.floor);c.lineTo(W,L.floor);c.stroke()}
+  // glow behind the player, then the player (runs down behind the plate)
+  const b=L.ph,cut=R.photo&&R.photo.cutout;const pg=c.createRadialGradient(b.x+b.w/2,b.y+b.h*.45,0,b.x+b.w/2,b.y+b.h*.45,b.w*.6);pg.addColorStop(0,rgba(glow,.35));pg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=pg;c.fillRect(0,0,W,H);
+  if(cut){c.save();c.shadowColor='rgba(0,0,0,.6)';c.shadowBlur=40;photo(c,R,b,{sil:'rgba(255,255,255,.14)'});c.restore()}
+  else photo(c,R,b,{path:x=>rr(x,b.x,b.y,b.w,b.h,28),bg:'rgba(255,255,255,.04)',sil:'rgba(255,255,255,.14)'});
+  const vg=c.createRadialGradient(W/2,H*.42,H*.3,W/2,H*.5,H*.8);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.5)');c.fillStyle=vg;c.fillRect(0,0,W,H);
+  logo(c,R,...L.logo,true);
+  // gold name plate with chamfered ends
+  const[px,py,pw,ph]=L.plate,ch=ph*.22;const plate=(x,y,w,h,k)=>{c.beginPath();c.moveTo(x+k,y);c.lineTo(x+w-k,y);c.lineTo(x+w,y+h/2);c.lineTo(x+w-k,y+h);c.lineTo(x+k,y+h);c.lineTo(x,y+h/2);c.closePath()};
+  c.save();c.shadowColor='rgba(0,0,0,.6)';c.shadowBlur=30;c.shadowOffsetY=10;plate(px,py,pw,ph,ch);const pf=c.createLinearGradient(0,py,0,py+ph);pf.addColorStop(0,mix(sink(P,.12),'#000',.25));pf.addColorStop(1,mix(sink(P,.06),'#000',.6));c.fillStyle=pf;c.fill();c.restore();
+  plate(px,py,pw,ph,ch);c.lineWidth=7;c.strokeStyle=metal(c,px,py,px+pw,py+ph,gold);c.stroke();plate(px+12,py+10,pw-24,ph-20,ch-6);c.lineWidth=1.6;c.strokeStyle=rgba(gold,.55);c.stroke();
+  // heading tab on the plate's top edge
+  const tsz=fmt==='square'?24:fmt==='story'?32:28;if(R.heading){const f=fitLine(c,R.heading.toUpperCase(),800,FB,pw*.62,tsz,12,.2);setF(c,800,f.s,FB);const tw2=tw(c,f.text,f.s*.2)+f.s*3,th=L.tab;const tx=W/2-tw2/2,ty=py-th*.55;
+    c.save();c.shadowColor='rgba(0,0,0,.5)';c.shadowBlur=16;plate(tx,ty,tw2,th,th*.35);c.fillStyle=mix(sink(P,.08),'#000',.4);c.fill();c.restore();plate(tx,ty,tw2,th,th*.35);c.lineWidth=5;c.strokeStyle=metal(c,tx,ty,tx+tw2,ty+th,gold);c.stroke();
+    c.fillStyle=gold;c.textBaseline='middle';txt(c,f.text,W/2,ty+th/2+f.s*.04,'center',f.s*.2);c.textBaseline='alphabetic'}
+  const top=R.heading?L.tab*.42:0;
+  nameBlock(c,R,[px+ch+10,py+top+14,pw-2*ch-20,ph-top-28],{wt:700,fam:FH,align:'center',maxS:fmt==='story'?150:fmt==='square'?104:124,lh:.95,cap:.78,oneLine:true,skew:.14,shadow:'rgba(0,0,0,.55)',sh:4,
+    fill:(x,y,w,h)=>{const g=c.createLinearGradient(0,y,0,y+h);g.addColorStop(0,'#ffffff');g.addColorStop(.55,'#f1f1f1');g.addColorStop(1,'#c9c9d2');return g}});
+  // team · category, then chips, then footer
+  info(c,R,teamCat(R),W/2,L.info,W-140,{size:fmt==='square'?30:fmt==='story'?40:36,track:.1,color:'#ffffff',align:'center',wrap:false});
+  chips(c,metaItems(R),W/2,L.meta,W-160,{size:fmt==='square'?24:fmt==='story'?32:29,wt:800,stroke:gold,lw:4,fill:'rgba(0,0,0,.55)',color:'#ffffff',align:'center',track:.08});
+  foot(c,R,W/2,L.foot,W-140,{size:fmt==='story'?24:20,color:'rgba(255,255,255,.6)',align:'center'})},
 
 elite(c,R,W,H,fmt){
   R.logoMargin=74;
