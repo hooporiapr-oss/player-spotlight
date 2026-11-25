@@ -488,13 +488,13 @@ canvas.pv:active{cursor:grabbing}
         <span class="lbl" data-i="sLogoType">Logo type</span>
         <div class="seg" id="sLogoType" style="margin-bottom:6px">
           <button type="button" data-ltype="standard"><span data-i="ltStandard">Standard</span></button>
-          <button type="button" data-ltype="banner"><span data-i="ltBanner">Banner · full width</span></button>
+          <button type="button" data-ltype="banner"><span data-i="ltBanner">Hero banner</span></button>
         </div>
-        <div id="sBannerNote"><p class="hint" style="margin:0 0 10px" data-i="ltBannerNote">Banner shows your logo image full width at the top, above the photo. Logo size sets its maximum height.</p>
-        <span class="lbl" data-i="sBorder">Banner border</span>
+        <div id="sBannerNote"><p class="hint" style="margin:0 0 10px" data-i="ltBannerNote">Hero: your logo image runs edge to edge across the top, with the photo below it. Logo size sets its maximum height.</p>
+        <span class="lbl" data-i="sBorder">Accent line under the banner</span>
         <div class="seg" id="sBorder" style="margin-bottom:14px">
-          <button type="button" data-bd="on"><span data-i="bdOn">Border</span></button>
-          <button type="button" data-bd="off"><span data-i="bdOff">No border</span></button>
+          <button type="button" data-bd="on"><span data-i="bdOn">Line</span></button>
+          <button type="button" data-bd="off"><span data-i="bdOff">No line</span></button>
         </div></div>
         <div id="sLogoPosWrap"><span class="lbl" data-i="sLogoPos">Logo position</span>
         <div class="seg" id="sLogoPos" style="margin-bottom:14px">
@@ -696,7 +696,7 @@ bxNoFmt:'Choose at least one size',bxWorking:'Creating {i} of {n}…',tBatchNone
 tplIntro:'Every template uses your logo and colors. Choose the one for new graphics.',useTpl:'Use this template',isDefault:'In use',
 d_spotlight:'Dark stage, dramatic light and bold type.',d_elite:'Recruiting style with elegant type and metallic accents.',d_hardwood:'Court wood, warm tones and athletic banners.',d_energy:'Dynamic shapes in your team colors.',d_signature:'Clean and minimal — the player is the focus.',
 setBrand:'Program branding',sProgram:'Program name',sLogo:'Program logo (required)',noLogo:'No logo yet',uploadLogo:'Upload logo',sLogoHint:'PNG, JPG or SVG. It appears on every graphic, with its own proportions and transparency.',
-sLogoBadge:'Logo backing',badgeNone:'None',badgeLight:'Light',badgeDark:'Dark',sLogoSize:'Logo size',sLogoPos:'Logo position',sLogoType:'Logo type',ltStandard:'Standard',ltBanner:'Banner · full width',sBorder:'Banner border',bdOn:'Border',bdOff:'No border',ltBannerNote:'Banner shows your logo image full width at the top, above the photo. Logo size sets its maximum height.',posAuto:'Template',posLeft:'Top left',posCenter:'Top center',posRight:'Top right',
+sLogoBadge:'Logo backing',badgeNone:'None',badgeLight:'Light',badgeDark:'Dark',sLogoSize:'Logo size',sLogoPos:'Logo position',sLogoType:'Logo type',ltStandard:'Standard',ltBanner:'Hero banner',sBorder:'Accent line under the banner',bdOn:'Line',bdOff:'No line',ltBannerNote:'Hero: your logo image runs edge to edge across the top, with the photo below it. Logo size sets its maximum height.',posAuto:'Template',posLeft:'Top left',posCenter:'Top center',posRight:'Top right',
 sPrimary:'Primary color',sSecondary:'Secondary color',sSlogan:'Slogan (optional)',sWebsite:'Website (optional)',sSeason:'Current season',
 setLists:'Teams & categories',sTeams:'Teams',sTeamsHint:'Each team keeps its own logo and colors, applied automatically when the team is chosen.',sCats:'Categories',sDefaultCats:'Built in: Pre-Mini, Mini, Infantil, Juvenil, Junior. Add your own below.',add:'Add',sTeamPh:'New team name',sCatPh:'New category',noTeams:'No teams yet',
 teamEditT:'Team profile',teamName:'Team name',useProgramColors:'Use the program colors',
@@ -740,7 +740,7 @@ bxNoFmt:'Escoge al menos un tamaño',bxWorking:'Creando {i} de {n}…',tBatchNon
 tplIntro:'Cada plantilla usa tu logo y tus colores. Escoge la de los gráficos nuevos.',useTpl:'Usar esta plantilla',isDefault:'En uso',
 d_spotlight:'Escenario oscuro, luz dramática y letra fuerte.',d_elite:'Estilo de reclutamiento con letra elegante y acentos metálicos.',d_hardwood:'Madera de cancha, tonos cálidos y banners atléticos.',d_energy:'Formas dinámicas con los colores del equipo.',d_signature:'Limpio y minimalista — el jugador es el centro.',
 setBrand:'Identidad del programa',sProgram:'Nombre del programa',sLogo:'Logo del programa (obligatorio)',noLogo:'Sin logo',uploadLogo:'Subir logo',sLogoHint:'PNG, JPG o SVG. Sale en cada gráfico, con sus proporciones y transparencia.',
-sLogoBadge:'Fondo del logo',badgeNone:'Ninguno',badgeLight:'Claro',badgeDark:'Oscuro',sLogoSize:'Tamaño del logo',sLogoPos:'Posición del logo',sLogoType:'Tipo de logo',ltStandard:'Estándar',ltBanner:'Banner · ancho completo',sBorder:'Borde del banner',bdOn:'Con borde',bdOff:'Sin borde',ltBannerNote:'El banner muestra la imagen de tu logo a todo lo ancho arriba, encima de la foto. El tamaño del logo fija su altura máxima.',posAuto:'Plantilla',posLeft:'Arriba izq.',posCenter:'Arriba centro',posRight:'Arriba der.',
+sLogoBadge:'Fondo del logo',badgeNone:'Ninguno',badgeLight:'Claro',badgeDark:'Oscuro',sLogoSize:'Tamaño del logo',sLogoPos:'Posición del logo',sLogoType:'Tipo de logo',ltStandard:'Estándar',ltBanner:'Banner hero',sBorder:'Línea bajo el banner',bdOn:'Con línea',bdOff:'Sin línea',ltBannerNote:'Hero: la imagen de tu logo va de borde a borde arriba, con la foto debajo. El tamaño del logo fija su altura máxima.',posAuto:'Plantilla',posLeft:'Arriba izq.',posCenter:'Arriba centro',posRight:'Arriba der.',
 sPrimary:'Color principal',sSecondary:'Color secundario',sSlogan:'Lema (opcional)',sWebsite:'Sitio web (opcional)',sSeason:'Temporada actual',
 setLists:'Equipos y categorías',sTeams:'Equipos',sTeamsHint:'Cada equipo guarda su propio logo y colores, que se aplican solos al escoger el equipo.',sCats:'Categorías',sDefaultCats:'Incluidas: Pre-Mini, Mini, Infantil, Juvenil, Junior. Añade las tuyas abajo.',add:'Añadir',sTeamPh:'Nombre del equipo',sCatPh:'Nueva categoría',noTeams:'Aún no hay equipos',
 teamEditT:'Perfil del equipo',teamName:'Nombre del equipo',useProgramColors:'Usar los colores del programa',
@@ -927,9 +927,10 @@ function ban(L,R,W,H,fmt,isTop){R.banner=null;R.W=W;R.H=H;
     const gap=fmt==='square'?14:18,bottom=Math.round(ex.y+ex.h+gap);
     if(ex.x<b.x+b.w&&ex.x+ex.w>b.x&&ex.y<b.y+b.h*.5&&ex.y+ex.h>b.y+2){const sh=bottom-b.y;b.y=bottom;b.h-=sh;return{sh,bottom}}return{sh:0,bottom:0}}
 const sc=R.logoScale||1,m=R.logoMargin||56;
-  const top=(fmt==='story'?50:30)+(m>56?26:0);const lg=R.logo,ar=lg&&lg.naturalWidth&&lg.naturalHeight?lg.naturalWidth/lg.naturalHeight:4;
-  const deco=(R.logoBorder!==false||(R.badge&&R.badge!=='none'))?12:0;let capH={portrait:300,square:170,story:440}[fmt]*sc;if(fmt==='square')capH=Math.min(capH,190);
-  let w=W-2*m-2*deco,h=w/ar;if(h>capH){h=capH;w=h*ar}R.banner={x:(W-w)/2,y:top+deco,w,h,deco};const bottom=Math.round(top+h+2*deco+(fmt==='square'?18:24));
+  // hero: the logo image runs edge to edge across the top of the graphic, in its own band
+  const lg=R.logo,ar=lg&&lg.naturalWidth&&lg.naturalHeight?lg.naturalWidth/lg.naturalHeight:4;
+  let capH={portrait:300,square:170,story:440}[fmt]*sc;if(fmt==='square')capH=Math.min(capH,190);
+  const h=Math.round(Math.min(W/ar,capH)),bar=R.logoBorder!==false?10:0;R.banner={x:0,y:0,w:W,h,bar};const bottom=h+bar+(fmt==='square'?18:24);
   const b=L.ph;let sh=0;if(b&&b.y<bottom){sh=bottom-b.y;b.y=bottom;b.h-=sh}return{sh,bottom}}
 // the box the logo is placed in (before fitting the image's own proportions)
 function lrect(R,x,y,w,h,align,isTop){align=align||'center';const W=R.W,H=R.H,sc=R.banner?1:R.logoScale||1,m=R.logoMargin||56;
@@ -940,11 +941,12 @@ function lrect(R,x,y,w,h,align,isTop){align=align||'center';const W=R.W,H=R.H,sc
   else x=align==='left'?x:align==='right'?x+w-nw:x+(w-nw)/2;
   y=y+(h-nh)/2;w=nw;h=nh;x=Math.max(16,Math.min(x,W-16-w));y=Math.max(14,Math.min(y,H-14-h));return{x,y,w,h,align}}
 function logo(c,R,x0,y0,w0,h0,align0,isTop){const W=R.W,H=R.H;const q=lrect(R,x0,y0,w0,h0,align0,isTop);let{x,y,w,h,align}=q;
-  if(R.banner){const d=R.banner.deco,bx=x-d,by=y-d,bw=w+2*d,bh=h+2*d,br=Math.min(22,bh*.14),lw=6;c.save();
-    if(R.badge&&R.badge!=='none'){c.fillStyle=R.badge==='light'?'rgba(255,255,255,.96)':'rgba(10,14,22,.88)';rr(c,bx,by,bw,bh,br);c.fill()}
-    if(R.logoBorder!==false){c.lineWidth=lw;c.strokeStyle=R.s;rr(c,bx+lw/2,by+lw/2,bw-lw,bh-lw,br);c.stroke()}c.restore();
-    if(!R.logo){const f=fitLine(c,'LOGO',700,FH,w*.5,h*.42,8,.1);c.fillStyle='rgba(255,255,255,.85)';c.textBaseline='middle';txt(c,f.text,x+w/2,y+h/2,'center',f.s*.1);c.textBaseline='alphabetic';return}
-    c.drawImage(R.logo,x,y,w,h);return}
+  if(R.banner){const B=R.banner;c.save();c.beginPath();c.rect(0,0,W,B.h);c.clip();
+    const iw=R.logo?R.logo.naturalWidth:0,ih=R.logo?R.logo.naturalHeight:0,k=iw?Math.min(W/iw,B.h/ih):1,dw=iw*k,dh=ih*k;
+    const bd=R.badge&&R.badge!=='none';if(bd||!R.logo||dw<W-2){c.fillStyle=bd?(R.badge==='light'?'#ffffff':'#0b0f17'):R.p;c.fillRect(0,0,W,B.h)}
+    if(R.logo)c.drawImage(R.logo,(W-dw)/2,(B.h-dh)/2,dw,dh);
+    else{const f=fitLine(c,'LOGO',700,FH,W*.5,B.h*.42,8,.1);c.fillStyle=onColor(R.p);c.textBaseline='middle';txt(c,f.text,W/2,B.h/2,'center',f.s*.1);c.textBaseline='alphabetic'}
+    c.restore();if(B.bar){c.fillStyle=R.s;c.fillRect(0,B.h,W,B.bar)}return}
   if(!R.logo){const r=Math.min(w,h)/2;const cx=align==='left'?x+r:align==='right'?x+w-r:x+w/2,cy=y+h/2;c.save();c.setLineDash([10,8]);c.beginPath();c.arc(cx,cy,r,0,Math.PI*2);c.fillStyle='rgba(128,128,128,.25)';c.fill();c.lineWidth=3;c.strokeStyle='rgba(255,255,255,.8)';c.stroke();c.restore();
     const f=fitLine(c,'LOGO',700,FH,r*1.5,r*.62,8,0);c.fillStyle='#ffffff';c.textBaseline='middle';txt(c,f.text,cx,cy+r*.04,'center');c.textBaseline='alphabetic';return}
   const iw=R.logo.naturalWidth,ih=R.logo.naturalHeight;const badge=R.badge&&R.badge!=='none';const pad=badge?Math.min(w,h)*.13:0;const k=Math.min((w-2*pad)/iw,(h-2*pad)/ih);const dw=iw*k,dh=ih*k;
