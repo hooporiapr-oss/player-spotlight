@@ -177,7 +177,7 @@ $('#send').onclick=async()=>{const{team,cat,p}=collect();const err=$('#err');err
   if(!team){err.textContent=t('eTeam');$('#team').focus();return}
   if(!cat){err.textContent=t('eCat');$('#cat').focus();return}
   if(!p.length){err.textContent=t('ePlayers');const f=$('.prow .pn');if(f)f.focus();return}
-  LINK=new URL('/studio/',location.href).href+'#roster='+b64url(JSON.stringify({v:1,t:team,c:cat,p}));
+  LINK=new URL('/',location.href).href+'#roster='+b64url(JSON.stringify({v:1,t:team,c:cat,p}));
   MSG=t('msg',{team,cat,n:p.length});
   $('#link').textContent=LINK;$('#sms').href='sms:?&body='+encodeURIComponent(MSG+'\n'+LINK);$('#mail').href='mailto:?subject='+encodeURIComponent(MSG)+'&body='+encodeURIComponent(MSG+'\n\n'+LINK);
   $('#done').classList.remove('hidden');
