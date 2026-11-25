@@ -1678,14 +1678,14 @@ $('#fRestore').addEventListener('change',async e=>{const f=e.target.files[0];if(
   const players=data.players.map(cleanPlayer).filter(Boolean);const damaged=data.players.length-players.length;const settings=cleanSettings(data.settings);
   if(data.players.length&&!players.length){toast(t('tBadBackup'),true);return}
   players.forEach(p=>{if(!p.brand)p.brand=Object.assign(liveBrandFrom(settings,p.team))});
-  const how=await ask({title:t('restoreT'),text:t('restoreHow',{n:players.length}),buttons:[{label:t('restoreReplace'),value:'replace',cls:'pri'},{label:t('restoreMerge'),value:'merge'},{label:t('cancel'),value:null}]});if(!how)return;
+  const how=await ask({title:t('restoreT'),text:t('restoreHow',{n:players.length}),buttons:[{label:t('restoreReplace'),value:'replace',cls:'pri'},{label:t('restoreMerge'),value:'merge'},{label:t('cancel'),value:null}]});if(!how)return;if(how==='replace'&&boundProgram()){toast(msg('Use Merge to protect the linked workspace.','Usa Combinar para proteger el estudio conectado.'),true);return}
   let next;if(how==='replace'){next=settings;next.lang=LANG}else{next=clone(S);settings.teams.forEach(tp=>{if(!next.teams.some(x=>x.name===tp.name))next.teams.push(tp)});next.teams.sort((a,b)=>a.name.localeCompare(b.name));next.cats=[...new Set([...next.cats,...settings.cats])];if(!next.logo&&settings.logo)next.logo=settings.logo;if(!next.programName&&settings.programName)next.programName=settings.programName}
   const inR=(data.rosters&&typeof data.rosters==='object')?data.rosters:{};const nextR=how==='replace'?inR:Object.assign({},inR,ROSTERS);
   busy(true,'');try{await DB.batch({clear:how==='replace',kv:{settings:next,rosters:nextR},players})}catch(x){busy(false);toast(t('tRestoreFail'),true);return}
   S=next;ROSTERS=nextR;PLAYERS=await DB.all().catch(()=>PLAYERS);if(how==='replace'){D=blank();dDirty=false;PD.started=false}procCache.clear();busy(false);
-  applyLang();loadSettingsForm();loadCreateForm();pdShow();galleryDirty=true;if(VIEW==='players')renderGallery();toast(t('tRestored',{n:players.length})+(damaged?t('tRestoreSkip',{m:damaged}):''))});
+  applyLang();loadSettingsForm();loadCreateForm();pdShow();galleryDirty=true;if(VIEW==='players')renderGallery();toast(t('tRestored',{n:players.length})+(damaged?t('tRestoreSkip',{m:damaged}):''));requestCloudSync()});
 function liveBrandFrom(st,team){const tp=st.teams.find(x=>x.name===team);return{program:st.programName,logo:st.logo,badge:st.logoBadge,logoScale:st.logoScale,logoPos:st.logoPos,art:st.art,primary:(tp&&tp.primary)||st.primary,secondary:(tp&&tp.secondary)||st.secondary,slogan:st.slogan,website:st.website,season:st.season}}
-$('#sWipe').onclick=async()=>{const ok=await ask({title:t('wipeT'),text:t('wipeText'),buttons:[{label:t('cancel'),value:null},{label:t('wipe'),value:true,cls:'danger'}]});if(!ok)return;
+$('#sWipe').onclick=async()=>{if(boundProgram()){toast(msg('Linked workspace cannot be wiped.','No se puede borrar el estudio conectado.'),true);return}const ok=await ask({title:t('wipeT'),text:t('wipeText'),buttons:[{label:t('cancel'),value:null},{label:t('wipe'),value:true,cls:'danger'}]});if(!ok)return;
   const fresh=DEF_SETTINGS();fresh.lang=LANG;try{await DB.batch({clear:true,kv:{settings:fresh}})}catch(e){toast(t('tSaveFail'),true);return}
   S=fresh;ROSTERS={};PLAYERS=[];D=blank();dDirty=false;PD={team:'',category:'',template:'spotlight',heading:'none',headingText:'',autoBg:false,started:false,count:0};procCache.clear();imgCache.clear();
   loadSettingsForm();loadCreateForm();pdShow();galleryDirty=true;toast(t('tWiped'))};
@@ -1711,7 +1711,7 @@ const sbRpc=(fn,body)=>fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'
 function cvProgram(){if(!COACH)return null;if(COACH.schools.length<2)return COACH.school;let k='';try{k=localStorage.getItem('pss-cv-school')||''}catch(e){}return COACH.schools.includes(k)?k:COACH.school}
 function cvSchools(){const w=$('#cvSchoolWrap'),sel=$('#cvSchool');if(!COACH||COACH.schools.length<2){w.classList.add('hidden');cvStatus();return}const cur=cvProgram();
   sel.innerHTML=COACH.schools.map(x=>`<option value="${esc(x)}"${x===cur?' selected':''}>${esc(x||'—')}</option>`).join('');w.classList.remove('hidden');cvStatus()}
-$('#cvSchool').onchange=e=>{try{localStorage.setItem('pss-cv-school',e.target.value)}catch(x){}queuePublish(PLAYERS);cloudSync()};
+$('#cvSchool').onchange=e=>{const old=boundProgram();if(old&&old!==e.target.value){e.target.value=old;toast(msg('Use a separate browser profile for another program.','Usa otro perfil del navegador para otro programa.'),true);return}try{localStorage.setItem('pss-cv-school',e.target.value)}catch(x){}ccShow()};
 // what went where: {playerId: {school, at}} — so a change re-sends the card and a delete takes it off
 function pubMap(){let m;try{m=JSON.parse(localStorage.getItem('pss-pub')||'{}')||{}}catch(e){m={}}
   for(const k in m)if(Array.isArray(m[k]))m[k]={school:m[k][0],at:''};return m}
@@ -1719,60 +1719,91 @@ function pubSave(m){try{localStorage.setItem('pss-pub',JSON.stringify(m))}catch(
 async function jpegOf(blob,maxW,q){const im=await createImageBitmap(blob);const k=Math.min(1,maxW/im.width);const cv=document.createElement('canvas');cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);
   const x=cv.getContext('2d');x.fillStyle='#000';x.fillRect(0,0,cv.width,cv.height);x.imageSmoothingQuality='high';x.drawImage(im,0,0,cv.width,cv.height);if(im.close)im.close();const u=cv.toDataURL('image/jpeg',q);cv.width=cv.height=0;return u}
 /* every player saved with parent permission goes to Coach View by itself — no button */
+/* Replace the Studio block from `const PUBQ=` through (but not including)
+   `function cvStatus()`. Requires the companion SQL repair. */
 const PUBQ=new Map();let pubBusy=false,pubErr=false;
-function queuePublish(list){(list||[]).forEach(p=>p&&p.id&&PUBQ.set(p.id,p.id));runPub()}
-async function runPub(){if(pubBusy)return;pubBusy=true;pubErr=false;cvStatus();
-  try{while(PUBQ.size){const id=PUBQ.keys().next().value;PUBQ.delete(id);try{await pubOne(id)}catch(e){pubErr=true}}}finally{pubBusy=false;cvStatus()}}
-async function pubOne(id){let code=null;try{code=localStorage.getItem('pss-coach')}catch(e){}if(!code)return;
-  if(!COACH||COACH.code!==code){if(!await checkCoach(code))return}
-  const prog=cvProgram(),p=PLAYERS.find(x=>x.id===id),m=pubMap(),was=m[id];if(prog==null||!p)return;
-  if(!canExport(p,true)){if(was)unpublish([id]);return}             // no permission (or missing info): not in Coach View
-  if(was&&was.school===prog&&was.at===(p.updatedAt||''))return;      // already there, unchanged
-  const b=await exportBlob(p,'portrait');const[image,thumb]=await Promise.all([jpegOf(b,1080,.86),jpegOf(b,360,.8)]);
-  const r=await sbRpc('spotlight_publish',{p_code:code,p_school:prog,p_key:p.id,p_name:p.name,p_team:p.team||'',p_category:p.category||'',p_thumb:thumb,p_image:image});
-  if(!r.ok)throw new Error('net');const d=await r.json();if(!d)throw new Error('code');
-  if(was&&was.school!==d.school)sbRpc('spotlight_remove',{p_code:code,p_school:was.school,p_key:id}).catch(()=>{});
-  const m2=pubMap();m2[id]={school:d.school,at:p.updatedAt||''};pubSave(m2)}
-
-/* ☁️ the studio online (studio-cloud.sql): players with their photos and the settings are kept under the
-   program of the coach code, so any browser or device opens the same studio. The newer copy wins. */
-const CLOUD={ok:null,busy:false,again:false,last:0,n:0};let appLoaded=false;
+const CLOUD={ok:null,busy:false,again:false,last:0,n:0,error:'',bound:null};let appLoaded=false;
 const tms=x=>{const v=Date.parse(x||'');return isNaN(v)?0:v};
-function cloudArgs(){let code='';try{code=localStorage.getItem('pss-coach')||''}catch(e){}const prog=cvProgram();return code&&prog!=null?{p_code:code,p_school:prog}:null}
-async function cloudCall(fn,body){const r=await sbRpc(fn,body);if(!r.ok){if(r.status===404)CLOUD.ok=false;throw new Error('net')}return r.json()}
-const SYNCQ=new Set();let syncBusy=false;
-function syncQueue(id){if(!id)return;SYNCQ.add(id);runSync()}
-async function runSync(){if(syncBusy)return;syncBusy=true;ccShow();
-  try{while(SYNCQ.size){const id=SYNCQ.values().next().value;SYNCQ.delete(id);const a=cloudArgs();if(!a)break;
-    try{const p=PLAYERS.find(x=>x.id===id);if(p)await cloudCall('studio_put',Object.assign({p_id:id,p_data:p,p_at:p.updatedAt||new Date().toISOString()},a));else await cloudCall('studio_del',Object.assign({p_id:id},a))}catch(e){}}}
-  finally{syncBusy=false;ccShow()}}
+const msg=(en,es)=>LANG==='es'?es:en;
+// A browser's existing IndexedDB is one workspace. Never implicitly move it.
+const BIND_KEY='pss-workspace-program-v1';
+function boundProgram(){try{return localStorage.getItem(BIND_KEY)}catch(e){return null}}
+function claimWorkspace(program){
+  if(!appLoaded||!program)return false;
+  const prior=boundProgram();if(prior)return prior===program;
+  if(!window.confirm(msg(`Connect this browser's local studio to ${program}? Only approve if all local players belong to this program.`, `¿Conectar el estudio local de este navegador con ${program}? Confirma solo si todos los jugadores locales pertenecen a este programa.`)))return false;
+  try{localStorage.setItem(BIND_KEY,program);return boundProgram()===program}catch(e){return false}
+}
+function cloudArgs(){let code='';try{code=localStorage.getItem('pss-coach')||''}catch(e){}
+  const prog=cvProgram();return appLoaded&&code&&COACH&&COACH.code===code&&prog&&boundProgram()===prog?{p_code:code,p_school:prog}:null}
+const sameContext=a=>{const b=cloudArgs();return !!(a&&b&&a.p_code===b.p_code&&a.p_school===b.p_school)};
+async function cloudCall(fn,body){const r=await sbRpc(fn,body);if(!r.ok)throw new Error('request failed');return r.json()}
+function requireWrite(v){if(v!==true)throw new Error('write not confirmed')}
+// Durable removal requests contain only IDs and program, never photographs or codes.
+const DEL_KEY='pss-pending-removals-v1';
+function pendingDeletes(){try{return JSON.parse(localStorage.getItem(DEL_KEY)||'{}')||{}}catch(e){return {}}}
+function rememberDelete(id){const a=cloudArgs();const school=a?a.p_school:boundProgram();if(!school)return;const d=pendingDeletes();d[JSON.stringify([school,id])]=true;localStorage.setItem(DEL_KEY,JSON.stringify(d))}
+function clearDelete(key){const d=pendingDeletes();delete d[key];localStorage.setItem(DEL_KEY,JSON.stringify(d))}
+function queuePublish(){requestCloudSync()}
+function syncQueue(id){if(id&&!PLAYERS.some(x=>x.id===id)){try{rememberDelete(id)}catch(e){CLOUD.error='local storage unavailable'}}requestCloudSync()}
+function requestCloudSync(){if(!cloudArgs())return;cloudSync()}
 let setT=0;
-function settingsChanged(){try{localStorage.setItem('pss-set-at',new Date().toISOString())}catch(e){}clearTimeout(setT);setT=setTimeout(putSettings,1200)}
-async function putSettings(){const a=cloudArgs();if(!a)return;let at='';try{at=localStorage.getItem('pss-set-at')||''}catch(e){}if(!at){at=new Date().toISOString();try{localStorage.setItem('pss-set-at',at)}catch(e){}}
-  try{await cloudCall('studio_settings_put',Object.assign({p_data:S,p_at:at},a))}catch(e){}}
-async function cloudSync(){const a=cloudArgs();if(!a||!appLoaded)return;if(CLOUD.busy){CLOUD.again=true;return}CLOUD.busy=true;ccShow();let changed=false;
-  try{const L=await cloudCall('studio_list',a);if(!L){CLOUD.ok=false;return}CLOUD.ok=true;
-    // settings: logo, colors, teams, categories
-    let setAt='';try{setAt=localStorage.getItem('pss-set-at')||''}catch(e){}
-    if(L.settings_at&&tms(L.settings_at)>tms(setAt)){const g=await cloudCall('studio_settings_get',a);
-      if(g&&g.data){S=cleanSettings(Object.assign({},g.data,{lang:S.lang}));await DB.set('settings',S);try{localStorage.setItem('pss-set-at',g.at)}catch(e){}loadSettingsForm();applyLang();changed=true}}
-    else if(!L.settings_at||tms(setAt)>tms(L.settings_at))await putSettings();
-    // players: bring in what is newer online, send what is newer here
-    const remote={};(L.players||[]).forEach(x=>remote[x.id]=x);
-    for(const x of (L.players||[])){const loc=PLAYERS.find(p=>p.id===x.id);
-      if(x.deleted){if(loc&&tms(loc.updatedAt)<=tms(x.at)){await DB.del(x.id);PLAYERS=PLAYERS.filter(p=>p.id!==x.id);changed=true}continue}
-      if(!loc||tms(loc.updatedAt)<tms(x.at)){const g=await cloudCall('studio_get',Object.assign({p_id:x.id},a));const c=g&&cleanPlayer(g);
-        if(c){await DB.put(c);const i=PLAYERS.findIndex(p=>p.id===c.id);if(i>=0)PLAYERS[i]=c;else PLAYERS.push(c);changed=true}}}
-    PLAYERS.forEach(p=>{const x=remote[p.id];if(!x||(!x.deleted&&tms(p.updatedAt)>tms(x.at))||(x.deleted&&tms(p.updatedAt)>tms(x.at)))SYNCQ.add(p.id)});runSync();
-    CLOUD.n=PLAYERS.length}
-  catch(e){}finally{CLOUD.busy=false;CLOUD.last=Date.now();
-    if(changed){procCache.clear();galleryDirty=true;if(VIEW==='players')renderGallery();refreshAll();queuePublish(PLAYERS)}ccShow();if(CLOUD.again){CLOUD.again=false;cloudSync()}}}
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-CLOUD.last>30000)cloudSync()});
+function settingsChanged(){try{localStorage.setItem('pss-set-at',new Date().toISOString())}catch(e){}clearTimeout(setT);setT=setTimeout(requestCloudSync,1200)}
+function settingsAt(){try{return localStorage.getItem('pss-set-at')||''}catch(e){return ''}}
+async function putSettings(a){if(!sameContext(a))throw new Error('workspace changed');let at=settingsAt();if(!at){at=new Date().toISOString();localStorage.setItem('pss-set-at',at)}requireWrite(await cloudCall('studio_settings_put',Object.assign({p_data:S,p_at:at},a)))}
+async function publishConfirmed(p,a){
+  if(!sameContext(a))throw new Error('workspace changed');
+  if(!canExport(p,true))return;
+  const b=await exportBlob(p,'portrait');const [image,thumb]=await Promise.all([jpegOf(b,1080,.86),jpegOf(b,360,.8)]);
+  if(!sameContext(a))throw new Error('workspace changed');
+  const d=await cloudCall('spotlight_publish_checked',Object.assign({p_key:p.id,p_name:p.name,p_team:p.team||'',p_category:p.category||'',p_thumb:thumb,p_image:image,p_at:p.updatedAt},a));
+  if(!d||d.ok!==true||d.school!==a.p_school)throw new Error('card not confirmed');
+  const m=pubMap();m[p.id]={school:a.p_school,at:p.updatedAt||''};pubSave(m);
+}
+async function cloudSync(){
+  const a=cloudArgs();if(!a)return;if(CLOUD.busy){CLOUD.again=true;return}
+  CLOUD.busy=true;CLOUD.ok=null;CLOUD.error='';pubBusy=true;pubErr=false;ccShow();let changed=false;
+  try{
+    const L=await cloudCall('studio_list',a);if(!L||L.school!==a.p_school||!Array.isArray(L.players)||!sameContext(a))throw new Error('workspace not confirmed');
+    // Reconcile explicit deletions before reads; retries are safe and scoped.
+    for(const key of Object.keys(pendingDeletes())){const [school,id]=JSON.parse(key);if(school!==a.p_school)continue;if(!sameContext(a))throw new Error('workspace changed');requireWrite(await cloudCall('studio_del',Object.assign({p_id:id},a)));clearDelete(key)}
+    const current=await cloudCall('studio_list',a);if(!current||current.school!==a.p_school||!sameContext(a))throw new Error('workspace changed');
+    const remote=new Map(current.players.map(x=>[x.id,x]));
+    for(const x of current.players){
+      if(!sameContext(a))throw new Error('workspace changed');const loc=PLAYERS.find(p=>p.id===x.id);
+      // Preserve local copies on a remote deletion; exclude them from upload.
+      if(x.deleted)continue;
+      if(!loc||tms(loc.updatedAt)<tms(x.at)){const g=await cloudCall('studio_get',Object.assign({p_id:x.id},a));const c=g&&cleanPlayer(g);if(!sameContext(a))throw new Error('workspace changed');if(!c)throw new Error('player read failed');
+        const latest=PLAYERS.find(p=>p.id===c.id);if(latest&&tms(latest.updatedAt)>tms(c.updatedAt))continue;
+        await DB.put(c);const i=PLAYERS.findIndex(p=>p.id===c.id);if(i>=0)PLAYERS[i]=c;else PLAYERS.push(c);changed=true;}
+    }
+    let failures=0;
+    for(const p of [...PLAYERS]){
+      const x=remote.get(p.id);if(x&&x.deleted)continue;
+      try{if(!sameContext(a))throw new Error('workspace changed');
+        if(!x||tms(p.updatedAt)>tms(x.at)){requireWrite(await cloudCall('studio_put',Object.assign({p_id:p.id,p_data:p,p_at:p.updatedAt},a)))}
+        // Only publish a confirmed server revision; server validates the timestamp and consent.
+        if(canExport(p,true))await publishConfirmed(p,a);
+      }catch(e){failures++;pubErr=true;}
+    }
+    // Program settings belong to full-program editors only. Limited editors can read them.
+    const setAt=settingsAt();if(current.settings_at&&tms(current.settings_at)>tms(setAt)){
+      const g=await cloudCall('studio_settings_get',a);if(g&&g.data&&sameContext(a)){S=cleanSettings(Object.assign({},g.data,{lang:S.lang}));await DB.set('settings',S);localStorage.setItem('pss-set-at',g.at);loadSettingsForm();applyLang();changed=true}}
+    else if(current.can_edit_settings===true&&(!current.settings_at||tms(setAt)>tms(current.settings_at)))await putSettings(a);
+    const verified=await cloudCall('studio_list',a);if(!verified||verified.school!==a.p_school||!sameContext(a))throw new Error('verification failed');
+    CLOUD.n=verified.players.filter(x=>!x.deleted).length;
+    CLOUD.ok=failures===0;CLOUD.error=failures?msg('Some records were not synchronized; retry.','Algunos registros no se sincronizaron; vuelve a intentar.'):'';
+  }catch(e){CLOUD.ok=false;CLOUD.error=msg('Sync incomplete; local records retained.','Sincronización incompleta; registros locales conservados.');pubErr=true;}
+  finally{CLOUD.busy=false;pubBusy=false;CLOUD.last=Date.now();if(changed){procCache.clear();galleryDirty=true;if(VIEW==='players')renderGallery();refreshAll()}ccShow();if(CLOUD.again){CLOUD.again=false;cloudSync()}}
+}
+let syncBusy=false; // legacy status reference
+window.addEventListener('online',requestCloudSync);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-CLOUD.last>30000)requestCloudSync()});
+
 function cvStatus(){const el=$('#cvInfo');if(!el)return;if(!COACH){let c='';try{c=localStorage.getItem('pss-coach')||''}catch(e){}el.textContent=c?'':t('cvNoCodeSet');return}const prog=cvProgram(),m=pubMap();
   const n=PLAYERS.filter(p=>m[p.id]&&m[p.id].school===prog).length;
-  el.textContent=pubBusy?t('cvSending'):pubErr?t('cvFail'):t(n===1?'cvIn1':'cvIn',{n,prog:prog||'—'})}
-function unpublish(ids){const m=pubMap();let code=null;try{code=localStorage.getItem('pss-coach')}catch(e){}
-  ids.forEach(id=>{const w=m[id];if(w&&code)sbRpc('spotlight_remove',{p_code:code,p_school:w.school,p_key:id}).catch(()=>{});delete m[id]});pubSave(m);cvStatus()}
+  el.textContent=!cloudArgs()?msg('Local only','Solo local'):pubBusy?t('cvSending'):pubErr?t('cvFail'):msg('Cards are verified during synchronization.','Las tarjetas se verifican durante la sincronización.')}
+function unpublish(ids){/* deletion is handled by durable studio_del; no physical card deletion */}
 async function checkCoach(code){const r=await fetch(SB_URL+'/rest/v1/rpc/hooporia_coach',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Authorization:'Bearer '+SB_KEY},body:JSON.stringify({p_code:code})});
   if(!r.ok)throw new Error('net');const d=await r.json();if(d){const had=COACH&&COACH.code===code;COACH={code,school:d.school||'',schools:Array.isArray(d.schools)?d.schools:[d.school||'']};cvSchools();if(!had&&started){queuePublish(PLAYERS);cloudSync()}}return !!d}
 function showApp(on){$('#gate').classList.toggle('hidden',on);$$('main,nav.tabs').forEach(x=>x.classList.toggle('hidden',!on));$('#lockBtn').classList.add('hidden')}
@@ -1781,11 +1812,11 @@ async function gateTry(){const code=$('#gateCode').value.trim().toUpperCase();if
   catch(e){$('#gateErr').textContent=t('gateNet')}finally{$('#gateOpen').disabled=false}}
 function ccShow(st){const el=$('#sCoachInfo');if(!el)return;let code='';try{code=localStorage.getItem('pss-coach')||''}catch(e){}if(document.activeElement!==$('#sCoachCode'))$('#sCoachCode').value=code;
   if(st)ccShow.st=st;st=ccShow.st;
-  const on=CLOUD.ok===false?' · '+t('clNoSql'):CLOUD.busy||syncBusy?' · '+t('clSync'):CLOUD.ok?' · '+t('clOk',{n:PLAYERS.length}):'';
+  const on=!cloudArgs()?' · '+msg('Local only — confirm program in Settings','Solo local — confirma el programa en Ajustes'):CLOUD.busy?' · '+t('clSync'):CLOUD.ok===false?' · '+CLOUD.error:CLOUD.ok?' · '+t('clOk',{n:CLOUD.n}):'';
   el.textContent=st==='bad'?t('ccBad'):st==='net'?t('ccNet'):st==='none'||!code?t('ccNone'):COACH?t('ccOk',{p:COACH.schools.filter(Boolean).join(' · ')||'—'})+on:'';cvStatus()}
 $('#sCoachSave').onclick=async()=>{const code=$('#sCoachCode').value.trim().toUpperCase();
   if(!code){try{localStorage.removeItem('pss-coach')}catch(e){}COACH=null;cvSchools();ccShow('none');return}
-  $('#sCoachSave').disabled=true;try{if(await checkCoach(code)){try{localStorage.setItem('pss-coach',code)}catch(e){}ccShow('ok');queuePublish(PLAYERS);cloudSync();toast(t('tSaved'))}else ccShow('bad')}
+  $('#sCoachSave').disabled=true;try{if(await checkCoach(code)){try{localStorage.setItem('pss-coach',code)}catch(e){}if(!claimWorkspace(cvProgram())){ccShow('ok');toast(msg('Local workspace not connected.','Estudio local no conectado.'),true);return}ccShow('ok');requestCloudSync();toast(t('tSaved'))}else ccShow('bad')}
   catch(e){ccShow('net')}finally{$('#sCoachSave').disabled=false}};
 $('#gateOpen').onclick=gateTry;$('#gateCode').addEventListener('keydown',e=>{if(e.key==='Enter')gateTry()});
 $('#lockBtn').onclick=()=>{try{localStorage.removeItem('pss-coach')}catch(e){}$('#gateCode').value='';showApp(false)};
