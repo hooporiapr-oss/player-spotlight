@@ -1736,7 +1736,7 @@ async function pubOne(id){let code=null;try{code=localStorage.getItem('pss-coach
 
 /* ☁️ the studio online (studio-cloud.sql): players with their photos and the settings are kept under the
    program of the coach code, so any browser or device opens the same studio. The newer copy wins. */
-const CLOUD={ok:null,busy:false,last:0,n:0};
+const CLOUD={ok:null,busy:false,again:false,last:0,n:0};let appLoaded=false;
 const tms=x=>{const v=Date.parse(x||'');return isNaN(v)?0:v};
 function cloudArgs(){let code='';try{code=localStorage.getItem('pss-coach')||''}catch(e){}const prog=cvProgram();return code&&prog!=null?{p_code:code,p_school:prog}:null}
 async function cloudCall(fn,body){const r=await sbRpc(fn,body);if(!r.ok){if(r.status===404)CLOUD.ok=false;throw new Error('net')}return r.json()}
@@ -1750,7 +1750,7 @@ let setT=0;
 function settingsChanged(){try{localStorage.setItem('pss-set-at',new Date().toISOString())}catch(e){}clearTimeout(setT);setT=setTimeout(putSettings,1200)}
 async function putSettings(){const a=cloudArgs();if(!a)return;let at='';try{at=localStorage.getItem('pss-set-at')||''}catch(e){}if(!at){at=new Date().toISOString();try{localStorage.setItem('pss-set-at',at)}catch(e){}}
   try{await cloudCall('studio_settings_put',Object.assign({p_data:S,p_at:at},a))}catch(e){}}
-async function cloudSync(){const a=cloudArgs();if(!a||CLOUD.busy||!started)return;CLOUD.busy=true;ccShow();let changed=false;
+async function cloudSync(){const a=cloudArgs();if(!a||!appLoaded)return;if(CLOUD.busy){CLOUD.again=true;return}CLOUD.busy=true;ccShow();let changed=false;
   try{const L=await cloudCall('studio_list',a);if(!L){CLOUD.ok=false;return}CLOUD.ok=true;
     // settings: logo, colors, teams, categories
     let setAt='';try{setAt=localStorage.getItem('pss-set-at')||''}catch(e){}
@@ -1766,7 +1766,7 @@ async function cloudSync(){const a=cloudArgs();if(!a||CLOUD.busy||!started)retur
     PLAYERS.forEach(p=>{const x=remote[p.id];if(!x||(!x.deleted&&tms(p.updatedAt)>tms(x.at))||(x.deleted&&tms(p.updatedAt)>tms(x.at)))SYNCQ.add(p.id)});runSync();
     CLOUD.n=PLAYERS.length}
   catch(e){}finally{CLOUD.busy=false;CLOUD.last=Date.now();
-    if(changed){procCache.clear();galleryDirty=true;if(VIEW==='players')renderGallery();refreshAll();queuePublish(PLAYERS)}ccShow()}}
+    if(changed){procCache.clear();galleryDirty=true;if(VIEW==='players')renderGallery();refreshAll();queuePublish(PLAYERS)}ccShow();if(CLOUD.again){CLOUD.again=false;cloudSync()}}}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-CLOUD.last>30000)cloudSync()});
 function cvStatus(){const el=$('#cvInfo');if(!el)return;if(!COACH){let c='';try{c=localStorage.getItem('pss-coach')||''}catch(e){}el.textContent=c?'':t('cvNoCodeSet');return}const prog=cvProgram(),m=pubMap();
   const n=PLAYERS.filter(p=>m[p.id]&&m[p.id].school===prog).length;
@@ -1799,7 +1799,7 @@ async function startApp(){if(started){refreshAll();return}started=true;
   try{PLAYERS=await DB.all()}catch(e){PLAYERS=[]}
   // the program's teams Team 5 … Team 18 are always there (teams you added stay)
   {const miss=DEFAULT_TEAMS.filter(n=>!S.teams.some(x=>x.name===n));if(miss.length){miss.forEach(n=>S.teams.push({name:n,logo:null,primary:null,secondary:null}));S.teams.sort(byName);DB.set('settings',S).catch(()=>{})}}
-  if(COACH){queuePublish(PLAYERS);cloudSync()}
+  appLoaded=true;ccShow();if(COACH){queuePublish(PLAYERS);cloudSync()}
   // graphics saved before branding was kept per player get today's branding, once, so they never shift again
   const legacy=PLAYERS.filter(p=>!p.brand);if(legacy.length){legacy.forEach(p=>{p.brand=liveBrand(p.team);if(!p.heading)p.heading='none'});DB.batch({players:legacy}).catch(()=>{})}
   try{const d=await DB.get('draft');if(d&&d.D){D=Object.assign(blank(),d.D,{adj:Object.assign(DEF_ADJ(),d.D.adj||{}),show:Object.assign(DEF_SHOW(),d.D.show||{})});dDirty=!!d.dDirty;if(D.id&&!PLAYERS.find(p=>p.id===D.id)){D.id=null;D.brand=null}if(!D.consent){D.photo=null}}}catch(e){}
