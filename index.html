@@ -473,6 +473,15 @@ canvas.pv:active{cursor:grabbing}
   <div class="sgrid">
     <div>
       <div class="card">
+        <h2 data-i="ccT">📲 Coach code</h2>
+        <p class="note" data-i="ccHint">Your coach code sends the player cards to Coach View. Enter it once on this device.</p>
+        <div class="row2" style="align-items:end">
+          <label class="f" style="margin:0"><span class="lbl" data-i="gateCode">Coach code</span><input type="text" id="sCoachCode" autocomplete="off" autocapitalize="characters" spellcheck="false"></label>
+          <button type="button" class="btn pri" id="sCoachSave"><span data-i="saveBtn">Save</span></button>
+        </div>
+        <div class="status" id="sCoachInfo"></div>
+      </div>
+      <div class="card">
         <h2 data-i="setBrand">Program branding</h2>
         <label class="f"><span class="lbl" data-i="sProgram">Program name</span><input type="text" id="sProgram" maxlength="60" autocomplete="off"></label>
         <span class="lbl" data-i="sLogo">Program logo</span>
@@ -714,7 +723,7 @@ wipeT:'Delete all data?',wipeText:'This deletes every player, photo, team and se
 newT:'Start a new player?',newText:'Changes that are not saved will be lost.',
 cropTitle:'Crop photo',cropHint:'Drag the corners, or drag inside to move the box',camTitle:'Take photo',flip:'Flip camera',nPlayers:n=>n===1?'1 player':n+' players',
 removeTeamT:'Remove team?',removeTeam:'Remove {name} from the list? Saved players keep their team and colors.',
-gateT:'Coach access',gateSub:'Player Spotlight Studio is for coaches. Enter your coach code.',gateCode:'Coach code',gateOpen:'Open',gateBad:'That code is not a coach code',gateNet:'Checking the code needs an internet connection',gateNote:'Coach codes are created in License Admin → Coach. A player code does not open this tool.',lock:'Lock'},
+gateT:'Coach access',ccT:'📲 Coach code',ccHint:'Your coach code sends the player cards to Coach View. Enter it once on this device.',ccOk:'✓ Connected · {p}',clOk:'☁️ online · {n} players',clSync:'☁️ syncing…',clNoSql:'☁️ not online yet (run studio-cloud.sql)',ccBad:'That code is not a coach code.',ccNet:'Checking the code needs an internet connection.',ccNone:'No coach code yet — cards stay on this device.',cvNoCodeSet:'Add your coach code in Settings to send cards to Coach View.',gateSub:'Player Spotlight Studio is for coaches. Enter your coach code.',gateCode:'Coach code',gateOpen:'Open',gateBad:'That code is not a coach code',gateNet:'Checking the code needs an internet connection',gateNote:'Coach codes are created in License Admin → Coach. A player code does not open this tool.',lock:'Lock'},
 es:{tabCreate:'Crear',tabPhotoDay:'Día de Fotos',tabPlayers:'Jugadores',tabTemplates:'Plantillas',tabSettings:'Ajustes',
 preview:'Vista previa en vivo',fmtPortrait:'Vertical',fmtSquare:'Cuadrado',fmtStory:'Historia',dragHint:'Arrastra la foto para moverla · pellizca o usa el Zoom',
 openSettings:'Abrir Ajustes',secPhoto:'Foto',takePhoto:'Tomar Foto',uploadPhoto:'Subir Foto',retake:'Repetir Foto',replace:'Cambiar Foto',
@@ -758,7 +767,7 @@ wipeT:'¿Borrar todos los datos?',wipeText:'Esto borra todos los jugadores, foto
 newT:'¿Empezar un jugador nuevo?',newText:'Los cambios sin guardar se perderán.',
 cropTitle:'Recortar foto',cropHint:'Arrastra las esquinas, o arrastra por dentro para mover el cuadro',camTitle:'Tomar foto',flip:'Cambiar cámara',nPlayers:n=>n===1?'1 jugador':n+' jugadores',
 removeTeamT:'¿Quitar equipo?',removeTeam:'¿Quitar {name} de la lista? Los jugadores guardados mantienen su equipo y colores.',
-gateT:'Acceso de coach',gateSub:'Player Spotlight Studio es para coaches. Escribe tu código de coach.',gateCode:'Código de coach',gateOpen:'Abrir',gateBad:'Ese código no es de coach',gateNet:'Para comprobar el código se necesita internet',gateNote:'Los códigos de coach se crean en License Admin → Coach. Un código de jugador no abre esta herramienta.',lock:'Bloquear'}
+gateT:'Acceso de coach',ccT:'📲 Código de coach',ccHint:'Tu código de coach envía las tarjetas a la Vista del Coach. Entra el código una vez en este equipo.',ccOk:'✓ Conectado · {p}',clOk:'☁️ en línea · {n} jugadores',clSync:'☁️ sincronizando…',clNoSql:'☁️ todavía no en línea (corre studio-cloud.sql)',ccBad:'Ese código no es un código de coach.',ccNet:'Verificar el código necesita internet.',ccNone:'Todavía no hay código de coach — las tarjetas se quedan en este equipo.',cvNoCodeSet:'Añade tu código de coach en Ajustes para enviar tarjetas a la Vista del Coach.',gateSub:'Player Spotlight Studio es para coaches. Escribe tu código de coach.',gateCode:'Código de coach',gateOpen:'Abrir',gateBad:'Ese código no es de coach',gateNet:'Para comprobar el código se necesita internet',gateNote:'Los códigos de coach se crean en License Admin → Coach. Un código de jugador no abre esta herramienta.',lock:'Bloquear'}
 };
 let LANG='en';
 const t=(k,v)=>{let s=(I18N[LANG]&&I18N[LANG][k]);if(s===undefined)s=I18N.en[k];if(s===undefined)return k;if(typeof s==='string'&&v)for(const x in v)s=s.split('{'+x+'}').join(v[x]);return s};
@@ -1351,13 +1360,13 @@ async function paintChips(box,p){const sample=Object.assign(clone(p),{});for(con
 
 /* ───────── saving ───────── */
 let failShown=0;
-async function saveS(){try{await DB.set('settings',S);return true}catch(e){if(Date.now()-failShown>3000){failShown=Date.now();toast(t('tSaveFail'),true)}return false}}
+async function saveS(){try{await DB.set('settings',S);settingsChanged();return true}catch(e){if(Date.now()-failShown>3000){failShown=Date.now();toast(t('tSaveFail'),true)}return false}}
 async function savePlayer(p){const now=new Date().toISOString();const rec=clone(p);if(!rec.id){rec.id=uid();rec.createdAt=now}rec.updatedAt=now;rec.consentAt=rec.consentAt||now;rec.name=rec.name.trim();
   if(!rec.brand)rec.brand=liveBrand(rec.team);   // the graphic keeps this branding from now on
   try{await DB.put(rec)}catch(e){toast(t('tSaveFail'),true);return null}
   p.id=rec.id;p.createdAt=rec.createdAt;p.updatedAt=now;p.consentAt=rec.consentAt;p.brand=rec.brand;
   const i=PLAYERS.findIndex(x=>x.id===rec.id);if(i>=0)PLAYERS[i]=rec;else PLAYERS.push(rec);
-  if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});queuePublish([rec]);return rec}
+  if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});queuePublish([rec]);syncQueue(rec.id);return rec}
 const savedMsg=()=>DB.ok?t('tSaved'):t('tSavedSession');
 // drafts never keep a player photo until photo permission is confirmed
 function saveDraft(){const c=clone(D);if(!c.consent){c.photo=null;c.card=null;if(c.template==='card')c.template=S.template||'spotlight';c.adj=Object.assign(DEF_ADJ(),{zoom:c.adj.zoom,ox:c.adj.ox,oy:c.adj.oy,bright:c.adj.bright,contrast:c.adj.contrast})}
@@ -1521,7 +1530,7 @@ $('#plBulkDel').onclick=async()=>{const ft=$('#plTeam').value;if(!ft)return;cons
   const q=$('#plSearch').value.trim();const what=[ft,$('#plCat').value,q?'"'+q+'"':''].filter(Boolean).join(' · ');
   const ok=await ask({title:t('bulkDelT'),text:t(list.length===1?'bulkDelText1':'bulkDelText',{n:list.length,what}),buttons:[{label:t('cancel'),value:null},{label:t('delete'),value:true,cls:'danger'}]});if(!ok)return;
   let n=0;busy(true,t('bulkDelT'));
-  try{for(const p of list){try{await DB.del(p.id)}catch(e){break}n++;unpublish([p.id]);PLAYERS=PLAYERS.filter(x=>x.id!==p.id);if(D.id===p.id){D.id=null;D.brand=null;dDirty=true;cStatus()}}}finally{busy(false)}
+  try{for(const p of list){try{await DB.del(p.id)}catch(e){break}n++;unpublish([p.id]);PLAYERS=PLAYERS.filter(x=>x.id!==p.id);syncQueue(p.id);PLAYERS=PLAYERS.filter(x=>x.id!==p.id);if(D.id===p.id){D.id=null;D.brand=null;dDirty=true;cStatus()}}}finally{busy(false)}
   if(n<list.length)toast(t('tSaveFail'),true);else toast(n===1?t('tDeleted'):t('tBulkDeleted',{n}));galleryDirty=true;renderGallery()};
 /* batch export */
 function bxList(){const tm=$('#bxTeam').value,ct=$('#bxCat').value;return PLAYERS.filter(p=>(!tm||p.team===tm)&&(!ct||p.category===ct)).sort((a,b)=>a.name.localeCompare(b.name))}
@@ -1592,7 +1601,7 @@ $('#mpRegen').onclick=async()=>{if(!MP)return;procCache.clear();await drawMP();p
 $('#mpBrand').onclick=async()=>{if(!MP)return;const prev=MP.brand;MP.brand=liveBrand(MP.team);if(await savePlayer(MP)){galleryDirty=true;drawMP();paintChips($('#mpTpl'),MP);toast(t('tSaved'))}else MP.brand=prev};
 $('#mpDelete').onclick=async()=>{if(!MP)return;const ok=await ask({title:t('confirmDeleteT'),text:t('confirmDelete',{name:MP.name}),buttons:[{label:t('cancel'),value:null},{label:t('delete'),value:true,cls:'danger'}]});if(!ok)return;
   try{await DB.del(MP.id)}catch(e){toast(t('tSaveFail'),true);return}
-  unpublish([MP.id]);
+  unpublish([MP.id]);const goneId=MP.id;setTimeout(()=>syncQueue(goneId),0);
   PLAYERS=PLAYERS.filter(p=>p.id!==MP.id);if(D.id===MP.id){D.id=null;D.brand=null;dDirty=true;cStatus()}$('#mPlayer').classList.remove('on');MP=null;toast(t('tDeleted'));renderGallery()};
 
 /* ───────── TEMPLATES ───────── */
@@ -1702,7 +1711,7 @@ const sbRpc=(fn,body)=>fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'
 function cvProgram(){if(!COACH)return null;if(COACH.schools.length<2)return COACH.school;let k='';try{k=localStorage.getItem('pss-cv-school')||''}catch(e){}return COACH.schools.includes(k)?k:COACH.school}
 function cvSchools(){const w=$('#cvSchoolWrap'),sel=$('#cvSchool');if(!COACH||COACH.schools.length<2){w.classList.add('hidden');cvStatus();return}const cur=cvProgram();
   sel.innerHTML=COACH.schools.map(x=>`<option value="${esc(x)}"${x===cur?' selected':''}>${esc(x||'—')}</option>`).join('');w.classList.remove('hidden');cvStatus()}
-$('#cvSchool').onchange=e=>{try{localStorage.setItem('pss-cv-school',e.target.value)}catch(x){}queuePublish(PLAYERS)};
+$('#cvSchool').onchange=e=>{try{localStorage.setItem('pss-cv-school',e.target.value)}catch(x){}queuePublish(PLAYERS);cloudSync()};
 // what went where: {playerId: {school, at}} — so a change re-sends the card and a delete takes it off
 function pubMap(){let m;try{m=JSON.parse(localStorage.getItem('pss-pub')||'{}')||{}}catch(e){m={}}
   for(const k in m)if(Array.isArray(m[k]))m[k]={school:m[k][0],at:''};return m}
@@ -1724,17 +1733,60 @@ async function pubOne(id){let code=null;try{code=localStorage.getItem('pss-coach
   if(!r.ok)throw new Error('net');const d=await r.json();if(!d)throw new Error('code');
   if(was&&was.school!==d.school)sbRpc('spotlight_remove',{p_code:code,p_school:was.school,p_key:id}).catch(()=>{});
   const m2=pubMap();m2[id]={school:d.school,at:p.updatedAt||''};pubSave(m2)}
-function cvStatus(){const el=$('#cvInfo');if(!el)return;if(!COACH){el.textContent='';return}const prog=cvProgram(),m=pubMap();
+
+/* ☁️ the studio online (studio-cloud.sql): players with their photos and the settings are kept under the
+   program of the coach code, so any browser or device opens the same studio. The newer copy wins. */
+const CLOUD={ok:null,busy:false,last:0,n:0};
+const tms=x=>{const v=Date.parse(x||'');return isNaN(v)?0:v};
+function cloudArgs(){let code='';try{code=localStorage.getItem('pss-coach')||''}catch(e){}const prog=cvProgram();return code&&prog!=null?{p_code:code,p_school:prog}:null}
+async function cloudCall(fn,body){const r=await sbRpc(fn,body);if(!r.ok){if(r.status===404)CLOUD.ok=false;throw new Error('net')}return r.json()}
+const SYNCQ=new Set();let syncBusy=false;
+function syncQueue(id){if(!id)return;SYNCQ.add(id);runSync()}
+async function runSync(){if(syncBusy)return;syncBusy=true;ccShow();
+  try{while(SYNCQ.size){const id=SYNCQ.values().next().value;SYNCQ.delete(id);const a=cloudArgs();if(!a)break;
+    try{const p=PLAYERS.find(x=>x.id===id);if(p)await cloudCall('studio_put',Object.assign({p_id:id,p_data:p,p_at:p.updatedAt||new Date().toISOString()},a));else await cloudCall('studio_del',Object.assign({p_id:id},a))}catch(e){}}}
+  finally{syncBusy=false;ccShow()}}
+let setT=0;
+function settingsChanged(){try{localStorage.setItem('pss-set-at',new Date().toISOString())}catch(e){}clearTimeout(setT);setT=setTimeout(putSettings,1200)}
+async function putSettings(){const a=cloudArgs();if(!a)return;let at='';try{at=localStorage.getItem('pss-set-at')||''}catch(e){}if(!at){at=new Date().toISOString();try{localStorage.setItem('pss-set-at',at)}catch(e){}}
+  try{await cloudCall('studio_settings_put',Object.assign({p_data:S,p_at:at},a))}catch(e){}}
+async function cloudSync(){const a=cloudArgs();if(!a||CLOUD.busy||!started)return;CLOUD.busy=true;ccShow();let changed=false;
+  try{const L=await cloudCall('studio_list',a);if(!L){CLOUD.ok=false;return}CLOUD.ok=true;
+    // settings: logo, colors, teams, categories
+    let setAt='';try{setAt=localStorage.getItem('pss-set-at')||''}catch(e){}
+    if(L.settings_at&&tms(L.settings_at)>tms(setAt)){const g=await cloudCall('studio_settings_get',a);
+      if(g&&g.data){S=cleanSettings(Object.assign({},g.data,{lang:S.lang}));await DB.set('settings',S);try{localStorage.setItem('pss-set-at',g.at)}catch(e){}loadSettingsForm();applyLang();changed=true}}
+    else if(!L.settings_at||tms(setAt)>tms(L.settings_at))await putSettings();
+    // players: bring in what is newer online, send what is newer here
+    const remote={};(L.players||[]).forEach(x=>remote[x.id]=x);
+    for(const x of (L.players||[])){const loc=PLAYERS.find(p=>p.id===x.id);
+      if(x.deleted){if(loc&&tms(loc.updatedAt)<=tms(x.at)){await DB.del(x.id);PLAYERS=PLAYERS.filter(p=>p.id!==x.id);changed=true}continue}
+      if(!loc||tms(loc.updatedAt)<tms(x.at)){const g=await cloudCall('studio_get',Object.assign({p_id:x.id},a));const c=g&&cleanPlayer(g);
+        if(c){await DB.put(c);const i=PLAYERS.findIndex(p=>p.id===c.id);if(i>=0)PLAYERS[i]=c;else PLAYERS.push(c);changed=true}}}
+    PLAYERS.forEach(p=>{const x=remote[p.id];if(!x||(!x.deleted&&tms(p.updatedAt)>tms(x.at))||(x.deleted&&tms(p.updatedAt)>tms(x.at)))SYNCQ.add(p.id)});runSync();
+    CLOUD.n=PLAYERS.length}
+  catch(e){}finally{CLOUD.busy=false;CLOUD.last=Date.now();
+    if(changed){procCache.clear();galleryDirty=true;if(VIEW==='players')renderGallery();refreshAll();queuePublish(PLAYERS)}ccShow()}}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-CLOUD.last>30000)cloudSync()});
+function cvStatus(){const el=$('#cvInfo');if(!el)return;if(!COACH){let c='';try{c=localStorage.getItem('pss-coach')||''}catch(e){}el.textContent=c?'':t('cvNoCodeSet');return}const prog=cvProgram(),m=pubMap();
   const n=PLAYERS.filter(p=>m[p.id]&&m[p.id].school===prog).length;
   el.textContent=pubBusy?t('cvSending'):pubErr?t('cvFail'):t(n===1?'cvIn1':'cvIn',{n,prog:prog||'—'})}
 function unpublish(ids){const m=pubMap();let code=null;try{code=localStorage.getItem('pss-coach')}catch(e){}
   ids.forEach(id=>{const w=m[id];if(w&&code)sbRpc('spotlight_remove',{p_code:code,p_school:w.school,p_key:id}).catch(()=>{});delete m[id]});pubSave(m);cvStatus()}
 async function checkCoach(code){const r=await fetch(SB_URL+'/rest/v1/rpc/hooporia_coach',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Authorization:'Bearer '+SB_KEY},body:JSON.stringify({p_code:code})});
-  if(!r.ok)throw new Error('net');const d=await r.json();if(d){const had=COACH&&COACH.code===code;COACH={code,school:d.school||'',schools:Array.isArray(d.schools)?d.schools:[d.school||'']};cvSchools();if(!had&&started)queuePublish(PLAYERS)}return !!d}
-function showApp(on){$('#gate').classList.toggle('hidden',on);$$('main,nav.tabs').forEach(x=>x.classList.toggle('hidden',!on));$('#lockBtn').classList.toggle('hidden',!on)}
+  if(!r.ok)throw new Error('net');const d=await r.json();if(d){const had=COACH&&COACH.code===code;COACH={code,school:d.school||'',schools:Array.isArray(d.schools)?d.schools:[d.school||'']};cvSchools();if(!had&&started){queuePublish(PLAYERS);cloudSync()}}return !!d}
+function showApp(on){$('#gate').classList.toggle('hidden',on);$$('main,nav.tabs').forEach(x=>x.classList.toggle('hidden',!on));$('#lockBtn').classList.add('hidden')}
 async function gateTry(){const code=$('#gateCode').value.trim().toUpperCase();if(!code)return;$('#gateErr').textContent='';$('#gateOpen').disabled=true;
   try{if(await checkCoach(code)){try{localStorage.setItem('pss-coach',code)}catch(e){}showApp(true);startApp()}else $('#gateErr').textContent=t('gateBad')}
   catch(e){$('#gateErr').textContent=t('gateNet')}finally{$('#gateOpen').disabled=false}}
+function ccShow(st){const el=$('#sCoachInfo');if(!el)return;let code='';try{code=localStorage.getItem('pss-coach')||''}catch(e){}if(document.activeElement!==$('#sCoachCode'))$('#sCoachCode').value=code;
+  if(st)ccShow.st=st;st=ccShow.st;
+  const on=CLOUD.ok===false?' · '+t('clNoSql'):CLOUD.busy||syncBusy?' · '+t('clSync'):CLOUD.ok?' · '+t('clOk',{n:PLAYERS.length}):'';
+  el.textContent=st==='bad'?t('ccBad'):st==='net'?t('ccNet'):st==='none'||!code?t('ccNone'):COACH?t('ccOk',{p:COACH.schools.filter(Boolean).join(' · ')||'—'})+on:'';cvStatus()}
+$('#sCoachSave').onclick=async()=>{const code=$('#sCoachCode').value.trim().toUpperCase();
+  if(!code){try{localStorage.removeItem('pss-coach')}catch(e){}COACH=null;cvSchools();ccShow('none');return}
+  $('#sCoachSave').disabled=true;try{if(await checkCoach(code)){try{localStorage.setItem('pss-coach',code)}catch(e){}ccShow('ok');queuePublish(PLAYERS);cloudSync();toast(t('tSaved'))}else ccShow('bad')}
+  catch(e){ccShow('net')}finally{$('#sCoachSave').disabled=false}};
 $('#gateOpen').onclick=gateTry;$('#gateCode').addEventListener('keydown',e=>{if(e.key==='Enter')gateTry()});
 $('#lockBtn').onclick=()=>{try{localStorage.removeItem('pss-coach')}catch(e){}$('#gateCode').value='';showApp(false)};
 
@@ -1746,8 +1798,8 @@ async function startApp(){if(started){refreshAll();return}started=true;
   if(S.lang)LANG=S.lang;
   try{PLAYERS=await DB.all()}catch(e){PLAYERS=[]}
   // the program's teams Team 5 … Team 18 are always there (teams you added stay)
-  {const miss=DEFAULT_TEAMS.filter(n=>!S.teams.some(x=>x.name===n));if(miss.length){miss.forEach(n=>S.teams.push({name:n,logo:null,primary:null,secondary:null}));S.teams.sort(byName);saveS()}}
-  if(COACH)queuePublish(PLAYERS);
+  {const miss=DEFAULT_TEAMS.filter(n=>!S.teams.some(x=>x.name===n));if(miss.length){miss.forEach(n=>S.teams.push({name:n,logo:null,primary:null,secondary:null}));S.teams.sort(byName);DB.set('settings',S).catch(()=>{})}}
+  if(COACH){queuePublish(PLAYERS);cloudSync()}
   // graphics saved before branding was kept per player get today's branding, once, so they never shift again
   const legacy=PLAYERS.filter(p=>!p.brand);if(legacy.length){legacy.forEach(p=>{p.brand=liveBrand(p.team);if(!p.heading)p.heading='none'});DB.batch({players:legacy}).catch(()=>{})}
   try{const d=await DB.get('draft');if(d&&d.D){D=Object.assign(blank(),d.D,{adj:Object.assign(DEF_ADJ(),d.D.adj||{}),show:Object.assign(DEF_SHOW(),d.D.show||{})});dDirty=!!d.dDirty;if(D.id&&!PLAYERS.find(p=>p.id===D.id)){D.id=null;D.brand=null}if(!D.consent){D.photo=null}}}catch(e){}
@@ -1764,14 +1816,13 @@ async function startApp(){if(started){refreshAll();return}started=true;
   await fontsReady;refreshAll();
   if(!ok)toast(t('tMem'),true);
   importRosterLink();
-  window.PSS={render,buildR,FORMATS,TEMPLATES,blank,savePlayer,openPlayer,cleanPlayer,get S(){return S},get D(){return D},get PLAYERS(){return PLAYERS},exportBlob,canExport};
+  window.PSS={render,buildR,FORMATS,TEMPLATES,blank,savePlayer,openPlayer,cleanPlayer,cloudSync,get S(){return S},get D(){return D},get PLAYERS(){return PLAYERS},exportBlob,canExport};
 }
 (function boot(){try{const l=localStorage.getItem('pss-lang');LANG=l||((navigator.language||'en').toLowerCase().startsWith('es')?'es':'en')}catch(e){LANG='es'}applyLang();
   let code=null;try{code=localStorage.getItem('pss-coach')}catch(e){}
-  if(!code){showApp(false);setTimeout(()=>$('#gateCode').focus(),100);return}
-  showApp(true);startApp();
-  // re-check the saved code when online; a code that is no longer valid locks the app (offline keeps working)
-  checkCoach(code).then(okc=>{if(!okc){try{localStorage.removeItem('pss-coach')}catch(e){}showApp(false);$('#gateErr').textContent=t('gateBad')}}).catch(()=>{})})();
+  showApp(true);startApp();ccShow(code?'':'none');
+  // the saved code is checked when online; a code that is no longer valid is dropped (the studio keeps working)
+  if(code)checkCoach(code).then(okc=>{if(!okc){try{localStorage.removeItem('pss-coach')}catch(e){}COACH=null;ccShow('bad')}else ccShow('ok')}).catch(()=>{})})();
 })();
 
 </script>
