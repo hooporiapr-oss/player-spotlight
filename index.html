@@ -485,24 +485,13 @@ canvas.pv:active{cursor:grabbing}
           <button type="button" data-badge="dark"><span data-i="badgeDark">Dark</span></button>
         </div>
         <div class="sl" style="margin:0 0 6px"><div class="top"><span class="lbl" data-i="sLogoSize">Logo size</span><output id="sLogoSizeO"></output></div><input type="range" id="sLogoSize" min="60" max="150" step="5" value="100"></div>
-        <span class="lbl" data-i="sLogoType">Logo type</span>
-        <div class="seg" id="sLogoType" style="margin-bottom:6px">
-          <button type="button" data-ltype="standard"><span data-i="ltStandard">Standard</span></button>
-          <button type="button" data-ltype="banner"><span data-i="ltBanner">Hero banner</span></button>
-        </div>
-        <div id="sBannerNote"><p class="hint" style="margin:0 0 10px" data-i="ltBannerNote">Hero: your logo image runs edge to edge across the top, with the photo below it. Logo size sets its maximum height.</p>
-        <span class="lbl" data-i="sBorder">Accent line under the banner</span>
-        <div class="seg" id="sBorder" style="margin-bottom:14px">
-          <button type="button" data-bd="on"><span data-i="bdOn">Line</span></button>
-          <button type="button" data-bd="off"><span data-i="bdOff">No line</span></button>
-        </div></div>
-        <div id="sLogoPosWrap"><span class="lbl" data-i="sLogoPos">Logo position</span>
+        <span class="lbl" data-i="sLogoPos">Logo position</span>
         <div class="seg" id="sLogoPos" style="margin-bottom:14px">
           <button type="button" data-pos="auto"><span data-i="posAuto">Template</span></button>
           <button type="button" data-pos="left"><span data-i="posLeft">Left</span></button>
           <button type="button" data-pos="center"><span data-i="posCenter">Center</span></button>
           <button type="button" data-pos="right"><span data-i="posRight">Right</span></button>
-        </div></div>
+        </div>
         <div class="colors">
           <label class="f" style="margin:0"><span class="lbl" data-i="sPrimary">Primary color</span><span class="colorf"><input type="color" id="sPrimary"><code id="sPrimaryC"></code></span></label>
           <label class="f" style="margin:0"><span class="lbl" data-i="sSecondary">Secondary color</span><span class="colorf"><input type="color" id="sSecondary"><code id="sSecondaryC"></code></span></label>
@@ -696,7 +685,7 @@ bxNoFmt:'Choose at least one size',bxWorking:'Creating {i} of {n}…',tBatchNone
 tplIntro:'Every template uses your logo and colors. Choose the one for new graphics.',useTpl:'Use this template',isDefault:'In use',
 d_spotlight:'Dark stage, dramatic light and bold type.',d_elite:'Recruiting style with elegant type and metallic accents.',d_hardwood:'Court wood, warm tones and athletic banners.',d_energy:'Dynamic shapes in your team colors.',d_signature:'Clean and minimal — the player is the focus.',
 setBrand:'Program branding',sProgram:'Program name',sLogo:'Program logo (required)',noLogo:'No logo yet',uploadLogo:'Upload logo',sLogoHint:'PNG, JPG or SVG. It appears on every graphic, with its own proportions and transparency.',
-sLogoBadge:'Logo backing',badgeNone:'None',badgeLight:'Light',badgeDark:'Dark',sLogoSize:'Logo size',sLogoPos:'Logo position',sLogoType:'Logo type',ltStandard:'Standard',ltBanner:'Hero banner',sBorder:'Accent line under the banner',bdOn:'Line',bdOff:'No line',ltBannerNote:'Hero: your logo image runs edge to edge across the top, with the photo below it. Logo size sets its maximum height.',posAuto:'Template',posLeft:'Top left',posCenter:'Top center',posRight:'Top right',
+sLogoBadge:'Logo backing',badgeNone:'None',badgeLight:'Light',badgeDark:'Dark',sLogoSize:'Logo size',sLogoPos:'Logo position',posAuto:'Template',posLeft:'Top left',posCenter:'Top center',posRight:'Top right',
 sPrimary:'Primary color',sSecondary:'Secondary color',sSlogan:'Slogan (optional)',sWebsite:'Website (optional)',sSeason:'Current season',
 setLists:'Teams & categories',sTeams:'Teams',sTeamsHint:'Each team keeps its own logo and colors, applied automatically when the team is chosen.',sCats:'Categories',sDefaultCats:'Built in: Pre-Mini, Mini, Infantil, Juvenil, Junior. Add your own below.',add:'Add',sTeamPh:'New team name',sCatPh:'New category',noTeams:'No teams yet',
 teamEditT:'Team profile',teamName:'Team name',useProgramColors:'Use the program colors',
@@ -740,7 +729,7 @@ bxNoFmt:'Escoge al menos un tamaño',bxWorking:'Creando {i} de {n}…',tBatchNon
 tplIntro:'Cada plantilla usa tu logo y tus colores. Escoge la de los gráficos nuevos.',useTpl:'Usar esta plantilla',isDefault:'En uso',
 d_spotlight:'Escenario oscuro, luz dramática y letra fuerte.',d_elite:'Estilo de reclutamiento con letra elegante y acentos metálicos.',d_hardwood:'Madera de cancha, tonos cálidos y banners atléticos.',d_energy:'Formas dinámicas con los colores del equipo.',d_signature:'Limpio y minimalista — el jugador es el centro.',
 setBrand:'Identidad del programa',sProgram:'Nombre del programa',sLogo:'Logo del programa (obligatorio)',noLogo:'Sin logo',uploadLogo:'Subir logo',sLogoHint:'PNG, JPG o SVG. Sale en cada gráfico, con sus proporciones y transparencia.',
-sLogoBadge:'Fondo del logo',badgeNone:'Ninguno',badgeLight:'Claro',badgeDark:'Oscuro',sLogoSize:'Tamaño del logo',sLogoPos:'Posición del logo',sLogoType:'Tipo de logo',ltStandard:'Estándar',ltBanner:'Banner hero',sBorder:'Línea bajo el banner',bdOn:'Con línea',bdOff:'Sin línea',ltBannerNote:'Hero: la imagen de tu logo va de borde a borde arriba, con la foto debajo. El tamaño del logo fija su altura máxima.',posAuto:'Plantilla',posLeft:'Arriba izq.',posCenter:'Arriba centro',posRight:'Arriba der.',
+sLogoBadge:'Fondo del logo',badgeNone:'Ninguno',badgeLight:'Claro',badgeDark:'Oscuro',sLogoSize:'Tamaño del logo',sLogoPos:'Posición del logo',posAuto:'Plantilla',posLeft:'Arriba izq.',posCenter:'Arriba centro',posRight:'Arriba der.',
 sPrimary:'Color principal',sSecondary:'Color secundario',sSlogan:'Lema (opcional)',sWebsite:'Sitio web (opcional)',sSeason:'Temporada actual',
 setLists:'Equipos y categorías',sTeams:'Equipos',sTeamsHint:'Cada equipo guarda su propio logo y colores, que se aplican solos al escoger el equipo.',sCats:'Categorías',sDefaultCats:'Incluidas: Pre-Mini, Mini, Infantil, Juvenil, Junior. Añade las tuyas abajo.',add:'Añadir',sTeamPh:'Nombre del equipo',sCatPh:'Nueva categoría',noTeams:'Aún no hay equipos',
 teamEditT:'Perfil del equipo',teamName:'Nombre del equipo',useProgramColors:'Usar los colores del programa',
@@ -775,7 +764,7 @@ const DB={db:null,ok:false,mem:{kv:{},players:{}},
 };
 
 /* ───────── state ───────── */
-const DEF_SETTINGS=()=>({programName:'',logo:null,logoBadge:'none',logoScale:100,logoPos:'auto',logoType:'standard',logoBorder:true,primary:'#FF7A18',secondary:'#F2C14E',slogan:'',website:'',season:String(new Date().getFullYear()),lang:null,teams:[],cats:[],template:'spotlight'});
+const DEF_SETTINGS=()=>({programName:'',logo:null,logoBadge:'none',logoScale:100,logoPos:'auto',primary:'#FF7A18',secondary:'#F2C14E',slogan:'',website:'',season:String(new Date().getFullYear()),lang:null,teams:[],cats:[],template:'spotlight'});
 let S=DEF_SETTINGS();
 let PLAYERS=[];
 const DEF_SHOW=()=>({number:true,position:true,season:true,teamLogo:true,slogan:true,website:true});
@@ -792,7 +781,7 @@ const uid=()=>'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 
 /* teams are profiles: name + optional logo + optional colors */
 const teamP=n=>S.teams.find(x=>x.name===n)||null;
-function liveBrand(team){const tp=teamP(team);return{program:S.programName,logo:S.logo,badge:S.logoBadge,logoScale:S.logoScale,logoPos:S.logoPos,logoType:S.logoType,logoBorder:S.logoBorder!==false,
+function liveBrand(team){const tp=teamP(team);return{program:S.programName,logo:S.logo,badge:S.logoBadge,logoScale:S.logoScale,logoPos:S.logoPos,
   primary:(tp&&tp.primary)||S.primary,secondary:(tp&&tp.secondary)||S.secondary,slogan:S.slogan,website:S.website,season:S.season}}
 const brandOf=p=>p.brand||liveBrand(p.team);
 function headingText(p){if(p.heading==='custom')return (p.headingText||'').trim();return HEADS[p.heading]||''}
@@ -919,34 +908,12 @@ function drawFit(c,img,x,y,w,h,align){if(!img)return null;const iw=img.naturalWi
 function initials(n){const w=(n||'').trim().split(/\s+/).filter(Boolean);if(!w.length)return'★';return w.slice(0,3).map(s=>s[0]).join('').toUpperCase()}
 // the program logo, sized and placed by the program settings, proportions kept.
 // isTop: the template's own spot is in the top row; otherwise a top-row position is created when the logo is moved.
-// banner logo type: full width, centered, in its own band at the top; the photo starts below it.
-function ban(L,R,W,H,fmt,isTop){R.banner=null;R.W=W;R.H=H;
-  if(R.logoType!=='banner'){const b=L.ph;if(!b||!L.logo)return{sh:0,bottom:0};const r=lrect(R,...L.logo,isTop);let ex=r;
-    if(R.logo&&R.logo.naturalWidth){const iw=R.logo.naturalWidth,ih=R.logo.naturalHeight,bd=R.badge&&R.badge!=='none',pad=bd?Math.min(r.w,r.h)*.13:0,k=Math.min((r.w-2*pad)/iw,(r.h-2*pad)/ih),dw=iw*k,dh=ih*k;
-      const dx=r.align==='left'?r.x+pad:r.align==='right'?r.x+r.w-dw-pad:r.x+(r.w-dw)/2,dy=r.y+(r.h-dh)/2;ex={x:dx-pad,y:dy-pad,w:dw+2*pad,h:dh+2*pad}}
-    const gap=fmt==='square'?14:18,bottom=Math.round(ex.y+ex.h+gap);
-    if(ex.x<b.x+b.w&&ex.x+ex.w>b.x&&ex.y<b.y+b.h*.5&&ex.y+ex.h>b.y+2){const sh=bottom-b.y;b.y=bottom;b.h-=sh;return{sh,bottom}}return{sh:0,bottom:0}}
-const sc=R.logoScale||1,m=R.logoMargin||56;
-  // hero: the logo image runs edge to edge across the top of the graphic, in its own band
-  const lg=R.logo,ar=lg&&lg.naturalWidth&&lg.naturalHeight?lg.naturalWidth/lg.naturalHeight:4;
-  let capH={portrait:300,square:170,story:440}[fmt]*sc;if(fmt==='square')capH=Math.min(capH,190);
-  const h=Math.round(Math.min(W/ar,capH)),bar=R.logoBorder!==false?10:0;R.banner={x:0,y:0,w:W,h,bar};const bottom=h+bar+(fmt==='square'?18:24);
-  const b=L.ph;let sh=0;if(b&&b.y<bottom){sh=bottom-b.y;b.y=bottom;b.h-=sh}return{sh,bottom}}
-// the box the logo is placed in (before fitting the image's own proportions)
-function lrect(R,x,y,w,h,align,isTop){align=align||'center';const W=R.W,H=R.H,sc=R.banner?1:R.logoScale||1,m=R.logoMargin||56;
-  if(R.banner){x=R.banner.x;y=R.banner.y;w=R.banner.w;h=R.banner.h;align='center'}
-  else if(R.logoPos&&R.logoPos!=='auto'){if(isTop===false){y=40;h=130;w=300}align=R.logoPos;}
+function logo(c,R,x,y,w,h,align,isTop){align=align||'center';const W=R.W,H=R.H,sc=R.logoScale||1,m=R.logoMargin||56;
+  if(R.logoPos&&R.logoPos!=='auto'){if(isTop===false){y=40;h=130;w=300}align=R.logoPos;}
   const nw=w*sc,nh=h*sc;
-  if(!R.banner&&R.logoPos&&R.logoPos!=='auto')x=align==='left'?m:align==='right'?W-m-nw:(W-nw)/2;
+  if(R.logoPos&&R.logoPos!=='auto')x=align==='left'?m:align==='right'?W-m-nw:(W-nw)/2;
   else x=align==='left'?x:align==='right'?x+w-nw:x+(w-nw)/2;
-  y=y+(h-nh)/2;w=nw;h=nh;x=Math.max(16,Math.min(x,W-16-w));y=Math.max(14,Math.min(y,H-14-h));return{x,y,w,h,align}}
-function logo(c,R,x0,y0,w0,h0,align0,isTop){const W=R.W,H=R.H;const q=lrect(R,x0,y0,w0,h0,align0,isTop);let{x,y,w,h,align}=q;
-  if(R.banner){const B=R.banner;c.save();c.beginPath();c.rect(0,0,W,B.h);c.clip();
-    const iw=R.logo?R.logo.naturalWidth:0,ih=R.logo?R.logo.naturalHeight:0,k=iw?Math.min(W/iw,B.h/ih):1,dw=iw*k,dh=ih*k;
-    const bd=R.badge&&R.badge!=='none';if(bd||!R.logo||dw<W-2){c.fillStyle=bd?(R.badge==='light'?'#ffffff':'#0b0f17'):R.p;c.fillRect(0,0,W,B.h)}
-    if(R.logo)c.drawImage(R.logo,(W-dw)/2,(B.h-dh)/2,dw,dh);
-    else{const f=fitLine(c,'LOGO',700,FH,W*.5,B.h*.42,8,.1);c.fillStyle=onColor(R.p);c.textBaseline='middle';txt(c,f.text,W/2,B.h/2,'center',f.s*.1);c.textBaseline='alphabetic'}
-    c.restore();if(B.bar){c.fillStyle=R.s;c.fillRect(0,B.h,W,B.bar)}return}
+  y=y+(h-nh)/2;w=nw;h=nh;x=Math.max(16,Math.min(x,W-16-w));y=Math.max(14,Math.min(y,H-14-h));
   if(!R.logo){const r=Math.min(w,h)/2;const cx=align==='left'?x+r:align==='right'?x+w-r:x+w/2,cy=y+h/2;c.save();c.setLineDash([10,8]);c.beginPath();c.arc(cx,cy,r,0,Math.PI*2);c.fillStyle='rgba(128,128,128,.25)';c.fill();c.lineWidth=3;c.strokeStyle='rgba(255,255,255,.8)';c.stroke();c.restore();
     const f=fitLine(c,'LOGO',700,FH,r*1.5,r*.62,8,0);c.fillStyle='#ffffff';c.textBaseline='middle';txt(c,f.text,cx,cy+r*.04,'center');c.textBaseline='alphabetic';return}
   const iw=R.logo.naturalWidth,ih=R.logo.naturalHeight;const badge=R.badge&&R.badge!=='none';const pad=badge?Math.min(w,h)*.13:0;const k=Math.min((w-2*pad)/iw,(h-2*pad)/ih);const dw=iw*k,dh=ih*k;
@@ -1010,7 +977,6 @@ spotlight(c,R,W,H,fmt){
   const L={portrait:{logo:[W/2-150,34,300,140,'center'],ph:{x:70,y:196,w:940,h:770},name:[60,984,960,176],bar:1176,info:1218,meta:1270,foot:1322,num:[W/2,820,620],align:'center',nw:960,nx:60},
     square:{logo:[56,34,280,124,'left'],ph:{x:48,y:176,w:540,h:856},name:[624,220,412,350],bar:600,info:668,meta:756,foot:1036,num:null,align:'left',nw:412,nx:624},
     story:{logo:[W/2-180,96,360,180,'center'],ph:{x:60,y:310,w:960,h:1090},name:[60,1424,960,236],bar:1688,info:1738,meta:1800,foot:1866,num:[W/2,1180,860],align:'center',nw:960,nx:60}}[fmt];
-  const BN=ban(L,R,W,H,fmt,true);
   if(R.number&&L.num){setF(c,700,L.num[2],FH);c.textBaseline='alphabetic';c.lineWidth=5;c.strokeStyle=rgba(acc,.33);c.textAlign='center';c.strokeText(R.number,L.num[0],L.num[1]);c.textAlign='left'}
   const b=L.ph,cut=R.photo&&R.photo.cutout;
   if(cut){const fg=c.createRadialGradient(b.x+b.w/2,b.y+b.h,0,b.x+b.w/2,b.y+b.h,b.w*.6);fg.addColorStop(0,rgba(acc,.55));fg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=fg;c.fillRect(b.x-60,b.y+b.h*.5,b.w+120,b.h*.6)}
@@ -1036,7 +1002,6 @@ elite(c,R,W,H,fmt){
   const L={portrait:{logo:[W/2-140,52,280,132,'center'],ph:{x:92,y:196,w:896,h:760},badge:[916,890,70],name:[80,980,920,160],rule:1160,info:1214,meta:1262,foot:1306,cx:W/2,cw:900},
     square:{logo:[620,74,380,140,'center'],ph:{x:74,y:74,w:500,h:932},badge:[540,960,62],name:[620,236,380,340],rule:600,info:672,meta:752,foot:1010,cx:810,cw:380},
     story:{logo:[W/2-170,74,340,186,'center'],ph:{x:92,y:290,w:896,h:1100},badge:[916,1360,82],name:[80,1424,920,220],rule:1680,info:1742,meta:1798,foot:1862,cx:W/2,cw:900}}[fmt];
-  const BN=ban(L,R,W,H,fmt,fmt!=='square');
   const b=L.ph,cut=R.photo&&R.photo.cutout;
   const pbg=c.createRadialGradient(b.x+b.w/2,b.y+b.h*.45,0,b.x+b.w/2,b.y+b.h*.45,b.h*.8);pbg.addColorStop(0,rgba(lift(R.p,.2),.45));pbg.addColorStop(1,'#0b0e15');
   photo(c,R,b,{bg:pbg,after:x=>{if(!cut){const v=x.createLinearGradient(0,b.y+b.h*.7,0,b.y+b.h);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(0,0,0,.45)');x.fillStyle=v;x.fillRect(b.x,b.y,b.w,b.h)}}});
@@ -1062,13 +1027,12 @@ hardwood(c,R,W,H,fmt){
   const L={portrait:{logo:[W/2-150,16,300,116,'center'],ph:{x:150,y:150,w:780,h:790},num:[912,170,78],band:[40,972,W-80,140],sub:[120,1112,W-240,64],meta:1232,foot:1306},
     square:{logo:[60,24,280,108,'left'],ph:{x:66,y:150,w:520,h:620},num:[836,330,124],metaX:836,metaY:530,band:[30,812,W-60,128],sub:[120,940,W-240,60],foot:1040},
     story:{logo:[W/2-180,72,360,190,'center'],ph:{x:120,y:290,w:840,h:1010},num:[934,320,92],band:[40,1352,W-80,176],sub:[110,1528,W-220,78],meta:1700,foot:1864}}[fmt];
-  const BN=ban(L,R,W,H,fmt,true);if(BN.bottom)L.num[1]=Math.max(L.num[1]+BN.sh,BN.bottom+L.num[2]+6);
   const b=L.ph,cut=R.photo&&R.photo.cutout;
   if(!cut){c.save();c.shadowColor='rgba(0,0,0,.5)';c.shadowBlur=36;c.shadowOffsetY=14;c.fillStyle='#fbf7f0';c.fillRect(b.x-14,b.y-14,b.w+28,b.h+28);c.restore()}
   else{const sh=c.createRadialGradient(b.x+b.w/2,b.y+b.h,0,b.x+b.w/2,b.y+b.h,b.w*.45);sh.addColorStop(0,'rgba(30,10,0,.5)');sh.addColorStop(1,'rgba(30,10,0,0)');c.fillStyle=sh;c.fillRect(b.x,b.y+b.h*.7,b.w,b.h*.4)}
   photo(c,R,b,{bg:R.photo?null:'#e9dcc7',sil:'rgba(120,80,40,.35)'});
   logo(c,R,...L.logo,true);
-  if(R.number){let[nx,ny,nr]=L.num;if(fmt!=='square'&&!R.banner&&R.logoPos==='right')nx=W-nx;c.save();c.shadowColor='rgba(0,0,0,.4)';c.shadowBlur=18;c.shadowOffsetY=6;c.beginPath();c.arc(nx,ny,nr,0,Math.PI*2);c.fillStyle=R.s;c.fill();c.restore();
+  if(R.number){let[nx,ny,nr]=L.num;if(fmt!=='square'&&R.logoPos==='right')nx=W-nx;c.save();c.shadowColor='rgba(0,0,0,.4)';c.shadowBlur=18;c.shadowOffsetY=6;c.beginPath();c.arc(nx,ny,nr,0,Math.PI*2);c.fillStyle=R.s;c.fill();c.restore();
     c.beginPath();c.arc(nx,ny,nr,0,Math.PI*2);c.lineWidth=7;c.strokeStyle='#ffffff';c.stroke();const f=fitLine(c,R.number,700,FH,nr*1.4,nr*1.02,10,0);c.fillStyle=onColor(R.s);c.textBaseline='middle';txt(c,f.text,nx,ny+f.s*.05,'center');c.textBaseline='alphabetic'}
   const[bx,by,bw,bh]=L.band,sl=34;c.save();c.shadowColor='rgba(0,0,0,.35)';c.shadowBlur=20;c.shadowOffsetY=8;c.beginPath();c.moveTo(bx+sl,by);c.lineTo(bx+bw,by);c.lineTo(bx+bw-sl,by+bh);c.lineTo(bx,by+bh);c.closePath();c.fillStyle=R.p;c.fill();c.restore();
   const hl=c.createLinearGradient(0,by,0,by+bh);hl.addColorStop(0,'rgba(255,255,255,.18)');hl.addColorStop(.5,'rgba(255,255,255,0)');c.beginPath();c.moveTo(bx+sl,by);c.lineTo(bx+bw,by);c.lineTo(bx+bw-sl,by+bh);c.lineTo(bx,by+bh);c.closePath();c.fillStyle=hl;c.fill();
@@ -1088,7 +1052,6 @@ energy(c,R,W,H,fmt){
   const L={portrait:{logo:[56,36,300,130,'left'],ph:{x:110,y:176,w:860,h:770,k:90},num:[W-60,300,330],band:[0,986,W,152],chips:1196,meta:1258,foot:1316},
     square:{logo:[50,26,270,112,'left'],ph:{x:60,y:150,w:580,h:670,k:72},num:[W-50,320,300],band:[0,840,W,128],chips:1004,metaX:850,metaY:520,foot:1058},
     story:{logo:[60,80,340,180,'left'],ph:{x:100,y:290,w:880,h:1050,k:100},num:[W-60,560,420],band:[0,1390,W,190],chips:1640,meta:1716,foot:1866}}[fmt];
-  const BN=ban(L,R,W,H,fmt,true);if(BN.bottom)L.num[1]=Math.max(L.num[1]+BN.sh,BN.bottom+L.num[2]*.72);
   if(R.number){c.save();setF(c,700,L.num[2],FH);c.translate(L.num[0],L.num[1]);c.transform(1,0,-.2,1,0,0);c.fillStyle='rgba(255,255,255,.2)';c.textAlign='right';c.fillText(R.number,0,0);c.restore();c.textAlign='left'}
   const b=L.ph,k=b.k,cut=R.photo&&R.photo.cutout;const para=(x,dx,dy)=>{x.beginPath();x.moveTo(b.x+k+dx,b.y+dy);x.lineTo(b.x+b.w+dx,b.y+dy);x.lineTo(b.x+b.w-k+dx,b.y+b.h+dy);x.lineTo(b.x+dx,b.y+b.h+dy);x.closePath()};
   if(!cut){para(c,18,18);c.fillStyle='rgba(0,0,0,.35)';c.fill()}
@@ -1113,12 +1076,11 @@ signature(c,R,W,H,fmt){
   const L={portrait:{ph:{x:0,y:0,w:W,h:880},num:[W-60,60],acc:[80,934],name:[80,956,700,160],info:1174,meta:1226,logo:[W-80-190,940,190,170,'right'],foot:1300,x:80,w:920},
     square:{ph:{x:0,y:0,w:540,h:H},num:[500,40],acc:[600,290],name:[600,312,420,270],info:640,meta:722,logo:[600,820,260,150,'left'],foot:1028,x:600,w:420},
     story:{ph:{x:0,y:0,w:W,h:1240},num:[W-60,80],acc:[80,1300],name:[80,1324,920,240],info:1606,meta:1662,logo:[80,1720,260,120,'left'],foot:1864,x:80,w:920}}[fmt];
-  const BN=ban(L,R,W,H,fmt,false);if(BN.sh)L.num[1]+=BN.sh;
   const b=L.ph,cut=R.photo&&R.photo.cutout;
   const pg=c.createLinearGradient(0,b.y,0,b.y+b.h);pg.addColorStop(0,mix(R.p,'#ffffff',.86));pg.addColorStop(1,mix(R.p,'#ffffff',.7));
   photo(c,R,b,{bg:pg,sil:rgba(R.p,.25)});
   if(!cut){const fd=c.createLinearGradient(0,b.y+b.h-60,0,b.y+b.h);fd.addColorStop(0,'rgba(0,0,0,0)');fd.addColorStop(1,'rgba(0,0,0,.12)');c.fillStyle=fd;c.fillRect(b.x,b.y+b.h-60,b.w,60)}
-  if(R.number){const s=fmt==='square'?96:110;setF(c,600,s*.52,FH);const w=Math.max(s,tw(c,'#'+R.number,0)+s*.5);let x=L.num[0]-w;if(fmt!=='square'&&!R.banner&&R.logoPos==='right')x=60;const y=L.num[1];
+  if(R.number){const s=fmt==='square'?96:110;setF(c,600,s*.52,FH);const w=Math.max(s,tw(c,'#'+R.number,0)+s*.5);let x=L.num[0]-w;if(fmt!=='square'&&R.logoPos==='right')x=60;const y=L.num[1];
     c.save();c.shadowColor='rgba(0,0,0,.18)';c.shadowBlur=14;c.shadowOffsetY=4;rr(c,x,y,w,s,16);c.fillStyle='rgba(255,255,255,.95)';c.fill();c.restore();
     c.fillStyle=ink;c.textBaseline='middle';setF(c,600,s*.52,FH);txt(c,'#'+R.number,x+w/2,y+s/2+2,'center');c.textBaseline='alphabetic'}
   c.fillStyle=R.p;c.fillRect(L.acc[0],L.acc[1],96,8);
@@ -1137,8 +1099,8 @@ async function buildR(p,opts){opts=opts||{};const B=brandOf(p);const ph=await pr
   return{template:TEMPLATES.includes(p.template)?p.template:'spotlight',name:(p.name||'').trim()||(ph_?t('phName'):' '),team:(p.team||'').trim()||(ph_?t('phTeam'):''),cat:(p.category||'').trim()||(ph_?t('phCat'):''),
     number:showOr(p,'number')?String(p.number||'').trim():'',position:showOr(p,'position')?(p.position||'').trim():'',season:showOr(p,'season')?((p.season||'').trim()||B.season||''):'',
     slogan:showOr(p,'slogan')?(B.slogan||'').trim():'',website:showOr(p,'website')?(B.website||'').trim().replace(/^https?:\/\//i,'').replace(/\/$/,''):'',heading:headingText(p),
-    p:B.primary||'#FF7A18',s:B.secondary||'#F2C14E',logo:lg,badge:B.badge,program:B.program,logoScale:(B.logoScale||100)/100,logoPos:B.logoPos||'auto',logoType:B.logoType==='banner'?'banner':'standard',logoBorder:B.logoBorder!==false,teamLogo:tl,photo:ph,zoom:p.adj.zoom||1,ox:p.adj.ox||0,oy:p.adj.oy||0}}
-function render(c,fmt,R,scale){const F=FORMATS[fmt];c.save();c.setTransform(scale,0,0,scale,0,0);c.clearRect(0,0,F.w,F.h);R.hit=null;R.banner=null;R.W=F.w;R.H=F.h;c.textBaseline='alphabetic';c.textAlign='left';
+    p:B.primary||'#FF7A18',s:B.secondary||'#F2C14E',logo:lg,badge:B.badge,program:B.program,logoScale:(B.logoScale||100)/100,logoPos:B.logoPos||'auto',teamLogo:tl,photo:ph,zoom:p.adj.zoom||1,ox:p.adj.ox||0,oy:p.adj.oy||0}}
+function render(c,fmt,R,scale){const F=FORMATS[fmt];c.save();c.setTransform(scale,0,0,scale,0,0);c.clearRect(0,0,F.w,F.h);R.hit=null;R.W=F.w;R.H=F.h;c.textBaseline='alphabetic';c.textAlign='left';
   try{TPL[R.template](c,R,F.w,F.h,fmt)}catch(e){console.error(e)}c.restore();return R.hit}
 async function drawTo(cv,p,fmt,scale,opts){opts=Object.assign({thumb:scale<.36},opts||{});const R=await buildR(p,opts);const F=FORMATS[fmt];const w=Math.round(F.w*scale),h=Math.round(F.h*scale);if(cv.width!==w)cv.width=w;if(cv.height!==h)cv.height=h;
   return render(cv.getContext('2d'),fmt,R,scale)}
@@ -1532,7 +1494,7 @@ $$('#tFmt button').forEach(b=>b.onclick=()=>{tFmt=b.dataset.fmt;segOn('#tFmt',tF
 /* ───────── SETTINGS ───────── */
 let sT=0;const saveSoon=()=>{clearTimeout(sT);sT=setTimeout(()=>saveS(),400)};
 function loadSettingsForm(){$('#sProgram').value=S.programName;$('#sSlogan').value=S.slogan;$('#sWebsite').value=S.website;$('#sSeason').value=S.season;$('#sPrimary').value=S.primary;$('#sSecondary').value=S.secondary;
-  $('#sPrimaryC').textContent=S.primary.toUpperCase();$('#sSecondaryC').textContent=S.secondary.toUpperCase();segOn('#sBadge',S.logoBadge,'badge');segOn('#sLogoPos',S.logoPos,'pos');segOn('#sLogoType',S.logoType||'standard','ltype');segOn('#sBorder',S.logoBorder===false?'off':'on','bd');ltypeUI();
+  $('#sPrimaryC').textContent=S.primary.toUpperCase();$('#sSecondaryC').textContent=S.secondary.toUpperCase();segOn('#sBadge',S.logoBadge,'badge');segOn('#sLogoPos',S.logoPos,'pos');
   $('#sLogoSize').value=S.logoScale;$('#sLogoSizeO').textContent=S.logoScale+'%';showLogo();refreshLists();storage()}
 function showLogo(){$('#sLogoPrev').innerHTML=S.logo?`<img alt="" src="${S.logo}">`:`<span>${esc(t('noLogo'))}</span>`;$('#sLogoDel').classList.toggle('hidden',!S.logo)}
 function refreshLists(){const tl=$('#sTeamList');tl.innerHTML=S.teams.length?'':`<div class="muted">${esc(t('noTeams'))}</div>`;
@@ -1549,9 +1511,6 @@ const bindS=(id,key,cb)=>$(id).addEventListener('input',e=>{S[key]=e.target.valu
 bindS('#sProgram','programName');bindS('#sSlogan','slogan');bindS('#sWebsite','website');bindS('#sSeason','season',()=>{$('#cSeason').placeholder=brandOf(D).season||''});
 bindS('#sPrimary','primary',()=>{$('#sPrimaryC').textContent=S.primary.toUpperCase();refreshLists()});bindS('#sSecondary','secondary',()=>{$('#sSecondaryC').textContent=S.secondary.toUpperCase();refreshLists()});
 $('#sLogoSize').addEventListener('input',e=>{S.logoScale=+e.target.value;$('#sLogoSizeO').textContent=S.logoScale+'%';saveSoon();refreshAllSoon()});
-function ltypeUI(){const b=S.logoType==='banner';$('#sLogoPosWrap').hidden=b;$('#sBannerNote').hidden=!b}
-$$('#sBorder button').forEach(b=>b.onclick=()=>{S.logoBorder=b.dataset.bd==='on';segOn('#sBorder',b.dataset.bd,'bd');saveS();refreshAll()});
-$$('#sLogoType button').forEach(b=>b.onclick=()=>{S.logoType=b.dataset.ltype;segOn('#sLogoType',S.logoType,'ltype');ltypeUI();saveS();refreshAll()});
 $$('#sLogoPos button').forEach(b=>b.onclick=()=>{S.logoPos=b.dataset.pos;segOn('#sLogoPos',S.logoPos,'pos');saveS();refreshAll()});
 $$('#sBadge button').forEach(b=>b.onclick=()=>{S.logoBadge=b.dataset.badge;segOn('#sBadge',S.logoBadge,'badge');saveS();refreshAll()});
 $('#sLogoAdd').onclick=()=>{$('#fLogo').value='';$('#fLogo').click()};
@@ -1573,11 +1532,11 @@ function normTeams(a){if(!Array.isArray(a))return[];const out=[];a.forEach(x=>{c
   out.push({name,logo:isData(o.logo)?o.logo:null,primary:isColor(o.primary)?o.primary:null,secondary:isColor(o.secondary)?o.secondary:null})});return out.sort((a,b)=>a.name.localeCompare(b.name))}
 function cleanSettings(x){const d=DEF_SETTINGS();if(!x||typeof x!=='object')return d;const s=d;
   s.programName=str(x.programName,60);s.slogan=str(x.slogan,70);s.website=str(x.website,60);s.season=str(x.season,12)||d.season;s.logo=isData(x.logo)?x.logo:null;
-  s.logoBadge=['none','light','dark'].includes(x.logoBadge)?x.logoBadge:'none';s.logoScale=clampN(x.logoScale,60,150,100);s.logoPos=['auto','left','center','right'].includes(x.logoPos)?x.logoPos:'auto';s.logoType=x.logoType==='banner'?'banner':'standard';s.logoBorder=x.logoBorder!==false;
+  s.logoBadge=['none','light','dark'].includes(x.logoBadge)?x.logoBadge:'none';s.logoScale=clampN(x.logoScale,60,150,100);s.logoPos=['auto','left','center','right'].includes(x.logoPos)?x.logoPos:'auto';
   s.primary=isColor(x.primary)?x.primary:d.primary;s.secondary=isColor(x.secondary)?x.secondary:d.secondary;s.lang=['es','en'].includes(x.lang)?x.lang:null;s.template=TEMPLATES.includes(x.template)?x.template:'spotlight';
   s.teams=normTeams(x.teams);s.cats=Array.isArray(x.cats)?[...new Set(x.cats.filter(c=>typeof c==='string'&&c.trim()).map(c=>c.trim().slice(0,30)))]:[];return s}
 function cleanBrand(b){if(!b||typeof b!=='object')return null;return{program:str(b.program,60),logo:isData(b.logo)?b.logo:null,badge:['none','light','dark'].includes(b.badge)?b.badge:'none',logoScale:clampN(b.logoScale,60,150,100),
-  logoPos:['auto','left','center','right'].includes(b.logoPos)?b.logoPos:'auto',logoType:b.logoType==='banner'?'banner':'standard',logoBorder:b.logoBorder!==false,primary:isColor(b.primary)?b.primary:'#FF7A18',secondary:isColor(b.secondary)?b.secondary:'#F2C14E',slogan:str(b.slogan,70),website:str(b.website,60),season:str(b.season,12)}}
+  logoPos:['auto','left','center','right'].includes(b.logoPos)?b.logoPos:'auto',primary:isColor(b.primary)?b.primary:'#FF7A18',secondary:isColor(b.secondary)?b.secondary:'#F2C14E',slogan:str(b.slogan,70),website:str(b.website,60),season:str(b.season,12)}}
 function cleanCrop(c){if(!c||typeof c!=='object')return null;const x=clampN(c.x,0,1,0),y=clampN(c.y,0,1,0),w=clampN(c.w,.01,1,1),h=clampN(c.h,.01,1,1);return x+w<=1.0001&&y+h<=1.0001?{x,y,w,h}:null}
 function cleanPlayer(x){if(!x||typeof x!=='object'||typeof x.id!=='string'||!/^[\w-]{1,64}$/.test(x.id)||typeof x.name!=='string'||!x.name.trim())return null;
   if(x.photo!=null&&!isData(x.photo))return null;const p=blank();p.id=x.id;p.name=str(x.name,60);
@@ -1602,7 +1561,7 @@ $('#fRestore').addEventListener('change',async e=>{const f=e.target.files[0];if(
   busy(true,'');try{await DB.batch({clear:how==='replace',kv:{settings:next,rosters:nextR},players})}catch(x){busy(false);toast(t('tRestoreFail'),true);return}
   S=next;ROSTERS=nextR;PLAYERS=await DB.all().catch(()=>PLAYERS);if(how==='replace'){D=blank();dDirty=false;PD.started=false}procCache.clear();busy(false);
   applyLang();loadSettingsForm();loadCreateForm();pdShow();galleryDirty=true;if(VIEW==='players')renderGallery();toast(t('tRestored',{n:players.length})+(damaged?t('tRestoreSkip',{m:damaged}):''))});
-function liveBrandFrom(st,team){const tp=st.teams.find(x=>x.name===team);return{program:st.programName,logo:st.logo,badge:st.logoBadge,logoScale:st.logoScale,logoPos:st.logoPos,logoType:st.logoType,logoBorder:st.logoBorder!==false,primary:(tp&&tp.primary)||st.primary,secondary:(tp&&tp.secondary)||st.secondary,slogan:st.slogan,website:st.website,season:st.season}}
+function liveBrandFrom(st,team){const tp=st.teams.find(x=>x.name===team);return{program:st.programName,logo:st.logo,badge:st.logoBadge,logoScale:st.logoScale,logoPos:st.logoPos,primary:(tp&&tp.primary)||st.primary,secondary:(tp&&tp.secondary)||st.secondary,slogan:st.slogan,website:st.website,season:st.season}}
 $('#sWipe').onclick=async()=>{const ok=await ask({title:t('wipeT'),text:t('wipeText'),buttons:[{label:t('cancel'),value:null},{label:t('wipe'),value:true,cls:'danger'}]});if(!ok)return;
   const fresh=DEF_SETTINGS();fresh.lang=LANG;try{await DB.batch({clear:true,kv:{settings:fresh}})}catch(e){toast(t('tSaveFail'),true);return}
   S=fresh;ROSTERS={};PLAYERS=[];D=blank();dDirty=false;PD={team:'',category:'',template:'spotlight',heading:'none',headingText:'',autoBg:false,started:false,count:0};procCache.clear();imgCache.clear();
