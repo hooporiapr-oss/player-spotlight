@@ -590,6 +590,9 @@ canvas.pv:active{cursor:grabbing}
       <button type="button" class="btn" id="mpShare"><span data-i="share">Share</span></button>
       <button type="button" class="btn" id="mpEdit"><span data-i="edit">Edit</span></button>
       <button type="button" class="btn" id="mpRegen"><span data-i="regenerate">Regenerate</span></button>
+      <button type="button" class="btn full" id="mpCardUp"><span data-i="cardUp">⬆ Upload my card</span></button>
+      <button type="button" class="btn" id="mpCardDel" hidden><span data-i="cardDel">Remove my card</span></button>
+      <input type="file" id="fCard" accept="image/*" hidden>
       <button type="button" class="btn full" id="mpBrand"><span data-i="applyBrand">Use current branding</span></button>
       <button type="button" class="btn danger" id="mpDelete"><span data-i="delete">Delete</span></button>
       <button type="button" class="btn ghost" id="mpClose"><span data-i="close">Close</span></button>
@@ -641,7 +644,7 @@ const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll
 const FORMATS={portrait:{w:1080,h:1350},square:{w:1080,h:1080},story:{w:1080,h:1920}};
 const FMT_LIST=['portrait','square','story'];
 const TEMPLATES=['spotlight','elite','hardwood','energy','signature','arena'];
-const TPL_NAMES={spotlight:'Spotlight',elite:'Elite',hardwood:'Hardwood',energy:'Energy',signature:'Signature',arena:'Arena'};
+const TPL_NAMES={spotlight:'Spotlight',elite:'Elite',hardwood:'Hardwood',energy:'Energy',signature:'Signature',arena:'Arena',card:'My card'};
 const DEFAULT_CATS=['Pre-Mini','Mini','Infantil','Juvenil','Junior'];
 const SEG_URL='https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@0.1.1675465747/';
 const SB_URL='https://sdaphocueugzfvjovuxd.supabase.co';
@@ -690,7 +693,7 @@ confirmDeleteT:'Delete player?',confirmDelete:'Delete {name}? This cannot be und
 batchT:'Batch export',tpT:'Team page for websites',tpHint:'One web page with the team\'s graphics, your logo and colors. Upload it to the program\'s website. Choose a team above.',tpFirst:'First name and number only',tpBtn:'Download team page',tpWorking:'Building team page {i} of {n}…',tpDone:'Team page downloaded — {n} players',tpNeedTeam:'Choose a team first',tpFail:'The team page could not be made. Try again.',tpPlayers:'{n} players',batchHint:'Download every graphic for a team and category in one ZIP file.',batchBtn:'Download ZIP',bxInfo:'{p} players · {g} graphics',bxSkip:' · {s} without photo permission or logo will be skipped',
 bxNoFmt:'Choose at least one size',bxWorking:'Creating {i} of {n}…',tBatchNone:'No players here can be exported yet (photo permission and logo are required)',tBatchDone:'ZIP downloaded: {n} graphics',tBatchSkipped:' · {n} players skipped',tBatchFail:'The ZIP could not be created — try fewer sizes at a time',
 tplIntro:'Every template uses your logo and colors. Choose the one for new graphics.',useTpl:'Use this template',isDefault:'In use',
-d_spotlight:'Dark stage, dramatic light and bold type.',d_elite:'Recruiting style with elegant type and metallic accents.',d_hardwood:'Court wood, warm tones and athletic banners.',d_energy:'Dynamic shapes in your team colors.',d_signature:'Clean and minimal — the player is the focus.',d_arena:'Official trading card: arena lights, gold name plate and the player up close.',
+d_spotlight:'Dark stage, dramatic light and bold type.',d_elite:'Recruiting style with elegant type and metallic accents.',d_hardwood:'Court wood, warm tones and athletic banners.',d_energy:'Dynamic shapes in your team colors.',d_signature:'Clean and minimal — the player is the focus.',cardUp:'⬆ Upload my card',cardDel:'Remove my card',cardName:'My card',tCardSaved:'Your card is saved with this player.',tCardDel:'Your card was removed.',d_arena:'Official trading card: arena lights, gold name plate and the player up close.',
 setBrand:'Program branding',sProgram:'Program name',sLogo:'Program logo (required)',noLogo:'No logo yet',uploadLogo:'Upload logo',sLogoHint:'PNG, JPG or SVG. It appears on every graphic, with its own proportions and transparency.',
 sLogoBadge:'Logo backing',badgeNone:'None',badgeLight:'Light',badgeDark:'Dark',sLogoSize:'Logo size',sLogoPos:'Logo position',sArt:'Background art',artNone:'Template',artHoops:'Basketball art',artHint:'Basketball art paints a game-night scene in your colors behind every player. It looks best with Photo Day background removal.',posAuto:'Template',posLeft:'Top left',posCenter:'Top center',posRight:'Top right',
 sPrimary:'Primary color',sSecondary:'Secondary color',sSlogan:'Slogan (optional)',sWebsite:'Website (optional)',sSeason:'Current season',
@@ -734,7 +737,7 @@ confirmDeleteT:'¿Borrar jugador?',confirmDelete:'¿Borrar a {name}? No se puede
 batchT:'Exportar en lote',tpT:'Página del equipo para sitios web',tpHint:'Una página web con los gráficos del equipo, tu logo y colores. Súbela al sitio web del programa. Escoge un equipo arriba.',tpFirst:'Solo primer nombre y número',tpBtn:'Descargar página del equipo',tpWorking:'Creando página del equipo {i} de {n}…',tpDone:'Página del equipo descargada — {n} jugadores',tpNeedTeam:'Escoge un equipo primero',tpFail:'No se pudo crear la página del equipo. Inténtalo de nuevo.',tpPlayers:'{n} jugadores',batchHint:'Descarga todos los gráficos de un equipo y categoría en un solo archivo ZIP.',batchBtn:'Descargar ZIP',bxInfo:'{p} jugadores · {g} gráficos',bxSkip:' · se omitirán {s} sin permiso de foto o sin logo',
 bxNoFmt:'Escoge al menos un tamaño',bxWorking:'Creando {i} de {n}…',tBatchNone:'Ningún jugador aquí se puede exportar todavía (se requiere permiso de foto y logo)',tBatchDone:'ZIP descargado: {n} gráficos',tBatchSkipped:' · {n} jugadores omitidos',tBatchFail:'No se pudo crear el ZIP — prueba con menos tamaños a la vez',
 tplIntro:'Cada plantilla usa tu logo y tus colores. Escoge la de los gráficos nuevos.',useTpl:'Usar esta plantilla',isDefault:'En uso',
-d_spotlight:'Escenario oscuro, luz dramática y letra fuerte.',d_elite:'Estilo de reclutamiento con letra elegante y acentos metálicos.',d_hardwood:'Madera de cancha, tonos cálidos y banners atléticos.',d_energy:'Formas dinámicas con los colores del equipo.',d_signature:'Limpio y minimalista — el jugador es el centro.',d_arena:'Tarjeta oficial: luces de arena, placa dorada y el jugador de cerca.',
+d_spotlight:'Escenario oscuro, luz dramática y letra fuerte.',d_elite:'Estilo de reclutamiento con letra elegante y acentos metálicos.',d_hardwood:'Madera de cancha, tonos cálidos y banners atléticos.',d_energy:'Formas dinámicas con los colores del equipo.',d_signature:'Limpio y minimalista — el jugador es el centro.',cardUp:'⬆ Subir mi tarjeta',cardDel:'Quitar mi tarjeta',cardName:'Mi tarjeta',tCardSaved:'Tu tarjeta quedó guardada con este jugador.',tCardDel:'Se quitó tu tarjeta.',d_arena:'Tarjeta oficial: luces de arena, placa dorada y el jugador de cerca.',
 setBrand:'Identidad del programa',sProgram:'Nombre del programa',sLogo:'Logo del programa (obligatorio)',noLogo:'Sin logo',uploadLogo:'Subir logo',sLogoHint:'PNG, JPG o SVG. Sale en cada gráfico, con sus proporciones y transparencia.',
 sLogoBadge:'Fondo del logo',badgeNone:'Ninguno',badgeLight:'Claro',badgeDark:'Oscuro',sLogoSize:'Tamaño del logo',sLogoPos:'Posición del logo',sArt:'Arte de fondo',artNone:'Plantilla',artHoops:'Arte de baloncesto',artHint:'El arte de baloncesto pinta una escena de noche de juego con tus colores detrás de cada jugador. Se ve mejor con el fondo removido del Día de Fotos.',posAuto:'Plantilla',posLeft:'Arriba izq.',posCenter:'Arriba centro',posRight:'Arriba der.',
 sPrimary:'Color principal',sSecondary:'Color secundario',sSlogan:'Lema (opcional)',sWebsite:'Sitio web (opcional)',sSeason:'Temporada actual',
@@ -1046,6 +1049,9 @@ arena(c,R,W,H,fmt){
   chips(c,metaItems(R),W/2,L.meta,W-160,{size:fmt==='square'?24:fmt==='story'?32:29,wt:800,stroke:gold,lw:4,fill:'rgba(0,0,0,.55)',color:'#ffffff',align:'center',track:.08});
   foot(c,R,W/2,L.foot,W-140,{size:fmt==='story'?24:20,color:'rgba(255,255,255,.6)',align:'center'})},
 
+card(c,R,W,H,fmt){const im=R.card;c.fillStyle='#0b0b10';c.fillRect(0,0,W,H);if(!im)return;const iw=im.naturalWidth,ih=im.naturalHeight;
+  const kc=Math.max(W/iw,H/ih);c.save();c.filter='blur(28px) brightness(.55)';c.drawImage(im,(W-iw*kc)/2,(H-ih*kc)/2,iw*kc,ih*kc);c.restore();
+  const k=Math.min(W/iw,H/ih);const dw=iw*k,dh=ih*k;c.drawImage(im,(W-dw)/2,(H-dh)/2,dw,dh)},
 elite(c,R,W,H,fmt){
   R.logoMargin=74;
   const base=lift(R.s,.32),deep=mix(sink(R.p,.12),'#05070b',.55);
@@ -1187,9 +1193,9 @@ hoops(c,R,W,H,b,rg){let sd=97;const rnd=()=>{sd=(sd*16807)%2147483647;return(sd-
 
 /* ───────── render data + renderer ───────── */
 function showOr(p,k){return !p.show||p.show[k]!==false}
-async function buildR(p,opts){opts=opts||{};const B=brandOf(p);const ph=await processed(p,opts.thumb?THUMB_MAX:PROC_MAX);const[lg,tl]=await Promise.all([loadImg(B.logo),showOr(p,'teamLogo')?loadImg(p.teamLogo):null]);
+async function buildR(p,opts){opts=opts||{};const B=brandOf(p);const ph=await processed(p,opts.thumb?THUMB_MAX:PROC_MAX);const[lg,tl,cd]=await Promise.all([loadImg(B.logo),showOr(p,'teamLogo')?loadImg(p.teamLogo):null,p.card?loadImg(p.card):null]);
   const ph_=opts.placeholders;
-  return{template:TEMPLATES.includes(p.template)?p.template:'spotlight',name:(p.name||'').trim()||(ph_?t('phName'):' '),team:(p.team||'').trim()||(ph_?t('phTeam'):''),cat:(p.category||'').trim()||(ph_?t('phCat'):''),
+  return{card:cd,template:TEMPLATES.includes(p.template)||(p.template==='card'&&cd)?p.template:'spotlight',name:(p.name||'').trim()||(ph_?t('phName'):' '),team:(p.team||'').trim()||(ph_?t('phTeam'):''),cat:(p.category||'').trim()||(ph_?t('phCat'):''),
     number:showOr(p,'number')?String(p.number||'').trim():'',position:showOr(p,'position')?(p.position||'').trim():'',season:showOr(p,'season')?((p.season||'').trim()||B.season||''):'',
     slogan:showOr(p,'slogan')?(B.slogan||'').trim():'',website:showOr(p,'website')?(B.website||'').trim().replace(/^https?:\/\//i,'').replace(/\/$/,''):'',heading:headingText(p),
     p:B.primary||'#FF7A18',s:B.secondary||'#F2C14E',logo:lg,badge:B.badge,program:B.program,logoScale:(B.logoScale||100)/100,logoPos:B.logoPos||'auto',art:ARTS.includes(B.art)&&B.art!=='none'?B.art:null,teamLogo:tl,photo:ph,zoom:p.adj.zoom||1,ox:p.adj.ox||0,oy:p.adj.oy||0}}
@@ -1330,8 +1336,8 @@ $('#tmSave').onclick=async()=>{const name=$('#tmName').value.trim().slice(0,40);
   $('#mTeam').classList.remove('on');const d=TM.done;TM=null;refreshLists();fillTeam($('#cTeam'),D.team);fillTeam($('#pdTeam'),PD.team);refreshAll();if(d)d(name)};
 
 /* ───────── template chips ───────── */
-function tplChips(box,getT,setT){box.innerHTML='';TEMPLATES.forEach(k=>{const b=document.createElement('button');b.type='button';b.className='tchip';b.dataset.tpl=k;const cv=document.createElement('canvas');cv.width=108;cv.height=135;b.appendChild(cv);
-  const s=document.createElement('span');s.textContent=TPL_NAMES[k];b.appendChild(s);b.onclick=()=>{setT(k);markChips(box,k)};box.appendChild(b)});markChips(box,getT())}
+function tplChips(box,getT,setT,extra){box.innerHTML='';TEMPLATES.concat(extra||[]).forEach(k=>{const b=document.createElement('button');b.type='button';b.className='tchip';b.dataset.tpl=k;const cv=document.createElement('canvas');cv.width=108;cv.height=135;b.appendChild(cv);
+  const s=document.createElement('span');s.textContent=k==='card'?t('cardName'):TPL_NAMES[k];b.appendChild(s);b.onclick=()=>{setT(k);markChips(box,k)};box.appendChild(b)});markChips(box,getT())}
 function markChips(box,k){box.querySelectorAll('.tchip').forEach(b=>b.classList.toggle('on',b.dataset.tpl===k))}
 async function paintChips(box,p){const sample=Object.assign(clone(p),{});for(const b of box.querySelectorAll('.tchip')){sample.template=b.dataset.tpl;await drawTo(b.querySelector('canvas'),sample,'portrait',.1,{placeholders:true})}}
 
@@ -1346,7 +1352,7 @@ async function savePlayer(p){const now=new Date().toISOString();const rec=clone(
   if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});return rec}
 const savedMsg=()=>DB.ok?t('tSaved'):t('tSavedSession');
 // drafts never keep a player photo until photo permission is confirmed
-function saveDraft(){const c=clone(D);if(!c.consent){c.photo=null;c.adj=Object.assign(DEF_ADJ(),{zoom:c.adj.zoom,ox:c.adj.ox,oy:c.adj.oy,bright:c.adj.bright,contrast:c.adj.contrast})}
+function saveDraft(){const c=clone(D);if(!c.consent){c.photo=null;c.card=null;if(c.template==='card')c.template=S.template||'spotlight';c.adj=Object.assign(DEF_ADJ(),{zoom:c.adj.zoom,ox:c.adj.ox,oy:c.adj.oy,bright:c.adj.bright,contrast:c.adj.contrast})}
   return DB.set('draft',{D:c,dDirty}).catch(()=>{})}
 function newPhoto(p,d,radios){p.photo=d;p.adj=DEF_ADJ();if(p.consent){p.consent=null;p.consentAt=null;toast(t('tPermReset'))}if(radios)$$(radios).forEach(i=>i.checked=false)}
 
@@ -1359,7 +1365,7 @@ let draftT=0,chipT=0;function touch(){dDirty=true;cStatus();clearTimeout(draftT)
 function cStatus(){const el=$('#cStatus');if(!D.id)el.innerHTML=esc(t('stNew'));else el.innerHTML=`${esc(t('stEditing'))}: <b>${esc(D.name)}</b> — ${esc(dDirty?t('stUnsaved'):t('stSaved'))}`;
   $('#cSave span').textContent=D.id?t('saveChanges'):t('save')}
 function loadCreateForm(){$('#cName').value=D.name;fillTeam($('#cTeam'),D.team);fillCat($('#cCat'),D.category);$('#cNumber').value=D.number;$('#cPosition').value=D.position;$('#cSeason').value=D.season;$('#cSeason').placeholder=brandOf(D).season||'';
-  $$('#cShow input').forEach(i=>i.checked=D.show[i.dataset.show]!==false);$$('input[name=cConsent]').forEach(i=>i.checked=i.value===D.consent);markChips($('#cTpl'),D.template);
+  $$('#cShow input').forEach(i=>i.checked=D.show[i.dataset.show]!==false);$$('input[name=cConsent]').forEach(i=>i.checked=i.value===D.consent);tplChips($('#cTpl'),()=>D.template,k=>{D.template=k;touch()},D.card?['card']:[]);
   fillHeading($('#cHeading'),D.heading);$('#cHeadText').value=D.headingText||'';$('#cHeadText').classList.toggle('hidden',D.heading!=='custom');
   setTl();syncAdj();cStatus();cPv()}
 function syncAdj(){const has=!!D.photo;$('#cPhotoTools').classList.toggle('hidden',!has);$('#cTake span').textContent=has?t('retake'):t('takePhoto');$('#cUpload span').textContent=has?t('replace'):t('uploadPhoto');
@@ -1561,8 +1567,13 @@ ${cards}
   catch(e){toast(t('tpFail'),true)}finally{busy(false)}};
 let MP=null;
 async function openPlayer(id){const rec=PLAYERS.find(p=>p.id===id);if(!rec)return;MP=clone(rec);$('#mpName').textContent=rec.name;segOn('#mpFmt',mpFmt,'fmt');
-  tplChips($('#mpTpl'),()=>MP.template,async k=>{MP.template=k;if(await savePlayer(MP)){galleryDirty=true;drawMP()}});
+  mpChips();$('#mpCardDel').hidden=!MP.card;
   $('#mPlayer').classList.add('on');paintChips($('#mpTpl'),MP);drawMP()}
+function mpChips(){tplChips($('#mpTpl'),()=>MP.template,async k=>{const prev=MP.template;MP.template=k;if(await savePlayer(MP)){galleryDirty=true;drawMP()}else MP.template=prev},MP.card?['card']:[])}
+$('#mpCardUp').onclick=()=>MP&&$('#fCard').click();
+$('#fCard').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f||!MP)return;busy(true,'');let data;try{data=await ingest(f,1600,false)}catch(err){busy(false);toast(t('tSaveFail'),true);return}busy(false);
+  const prev={card:MP.card,template:MP.template};MP.card=data;MP.template='card';if(await savePlayer(MP)){galleryDirty=true;mpChips();paintChips($('#mpTpl'),MP);$('#mpCardDel').hidden=false;drawMP();toast(t('tCardSaved'))}else Object.assign(MP,prev)};
+$('#mpCardDel').onclick=async()=>{if(!MP||!MP.card)return;const prev={card:MP.card,template:MP.template};MP.card=null;if(MP.template==='card')MP.template='spotlight';if(await savePlayer(MP)){galleryDirty=true;mpChips();paintChips($('#mpTpl'),MP);$('#mpCardDel').hidden=true;drawMP();toast(t('tCardDel'))}else Object.assign(MP,prev)};
 async function drawMP(){if(!MP)return;await fontsReady;await drawTo($('#mpCv'),MP,mpFmt,.4)}
 $$('#mpFmt button').forEach(b=>b.onclick=()=>{mpFmt=b.dataset.fmt;segOn('#mpFmt',mpFmt,'fmt');drawMP()});
 $('#mpClose').onclick=()=>{$('#mPlayer').classList.remove('on');MP=null;if(galleryDirty)renderGallery()};
@@ -1635,7 +1646,7 @@ function cleanCrop(c){if(!c||typeof c!=='object')return null;const x=clampN(c.x,
 function cleanPlayer(x){if(!x||typeof x!=='object'||typeof x.id!=='string'||!/^[\w-]{1,64}$/.test(x.id)||typeof x.name!=='string'||!x.name.trim())return null;
   if(x.photo!=null&&!isData(x.photo))return null;const p=blank();p.id=x.id;p.name=str(x.name,60);
   ['team','category','position','season'].forEach(k=>p[k]=str(x[k],40));p.number=str(x.number,3).replace(/[^0-9]/g,'');p.headingText=str(x.headingText,28);
-  p.photo=x.photo||null;p.teamLogo=isData(x.teamLogo)?x.teamLogo:null;p.template=TEMPLATES.includes(x.template)?x.template:'spotlight';p.heading=HEAD_KEYS.includes(x.heading)?x.heading:'none';
+  p.photo=x.photo||null;p.teamLogo=isData(x.teamLogo)?x.teamLogo:null;p.card=isData(x.card)?x.card:null;p.template=TEMPLATES.includes(x.template)||(x.template==='card'&&p.card)?x.template:'spotlight';p.heading=HEAD_KEYS.includes(x.heading)?x.heading:'none';
   p.consent=['guardian','adult'].includes(x.consent)?x.consent:null;['consentAt','createdAt','updatedAt'].forEach(k=>p[k]=typeof x[k]==='string'?x[k].slice(0,40):null);
   const a=x.adj||{};const mask=isData(a.mask)?a.mask:null;
   p.adj=Object.assign(DEF_ADJ(),{crop:cleanCrop(a.crop),zoom:clampN(a.zoom,.6,3,1),ox:clampN(a.ox,-1,1,0),oy:clampN(a.oy,-1,1,-.4),bright:clampN(a.bright,50,160,100),contrast:clampN(a.contrast,50,160,100),mask,maskSig:mask&&typeof a.maskSig==='string'?a.maskSig:null,bg:a.bg==='removed'&&mask?'removed':'orig'});
@@ -1708,7 +1719,7 @@ async function startApp(){if(started){refreshAll();return}started=true;
   await fontsReady;refreshAll();
   if(!ok)toast(t('tMem'),true);
   importRosterLink();
-  window.PSS={render,buildR,FORMATS,TEMPLATES,get S(){return S},get D(){return D},get PLAYERS(){return PLAYERS},exportBlob,canExport};
+  window.PSS={render,buildR,FORMATS,TEMPLATES,blank,savePlayer,openPlayer,cleanPlayer,get S(){return S},get D(){return D},get PLAYERS(){return PLAYERS},exportBlob,canExport};
 }
 (function boot(){try{const l=localStorage.getItem('pss-lang');LANG=l||((navigator.language||'en').toLowerCase().startsWith('es')?'es':'en')}catch(e){LANG='es'}applyLang();
   let code=null;try{code=localStorage.getItem('pss-coach')}catch(e){}
