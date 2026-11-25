@@ -492,6 +492,12 @@ canvas.pv:active{cursor:grabbing}
           <button type="button" data-pos="center"><span data-i="posCenter">Center</span></button>
           <button type="button" data-pos="right"><span data-i="posRight">Right</span></button>
         </div>
+        <span class="lbl" data-i="sArt">Background art</span>
+        <div class="seg" id="sArt" style="margin-bottom:6px">
+          <button type="button" data-art="none"><span data-i="artNone">Template</span></button>
+          <button type="button" data-art="hoops"><span data-i="artHoops">Basketball art</span></button>
+        </div>
+        <p class="muted" data-i="artHint" style="margin:0 0 14px">Basketball art paints a game-night scene in your colors behind every player. It looks best with Photo Day background removal.</p>
         <div class="colors">
           <label class="f" style="margin:0"><span class="lbl" data-i="sPrimary">Primary color</span><span class="colorf"><input type="color" id="sPrimary"><code id="sPrimaryC"></code></span></label>
           <label class="f" style="margin:0"><span class="lbl" data-i="sSecondary">Secondary color</span><span class="colorf"><input type="color" id="sSecondary"><code id="sSecondaryC"></code></span></label>
@@ -647,6 +653,7 @@ const PRESETS=[['#FF7A18','#101C2A'],['#C8102E','#111111'],['#0B3D91','#F2C14E']
 const HEADS={'official-es':'Jugador Oficial','official-en':'Official Player','spotlight-es':'Jugador Destacado','spotlight-en':'Player Spotlight','welcome-es':'Bienvenido al Equipo','welcome-en':'Welcome to the Team'};
 const HEAD_KEYS=['none',...Object.keys(HEADS),'custom'];
 // inexpensive phones: smaller working images, smaller caches
+const ARTS=['none','hoops'];
 const LOWMEM=(navigator.deviceMemory&&navigator.deviceMemory<=4)||(/Android/i.test(navigator.userAgent||'')&&(navigator.hardwareConcurrency||8)<=4);
 const MAX_PHOTO=LOWMEM?1600:2000, PROC_MAX=LOWMEM?1200:1600, THUMB_MAX=440, MASK_MAX=LOWMEM?768:1024, PV_SCALE=LOWMEM?.45:.6;
 const tick=()=>new Promise(r=>setTimeout(r,0));
@@ -685,7 +692,7 @@ bxNoFmt:'Choose at least one size',bxWorking:'Creating {i} of {n}…',tBatchNone
 tplIntro:'Every template uses your logo and colors. Choose the one for new graphics.',useTpl:'Use this template',isDefault:'In use',
 d_spotlight:'Dark stage, dramatic light and bold type.',d_elite:'Recruiting style with elegant type and metallic accents.',d_hardwood:'Court wood, warm tones and athletic banners.',d_energy:'Dynamic shapes in your team colors.',d_signature:'Clean and minimal — the player is the focus.',
 setBrand:'Program branding',sProgram:'Program name',sLogo:'Program logo (required)',noLogo:'No logo yet',uploadLogo:'Upload logo',sLogoHint:'PNG, JPG or SVG. It appears on every graphic, with its own proportions and transparency.',
-sLogoBadge:'Logo backing',badgeNone:'None',badgeLight:'Light',badgeDark:'Dark',sLogoSize:'Logo size',sLogoPos:'Logo position',posAuto:'Template',posLeft:'Top left',posCenter:'Top center',posRight:'Top right',
+sLogoBadge:'Logo backing',badgeNone:'None',badgeLight:'Light',badgeDark:'Dark',sLogoSize:'Logo size',sLogoPos:'Logo position',sArt:'Background art',artNone:'Template',artHoops:'Basketball art',artHint:'Basketball art paints a game-night scene in your colors behind every player. It looks best with Photo Day background removal.',posAuto:'Template',posLeft:'Top left',posCenter:'Top center',posRight:'Top right',
 sPrimary:'Primary color',sSecondary:'Secondary color',sSlogan:'Slogan (optional)',sWebsite:'Website (optional)',sSeason:'Current season',
 setLists:'Teams & categories',sTeams:'Teams',sTeamsHint:'Each team keeps its own logo and colors, applied automatically when the team is chosen.',sCats:'Categories',sDefaultCats:'Built in: Pre-Mini, Mini, Infantil, Juvenil, Junior. Add your own below.',add:'Add',sTeamPh:'New team name',sCatPh:'New category',noTeams:'No teams yet',
 teamEditT:'Team profile',teamName:'Team name',useProgramColors:'Use the program colors',
@@ -729,7 +736,7 @@ bxNoFmt:'Escoge al menos un tamaño',bxWorking:'Creando {i} de {n}…',tBatchNon
 tplIntro:'Cada plantilla usa tu logo y tus colores. Escoge la de los gráficos nuevos.',useTpl:'Usar esta plantilla',isDefault:'En uso',
 d_spotlight:'Escenario oscuro, luz dramática y letra fuerte.',d_elite:'Estilo de reclutamiento con letra elegante y acentos metálicos.',d_hardwood:'Madera de cancha, tonos cálidos y banners atléticos.',d_energy:'Formas dinámicas con los colores del equipo.',d_signature:'Limpio y minimalista — el jugador es el centro.',
 setBrand:'Identidad del programa',sProgram:'Nombre del programa',sLogo:'Logo del programa (obligatorio)',noLogo:'Sin logo',uploadLogo:'Subir logo',sLogoHint:'PNG, JPG o SVG. Sale en cada gráfico, con sus proporciones y transparencia.',
-sLogoBadge:'Fondo del logo',badgeNone:'Ninguno',badgeLight:'Claro',badgeDark:'Oscuro',sLogoSize:'Tamaño del logo',sLogoPos:'Posición del logo',posAuto:'Plantilla',posLeft:'Arriba izq.',posCenter:'Arriba centro',posRight:'Arriba der.',
+sLogoBadge:'Fondo del logo',badgeNone:'Ninguno',badgeLight:'Claro',badgeDark:'Oscuro',sLogoSize:'Tamaño del logo',sLogoPos:'Posición del logo',sArt:'Arte de fondo',artNone:'Plantilla',artHoops:'Arte de baloncesto',artHint:'El arte de baloncesto pinta una escena de noche de juego con tus colores detrás de cada jugador. Se ve mejor con el fondo removido del Día de Fotos.',posAuto:'Plantilla',posLeft:'Arriba izq.',posCenter:'Arriba centro',posRight:'Arriba der.',
 sPrimary:'Color principal',sSecondary:'Color secundario',sSlogan:'Lema (opcional)',sWebsite:'Sitio web (opcional)',sSeason:'Temporada actual',
 setLists:'Equipos y categorías',sTeams:'Equipos',sTeamsHint:'Cada equipo guarda su propio logo y colores, que se aplican solos al escoger el equipo.',sCats:'Categorías',sDefaultCats:'Incluidas: Pre-Mini, Mini, Infantil, Juvenil, Junior. Añade las tuyas abajo.',add:'Añadir',sTeamPh:'Nombre del equipo',sCatPh:'Nueva categoría',noTeams:'Aún no hay equipos',
 teamEditT:'Perfil del equipo',teamName:'Nombre del equipo',useProgramColors:'Usar los colores del programa',
@@ -764,7 +771,7 @@ const DB={db:null,ok:false,mem:{kv:{},players:{}},
 };
 
 /* ───────── state ───────── */
-const DEF_SETTINGS=()=>({programName:'',logo:null,logoBadge:'none',logoScale:100,logoPos:'auto',primary:'#FF7A18',secondary:'#F2C14E',slogan:'',website:'',season:String(new Date().getFullYear()),lang:null,teams:[],cats:[],template:'spotlight'});
+const DEF_SETTINGS=()=>({programName:'',logo:null,logoBadge:'none',logoScale:100,logoPos:'auto',art:'none',primary:'#FF7A18',secondary:'#F2C14E',slogan:'',website:'',season:String(new Date().getFullYear()),lang:null,teams:[],cats:[],template:'spotlight'});
 let S=DEF_SETTINGS();
 let PLAYERS=[];
 const DEF_SHOW=()=>({number:true,position:true,season:true,teamLogo:true,slogan:true,website:true});
@@ -781,7 +788,7 @@ const uid=()=>'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 
 /* teams are profiles: name + optional logo + optional colors */
 const teamP=n=>S.teams.find(x=>x.name===n)||null;
-function liveBrand(team){const tp=teamP(team);return{program:S.programName,logo:S.logo,badge:S.logoBadge,logoScale:S.logoScale,logoPos:S.logoPos,
+function liveBrand(team){const tp=teamP(team);return{program:S.programName,logo:S.logo,badge:S.logoBadge,logoScale:S.logoScale,logoPos:S.logoPos,art:S.art,
   primary:(tp&&tp.primary)||S.primary,secondary:(tp&&tp.secondary)||S.secondary,slogan:S.slogan,website:S.website,season:S.season}}
 const brandOf=p=>p.brand||liveBrand(p.team);
 function headingText(p){if(p.heading==='custom')return (p.headingText||'').trim();return HEADS[p.heading]||''}
@@ -923,7 +930,7 @@ function logo(c,R,x,y,w,h,align,isTop){align=align||'center';const W=R.W,H=R.H,s
 function silhouette(c,b,col){c.save();c.fillStyle=col;const cx=b.x+b.w/2,u=Math.min(b.w*.55,b.h*.5);const hy=b.y+b.h*.34;
   c.beginPath();c.arc(cx,hy,u*.36,0,Math.PI*2);c.fill();c.beginPath();c.moveTo(cx-u*.95,b.y+b.h+2);c.bezierCurveTo(cx-u*.95,hy+u*.55,cx-u*.5,hy+u*.42,cx,hy+u*.42);c.bezierCurveTo(cx+u*.5,hy+u*.42,cx+u*.95,hy+u*.55,cx+u*.95,b.y+b.h+2);c.closePath();c.fill();c.restore()}
 function photo(c,R,b,o){o=o||{};c.save();if(o.path)o.path(c);else{c.beginPath();c.rect(b.x,b.y,b.w,b.h)}c.clip();
-  const ph=R.photo;if(o.bg&&(!ph||ph.cutout)){c.fillStyle=o.bg;c.fillRect(b.x,b.y,b.w,b.h)}
+  const ph=R.photo;if(o.bg&&(!ph||ph.cutout)&&!(R.art&&ph&&ph.cutout)){c.fillStyle=o.bg;c.fillRect(b.x,b.y,b.w,b.h)}
   if(!ph){silhouette(c,b,o.sil||'rgba(255,255,255,.16)');R.hit={b,dw:b.w,dh:b.h}}
   else{const cv=ph.canvas,iw=cv.width,ih=cv.height,s=Math.max(b.w/iw,b.h/ih)*R.zoom,dw=iw*s,dh=ih*s;
     const x=b.x+(b.w-dw)/2*(1+R.ox),y=b.y+(b.h-dh)/2*(1+R.oy);c.imageSmoothingQuality='high';c.drawImage(cv,x,y,dw,dh);R.hit={b,dw,dh}}
@@ -971,12 +978,13 @@ function wood(fmt,W,H){if(woodCache[fmt])return woodCache[fmt];const cv=document
 const TPL={
 spotlight(c,R,W,H,fmt){
   const acc=lift(R.p,.2),acc2=lift(R.s,.25),bgc='#06070b';
-  c.fillStyle=bgc;c.fillRect(0,0,W,H);
+  if(!R.art){c.fillStyle=bgc;c.fillRect(0,0,W,H);
   let g=c.createRadialGradient(W/2,H*.08,0,W/2,H*.08,H*.8);g.addColorStop(0,rgba(acc,.5));g.addColorStop(.4,rgba(acc,.14));g.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=g;c.fillRect(0,0,W,H);
-  [[.5,-.05,.08],[.5,1.05,.08],[.5,.5,.05]].forEach(([a,b,al])=>{c.beginPath();c.moveTo(W*a-24,0);c.lineTo(W*a+24,0);c.lineTo(W*b+W*.24,H);c.lineTo(W*b-W*.24,H);c.closePath();const bg=c.createLinearGradient(0,0,0,H);bg.addColorStop(0,`rgba(255,255,255,${al})`);bg.addColorStop(.85,'rgba(255,255,255,0)');c.fillStyle=bg;c.fill()});
+  [[.5,-.05,.08],[.5,1.05,.08],[.5,.5,.05]].forEach(([a,b,al])=>{c.beginPath();c.moveTo(W*a-24,0);c.lineTo(W*a+24,0);c.lineTo(W*b+W*.24,H);c.lineTo(W*b-W*.24,H);c.closePath();const bg=c.createLinearGradient(0,0,0,H);bg.addColorStop(0,`rgba(255,255,255,${al})`);bg.addColorStop(.85,'rgba(255,255,255,0)');c.fillStyle=bg;c.fill()});}
   const L={portrait:{logo:[W/2-150,34,300,140,'center'],ph:{x:70,y:196,w:940,h:770},name:[60,984,960,176],bar:1176,info:1218,meta:1270,foot:1322,num:[W/2,820,620],align:'center',nw:960,nx:60},
     square:{logo:[56,34,280,124,'left'],ph:{x:48,y:176,w:540,h:856},name:[624,220,412,350],bar:600,info:668,meta:756,foot:1036,num:null,align:'left',nw:412,nx:624},
     story:{logo:[W/2-180,96,360,180,'center'],ph:{x:60,y:310,w:960,h:1090},name:[60,1424,960,236],bar:1688,info:1738,meta:1800,foot:1866,num:[W/2,1180,860],align:'center',nw:960,nx:60}}[fmt];
+  if(R.art)drawArt(c,R,W,H,fmt,L.ph,null);
   if(R.number&&L.num){setF(c,700,L.num[2],FH);c.textBaseline='alphabetic';c.lineWidth=5;c.strokeStyle=rgba(acc,.33);c.textAlign='center';c.strokeText(R.number,L.num[0],L.num[1]);c.textAlign='left'}
   const b=L.ph,cut=R.photo&&R.photo.cutout;
   if(cut){const fg=c.createRadialGradient(b.x+b.w/2,b.y+b.h,0,b.x+b.w/2,b.y+b.h,b.w*.6);fg.addColorStop(0,rgba(acc,.55));fg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=fg;c.fillRect(b.x-60,b.y+b.h*.5,b.w+120,b.h*.6)}
@@ -995,13 +1003,14 @@ spotlight(c,R,W,H,fmt){
 elite(c,R,W,H,fmt){
   R.logoMargin=74;
   const base=lift(R.s,.32),deep=mix(sink(R.p,.12),'#05070b',.55);
-  const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0b0e15');g.addColorStop(1,deep);c.fillStyle=g;c.fillRect(0,0,W,H);
+  if(!R.art){const g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0b0e15');g.addColorStop(1,deep);c.fillStyle=g;c.fillRect(0,0,W,H);
   const tg=c.createRadialGradient(W/2,0,0,W/2,0,W*.9);tg.addColorStop(0,rgba(base,.16));tg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=tg;c.fillRect(0,0,W,H);
-  c.save();c.strokeStyle='rgba(255,255,255,.028)';c.lineWidth=2;for(let i=-H;i<W;i+=24){c.beginPath();c.moveTo(i,0);c.lineTo(i+H,H);c.stroke()}c.restore();
+  c.save();c.strokeStyle='rgba(255,255,255,.028)';c.lineWidth=2;for(let i=-H;i<W;i+=24){c.beginPath();c.moveTo(i,0);c.lineTo(i+H,H);c.stroke()}c.restore();}
   c.strokeStyle=metal(c,0,0,W,H,base);c.lineWidth=3;c.strokeRect(28,28,W-56,H-56);c.lineWidth=1.2;c.strokeRect(40,40,W-80,H-80);
   const L={portrait:{logo:[W/2-140,52,280,132,'center'],ph:{x:92,y:196,w:896,h:760},badge:[916,890,70],name:[80,980,920,160],rule:1160,info:1214,meta:1262,foot:1306,cx:W/2,cw:900},
     square:{logo:[620,74,380,140,'center'],ph:{x:74,y:74,w:500,h:932},badge:[540,960,62],name:[620,236,380,340],rule:600,info:672,meta:752,foot:1010,cx:810,cw:380},
     story:{logo:[W/2-170,74,340,186,'center'],ph:{x:92,y:290,w:896,h:1100},badge:[916,1360,82],name:[80,1424,920,220],rule:1680,info:1742,meta:1798,foot:1862,cx:W/2,cw:900}}[fmt];
+  if(R.art)drawArt(c,R,W,H,fmt,L.ph,null);if(R.art){c.strokeStyle=metal(c,0,0,W,H,base);c.lineWidth=3;c.strokeRect(28,28,W-56,H-56);c.lineWidth=1.2;c.strokeRect(40,40,W-80,H-80)}
   const b=L.ph,cut=R.photo&&R.photo.cutout;
   const pbg=c.createRadialGradient(b.x+b.w/2,b.y+b.h*.45,0,b.x+b.w/2,b.y+b.h*.45,b.h*.8);pbg.addColorStop(0,rgba(lift(R.p,.2),.45));pbg.addColorStop(1,'#0b0e15');
   photo(c,R,b,{bg:pbg,after:x=>{if(!cut){const v=x.createLinearGradient(0,b.y+b.h*.7,0,b.y+b.h);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(0,0,0,.45)');x.fillStyle=v;x.fillRect(b.x,b.y,b.w,b.h)}}});
@@ -1019,14 +1028,15 @@ elite(c,R,W,H,fmt){
   foot(c,R,L.cx,L.foot,L.cw,{size:19,color:'rgba(255,255,255,.5)',track:.12})},
 
 hardwood(c,R,W,H,fmt){
-  c.drawImage(wood(fmt,W,H),0,0);
+  if(!R.art){c.drawImage(wood(fmt,W,H),0,0);
   const vg=c.createRadialGradient(W/2,H*.45,H*.2,W/2,H*.5,H*.85);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(40,15,0,.55)');c.fillStyle=vg;c.fillRect(0,0,W,H);
   const key={portrait:[W/2,H+40,470],square:[W*.73,H+60,420],story:[W/2,H+60,560]}[fmt];
   c.save();c.fillStyle=rgba(R.p,.42);c.fillRect(key[0]-key[2]*.42,key[1]-key[2]*1.25,key[2]*.84,key[2]*1.25);c.lineWidth=10;c.strokeStyle='rgba(255,255,255,.82)';c.strokeRect(key[0]-key[2]*.42,key[1]-key[2]*1.25,key[2]*.84,key[2]*1.25);
-  c.beginPath();c.arc(key[0],key[1]-key[2]*1.25,key[2]*.42,Math.PI,0);c.stroke();c.beginPath();c.arc(key[0],key[1],key[2]*1.95,Math.PI*1.05,Math.PI*1.95);c.stroke();c.restore();
+  c.beginPath();c.arc(key[0],key[1]-key[2]*1.25,key[2]*.42,Math.PI,0);c.stroke();c.beginPath();c.arc(key[0],key[1],key[2]*1.95,Math.PI*1.05,Math.PI*1.95);c.stroke();c.restore();}
   const L={portrait:{logo:[W/2-150,16,300,116,'center'],ph:{x:150,y:150,w:780,h:790},num:[912,170,78],band:[40,972,W-80,140],sub:[120,1112,W-240,64],meta:1232,foot:1306},
     square:{logo:[60,24,280,108,'left'],ph:{x:66,y:150,w:520,h:620},num:[836,330,124],metaX:836,metaY:530,band:[30,812,W-60,128],sub:[120,940,W-240,60],foot:1040},
     story:{logo:[W/2-180,72,360,190,'center'],ph:{x:120,y:290,w:840,h:1010},num:[934,320,92],band:[40,1352,W-80,176],sub:[110,1528,W-220,78],meta:1700,foot:1864}}[fmt];
+  if(R.art)drawArt(c,R,W,H,fmt,L.ph,null);
   const b=L.ph,cut=R.photo&&R.photo.cutout;
   if(!cut){c.save();c.shadowColor='rgba(0,0,0,.5)';c.shadowBlur=36;c.shadowOffsetY=14;c.fillStyle='#fbf7f0';c.fillRect(b.x-14,b.y-14,b.w+28,b.h+28);c.restore()}
   else{const sh=c.createRadialGradient(b.x+b.w/2,b.y+b.h,0,b.x+b.w/2,b.y+b.h,b.w*.45);sh.addColorStop(0,'rgba(30,10,0,.5)');sh.addColorStop(1,'rgba(30,10,0,0)');c.fillStyle=sh;c.fillRect(b.x,b.y+b.h*.7,b.w,b.h*.4)}
@@ -1045,13 +1055,14 @@ hardwood(c,R,W,H,fmt){
   c.save();c.shadowColor='rgba(0,0,0,.6)';c.shadowBlur=8;foot(c,R,W/2,L.foot,W-160,{size:21,color:'rgba(255,255,255,.92)'});c.restore()},
 
 energy(c,R,W,H,fmt){
-  const g=c.createLinearGradient(0,0,W,H);g.addColorStop(0,R.p);g.addColorStop(1,R.s);c.fillStyle=g;c.fillRect(0,0,W,H);
+  if(!R.art){const g=c.createLinearGradient(0,0,W,H);g.addColorStop(0,R.p);g.addColorStop(1,R.s);c.fillStyle=g;c.fillRect(0,0,W,H);
   c.save();c.translate(W/2,H/2);c.rotate(-.42);[[-.62,.16,'rgba(0,0,0,.20)'],[-.2,.07,'rgba(255,255,255,.16)'],[.12,.22,'rgba(0,0,0,.14)'],[.5,.05,'rgba(255,255,255,.22)']].forEach(([p,w,col])=>{c.fillStyle=col;c.fillRect(p*H*1.3,-H*1.5,w*H,H*3)});c.restore();
   c.fillStyle='rgba(255,255,255,.22)';for(let y=0;y<11;y++)for(let x=0;x<11;x++){const r=Math.max(0,8-(x+y)*.55);if(r<=0)continue;c.beginPath();c.arc(W-40-x*30,40+y*30,r,0,Math.PI*2);c.fill()}
-  c.strokeStyle='rgba(255,255,255,.35)';c.lineWidth=5;[[90,H*.83,70],[W-120,H*.62,46]].forEach(([x,y,s])=>{c.beginPath();c.moveTo(x,y-s);c.lineTo(x+s,y+s*.8);c.lineTo(x-s,y+s*.8);c.closePath();c.stroke()});
+  c.strokeStyle='rgba(255,255,255,.35)';c.lineWidth=5;[[90,H*.83,70],[W-120,H*.62,46]].forEach(([x,y,s])=>{c.beginPath();c.moveTo(x,y-s);c.lineTo(x+s,y+s*.8);c.lineTo(x-s,y+s*.8);c.closePath();c.stroke()});}
   const L={portrait:{logo:[56,36,300,130,'left'],ph:{x:110,y:176,w:860,h:770,k:90},num:[W-60,300,330],band:[0,986,W,152],chips:1196,meta:1258,foot:1316},
     square:{logo:[50,26,270,112,'left'],ph:{x:60,y:150,w:580,h:670,k:72},num:[W-50,320,300],band:[0,840,W,128],chips:1004,metaX:850,metaY:520,foot:1058},
     story:{logo:[60,80,340,180,'left'],ph:{x:100,y:290,w:880,h:1050,k:100},num:[W-60,560,420],band:[0,1390,W,190],chips:1640,meta:1716,foot:1866}}[fmt];
+  if(R.art)drawArt(c,R,W,H,fmt,L.ph,null);
   if(R.number){c.save();setF(c,700,L.num[2],FH);c.translate(L.num[0],L.num[1]);c.transform(1,0,-.2,1,0,0);c.fillStyle='rgba(255,255,255,.2)';c.textAlign='right';c.fillText(R.number,0,0);c.restore();c.textAlign='left'}
   const b=L.ph,k=b.k,cut=R.photo&&R.photo.cutout;const para=(x,dx,dy)=>{x.beginPath();x.moveTo(b.x+k+dx,b.y+dy);x.lineTo(b.x+b.w+dx,b.y+dy);x.lineTo(b.x+b.w-k+dx,b.y+b.h+dy);x.lineTo(b.x+dx,b.y+b.h+dy);x.closePath()};
   if(!cut){para(c,18,18);c.fillStyle='rgba(0,0,0,.35)';c.fill()}
@@ -1076,6 +1087,7 @@ signature(c,R,W,H,fmt){
   const L={portrait:{ph:{x:0,y:0,w:W,h:880},num:[W-60,60],acc:[80,934],name:[80,956,700,160],info:1174,meta:1226,logo:[W-80-190,940,190,170,'right'],foot:1300,x:80,w:920},
     square:{ph:{x:0,y:0,w:540,h:H},num:[500,40],acc:[600,290],name:[600,312,420,270],info:640,meta:722,logo:[600,820,260,150,'left'],foot:1028,x:600,w:420},
     story:{ph:{x:0,y:0,w:W,h:1240},num:[W-60,80],acc:[80,1300],name:[80,1324,920,240],info:1606,meta:1662,logo:[80,1720,260,120,'left'],foot:1864,x:80,w:920}}[fmt];
+  if(R.art)drawArt(c,R,W,H,fmt,L.ph,L.ph);
   const b=L.ph,cut=R.photo&&R.photo.cutout;
   const pg=c.createLinearGradient(0,b.y,0,b.y+b.h);pg.addColorStop(0,mix(R.p,'#ffffff',.86));pg.addColorStop(1,mix(R.p,'#ffffff',.7));
   photo(c,R,b,{bg:pg,sil:rgba(R.p,.25)});
@@ -1092,6 +1104,45 @@ signature(c,R,W,H,fmt){
   foot(c,R,L.x,L.foot,fmt==='portrait'?L.w-230:L.w,{size:19,color:'#7a808a',align:'left',track:.1})}
 };
 
+
+/* ───────── art backgrounds (drawn by the studio, cached) ───────── */
+const artCache=new Map();
+function drawArt(c,R,W,H,fmt,b,clip){const key=[R.art,fmt,R.p,R.s,b.x,b.y,b.w,b.h,clip?1:0].join('|');let cv=artCache.get(key);
+  if(!cv){cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');const rg=clip||{x:0,y:0,w:W,h:H};
+    x.save();x.beginPath();x.rect(rg.x,rg.y,rg.w,rg.h);x.clip();try{ART[R.art](x,R,W,H,b,rg)}catch(e){console.error(e)}x.restore();
+    artCache.set(key,cv);if(artCache.size>(LOWMEM?3:6)){const k=artCache.keys().next().value;const old=artCache.get(k);artCache.delete(k);old.width=old.height=0}}
+  c.drawImage(cv,0,0)}
+const ART={
+hoops(c,R,W,H,b,rg){let sd=97;const rnd=()=>{sd=(sd*16807)%2147483647;return(sd-1)/2147483646},rr=(a,z)=>a+rnd()*(z-a);
+  const P=R.p,S=R.s,X=rg.x,Y=rg.y,RW=rg.w,RH=rg.h;
+  let g=c.createRadialGradient(b.x+b.w/2,b.y+b.h*.3,50,b.x+b.w/2,b.y+b.h*.5,Math.max(RW,RH));g.addColorStop(0,'#1b2440');g.addColorStop(.55,'#0b1022');g.addColorStop(1,'#03050b');c.fillStyle=g;c.fillRect(X,Y,RW,RH);
+  const fy=Math.min(Y+RH-40,b.y+b.h*.86);
+  c.save();c.globalCompositeOperation='lighter';[[X+RW*.2,-.18],[X+RW*.8,.2],[X+RW*.5,0]].forEach(([x,a])=>{const cg=c.createLinearGradient(x,Y,x,fy);cg.addColorStop(0,'rgba(255,240,210,.18)');cg.addColorStop(1,'rgba(255,240,210,0)');c.fillStyle=cg;c.beginPath();c.moveTo(x-30,Y);c.lineTo(x+30,Y);c.lineTo(x+RW*.35+a*RW*.8,fy);c.lineTo(x-RW*.35+a*RW*.8,fy);c.closePath();c.fill()});c.restore();
+  let fg=c.createLinearGradient(0,fy,0,Y+RH);fg.addColorStop(0,'#6b3b16');fg.addColorStop(1,'#2a1406');c.fillStyle=fg;c.fillRect(X,fy,RW,Y+RH-fy);
+  const cx=b.x+b.w/2;c.strokeStyle='rgba(0,0,0,.28)';c.lineWidth=2;for(let i=-20;i<=20;i++){c.beginPath();c.moveTo(cx+i*30,fy);c.lineTo(cx+i*150,fy+900);c.stroke()}
+  c.strokeStyle='rgba(255,255,255,.7)';c.lineWidth=5;c.beginPath();c.ellipse(cx,fy+30,b.w*.55,120,0,0,Math.PI);c.stroke();c.lineWidth=4;c.beginPath();c.moveTo(X,fy+2);c.lineTo(X+RW,fy+2);c.stroke();
+  const bx=cx,by=b.y+b.h*.4,BR=Math.min(b.w*.47,b.h*.45);
+  c.save();c.shadowColor=rgba(P,.9);c.shadowBlur=120;c.fillStyle=P;c.beginPath();c.arc(bx,by,BR,0,7);c.fill();c.restore();
+  c.save();c.beginPath();c.arc(bx,by,BR,0,7);c.clip();
+  let bg=c.createRadialGradient(bx-BR*.34,by-BR*.38,BR*.08,bx,by,BR);bg.addColorStop(0,mix(P,'#ffffff',.45));bg.addColorStop(.45,P);bg.addColorStop(1,sink(P,.6));c.fillStyle=bg;c.fillRect(bx-BR,by-BR,2*BR,2*BR);
+  for(let i=0;i<2600;i++){const a=rr(0,7),d=Math.sqrt(rnd())*BR,sz=rr(2,4.5);c.fillStyle=rnd()<.5?'rgba(60,20,0,.16)':'rgba(255,210,160,.14)';c.fillRect(bx+Math.cos(a)*d,by+Math.sin(a)*d,sz,sz)}
+  c.strokeStyle='#1a0b03';c.lineWidth=Math.max(8,BR*.036);c.lineCap='round';
+  c.beginPath();c.moveTo(bx-BR,by+BR*.05);c.bezierCurveTo(bx-BR*.4,by-BR*.07,bx+BR*.4,by-BR*.07,bx+BR,by+BR*.05);c.stroke();
+  c.beginPath();c.moveTo(bx+BR*.07,by-BR);c.bezierCurveTo(bx-BR*.14,by-BR*.4,bx-BR*.14,by+BR*.4,bx+BR*.07,by+BR);c.stroke();
+  c.beginPath();c.arc(bx-BR*1.25,by-BR*.05,BR*.92,-.95,.95);c.stroke();c.beginPath();c.arc(bx+BR*1.3,by+BR*.07,BR*.95,Math.PI-.95,Math.PI+.95);c.stroke();
+  const sh=c.createRadialGradient(bx-BR*.27,by-BR*.32,BR*.6,bx,by,BR*1.05);sh.addColorStop(0,'rgba(0,0,0,0)');sh.addColorStop(1,'rgba(0,0,0,.55)');c.fillStyle=sh;c.fillRect(bx-BR,by-BR,2*BR,2*BR);c.restore();
+  c.strokeStyle='rgba(255,220,170,.5)';c.lineWidth=5;c.beginPath();c.arc(bx,by,BR+2,Math.PI*1.05,Math.PI*1.6);c.stroke();
+  const hs=Math.min(1,b.w/900),hx=b.x+b.w-130*hs,hy=b.y+160*hs;
+  const x0=b.x+40,y0=fy,cxp=b.x+b.w*.55,cyp=b.y-b.h*.5;const arc=t=>{const u=1-t;return[u*u*x0+2*u*t*cxp+t*t*hx,u*u*y0+2*u*t*cyp+t*t*(hy+12*hs)]};
+  c.save();c.globalCompositeOperation='lighter';
+  for(const[lw,al,bl]of[[44,.06,46],[16,.22,24],[5,1,8]]){c.strokeStyle=rgba(S,al);c.lineWidth=lw*hs;c.shadowColor=S;c.shadowBlur=bl;c.beginPath();for(let t=0;t<=1.001;t+=.01){const[x,y]=arc(t);t?c.lineTo(x,y):c.moveTo(x,y)}c.stroke()}
+  c.shadowBlur=0;for(let i=0;i<70;i++){const t=rr(0,1),[x,y]=arc(t);c.fillStyle=rgba(rnd()<.5?S:'#ffffff',rr(.3,1));c.beginPath();c.arc(x+rr(-26,26),y+rr(-26,26),rr(1,4),0,7);c.fill()}c.restore();
+  c.save();c.translate(hx,hy);c.scale(hs,hs);c.save();c.strokeStyle='rgba(255,255,255,.9)';c.lineWidth=6;c.shadowColor='#ffffff';c.shadowBlur=14;c.strokeRect(-120,-170,250,170);c.strokeRect(-45,-110,100,80);c.restore();
+  c.strokeStyle='rgba(255,255,255,.75)';c.lineWidth=3;for(let i=0;i<=8;i++){const a0=-70+i*17.5,a1=-40+i*10;c.beginPath();c.moveTo(a0,10);c.quadraticCurveTo((a0+a1)/2+(i%2?8:-8),60,a1,120);c.stroke()}
+  c.save();c.strokeStyle=P;c.lineWidth=10;c.shadowColor=P;c.shadowBlur=20;c.beginPath();c.ellipse(0,10,74,16,0,0,7);c.stroke();c.restore();c.restore();
+  for(let i=0;i<200;i++){c.fillStyle=`rgba(255,235,200,${rr(.08,.5)})`;c.beginPath();c.arc(rr(X,X+RW),rr(Y,fy),rr(.8,2.6),0,7);c.fill()}
+  g=c.createRadialGradient(cx,b.y+b.h*.5,Math.min(RW,RH)*.38,cx,b.y+b.h*.5,Math.max(RW,RH)*.8);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.6)');c.fillStyle=g;c.fillRect(X,Y,RW,RH)}};
+
 /* ───────── render data + renderer ───────── */
 function showOr(p,k){return !p.show||p.show[k]!==false}
 async function buildR(p,opts){opts=opts||{};const B=brandOf(p);const ph=await processed(p,opts.thumb?THUMB_MAX:PROC_MAX);const[lg,tl]=await Promise.all([loadImg(B.logo),showOr(p,'teamLogo')?loadImg(p.teamLogo):null]);
@@ -1099,7 +1150,7 @@ async function buildR(p,opts){opts=opts||{};const B=brandOf(p);const ph=await pr
   return{template:TEMPLATES.includes(p.template)?p.template:'spotlight',name:(p.name||'').trim()||(ph_?t('phName'):' '),team:(p.team||'').trim()||(ph_?t('phTeam'):''),cat:(p.category||'').trim()||(ph_?t('phCat'):''),
     number:showOr(p,'number')?String(p.number||'').trim():'',position:showOr(p,'position')?(p.position||'').trim():'',season:showOr(p,'season')?((p.season||'').trim()||B.season||''):'',
     slogan:showOr(p,'slogan')?(B.slogan||'').trim():'',website:showOr(p,'website')?(B.website||'').trim().replace(/^https?:\/\//i,'').replace(/\/$/,''):'',heading:headingText(p),
-    p:B.primary||'#FF7A18',s:B.secondary||'#F2C14E',logo:lg,badge:B.badge,program:B.program,logoScale:(B.logoScale||100)/100,logoPos:B.logoPos||'auto',teamLogo:tl,photo:ph,zoom:p.adj.zoom||1,ox:p.adj.ox||0,oy:p.adj.oy||0}}
+    p:B.primary||'#FF7A18',s:B.secondary||'#F2C14E',logo:lg,badge:B.badge,program:B.program,logoScale:(B.logoScale||100)/100,logoPos:B.logoPos||'auto',art:ARTS.includes(B.art)&&B.art!=='none'?B.art:null,teamLogo:tl,photo:ph,zoom:p.adj.zoom||1,ox:p.adj.ox||0,oy:p.adj.oy||0}}
 function render(c,fmt,R,scale){const F=FORMATS[fmt];c.save();c.setTransform(scale,0,0,scale,0,0);c.clearRect(0,0,F.w,F.h);R.hit=null;R.W=F.w;R.H=F.h;c.textBaseline='alphabetic';c.textAlign='left';
   try{TPL[R.template](c,R,F.w,F.h,fmt)}catch(e){console.error(e)}c.restore();return R.hit}
 async function drawTo(cv,p,fmt,scale,opts){opts=Object.assign({thumb:scale<.36},opts||{});const R=await buildR(p,opts);const F=FORMATS[fmt];const w=Math.round(F.w*scale),h=Math.round(F.h*scale);if(cv.width!==w)cv.width=w;if(cv.height!==h)cv.height=h;
@@ -1494,7 +1545,7 @@ $$('#tFmt button').forEach(b=>b.onclick=()=>{tFmt=b.dataset.fmt;segOn('#tFmt',tF
 /* ───────── SETTINGS ───────── */
 let sT=0;const saveSoon=()=>{clearTimeout(sT);sT=setTimeout(()=>saveS(),400)};
 function loadSettingsForm(){$('#sProgram').value=S.programName;$('#sSlogan').value=S.slogan;$('#sWebsite').value=S.website;$('#sSeason').value=S.season;$('#sPrimary').value=S.primary;$('#sSecondary').value=S.secondary;
-  $('#sPrimaryC').textContent=S.primary.toUpperCase();$('#sSecondaryC').textContent=S.secondary.toUpperCase();segOn('#sBadge',S.logoBadge,'badge');segOn('#sLogoPos',S.logoPos,'pos');
+  $('#sPrimaryC').textContent=S.primary.toUpperCase();$('#sSecondaryC').textContent=S.secondary.toUpperCase();segOn('#sBadge',S.logoBadge,'badge');segOn('#sLogoPos',S.logoPos,'pos');segOn('#sArt',S.art||'none','art');
   $('#sLogoSize').value=S.logoScale;$('#sLogoSizeO').textContent=S.logoScale+'%';showLogo();refreshLists();storage()}
 function showLogo(){$('#sLogoPrev').innerHTML=S.logo?`<img alt="" src="${S.logo}">`:`<span>${esc(t('noLogo'))}</span>`;$('#sLogoDel').classList.toggle('hidden',!S.logo)}
 function refreshLists(){const tl=$('#sTeamList');tl.innerHTML=S.teams.length?'':`<div class="muted">${esc(t('noTeams'))}</div>`;
@@ -1511,6 +1562,7 @@ const bindS=(id,key,cb)=>$(id).addEventListener('input',e=>{S[key]=e.target.valu
 bindS('#sProgram','programName');bindS('#sSlogan','slogan');bindS('#sWebsite','website');bindS('#sSeason','season',()=>{$('#cSeason').placeholder=brandOf(D).season||''});
 bindS('#sPrimary','primary',()=>{$('#sPrimaryC').textContent=S.primary.toUpperCase();refreshLists()});bindS('#sSecondary','secondary',()=>{$('#sSecondaryC').textContent=S.secondary.toUpperCase();refreshLists()});
 $('#sLogoSize').addEventListener('input',e=>{S.logoScale=+e.target.value;$('#sLogoSizeO').textContent=S.logoScale+'%';saveSoon();refreshAllSoon()});
+$$('#sArt button').forEach(b=>b.onclick=()=>{S.art=b.dataset.art;segOn('#sArt',S.art,'art');saveS();refreshAll()});
 $$('#sLogoPos button').forEach(b=>b.onclick=()=>{S.logoPos=b.dataset.pos;segOn('#sLogoPos',S.logoPos,'pos');saveS();refreshAll()});
 $$('#sBadge button').forEach(b=>b.onclick=()=>{S.logoBadge=b.dataset.badge;segOn('#sBadge',S.logoBadge,'badge');saveS();refreshAll()});
 $('#sLogoAdd').onclick=()=>{$('#fLogo').value='';$('#fLogo').click()};
@@ -1532,11 +1584,11 @@ function normTeams(a){if(!Array.isArray(a))return[];const out=[];a.forEach(x=>{c
   out.push({name,logo:isData(o.logo)?o.logo:null,primary:isColor(o.primary)?o.primary:null,secondary:isColor(o.secondary)?o.secondary:null})});return out.sort((a,b)=>a.name.localeCompare(b.name))}
 function cleanSettings(x){const d=DEF_SETTINGS();if(!x||typeof x!=='object')return d;const s=d;
   s.programName=str(x.programName,60);s.slogan=str(x.slogan,70);s.website=str(x.website,60);s.season=str(x.season,12)||d.season;s.logo=isData(x.logo)?x.logo:null;
-  s.logoBadge=['none','light','dark'].includes(x.logoBadge)?x.logoBadge:'none';s.logoScale=clampN(x.logoScale,60,150,100);s.logoPos=['auto','left','center','right'].includes(x.logoPos)?x.logoPos:'auto';
+  s.logoBadge=['none','light','dark'].includes(x.logoBadge)?x.logoBadge:'none';s.logoScale=clampN(x.logoScale,60,150,100);s.logoPos=['auto','left','center','right'].includes(x.logoPos)?x.logoPos:'auto';s.art=ARTS.includes(x.art)?x.art:'none';
   s.primary=isColor(x.primary)?x.primary:d.primary;s.secondary=isColor(x.secondary)?x.secondary:d.secondary;s.lang=['es','en'].includes(x.lang)?x.lang:null;s.template=TEMPLATES.includes(x.template)?x.template:'spotlight';
   s.teams=normTeams(x.teams);s.cats=Array.isArray(x.cats)?[...new Set(x.cats.filter(c=>typeof c==='string'&&c.trim()).map(c=>c.trim().slice(0,30)))]:[];return s}
 function cleanBrand(b){if(!b||typeof b!=='object')return null;return{program:str(b.program,60),logo:isData(b.logo)?b.logo:null,badge:['none','light','dark'].includes(b.badge)?b.badge:'none',logoScale:clampN(b.logoScale,60,150,100),
-  logoPos:['auto','left','center','right'].includes(b.logoPos)?b.logoPos:'auto',primary:isColor(b.primary)?b.primary:'#FF7A18',secondary:isColor(b.secondary)?b.secondary:'#F2C14E',slogan:str(b.slogan,70),website:str(b.website,60),season:str(b.season,12)}}
+  logoPos:['auto','left','center','right'].includes(b.logoPos)?b.logoPos:'auto',art:ARTS.includes(b.art)?b.art:'none',primary:isColor(b.primary)?b.primary:'#FF7A18',secondary:isColor(b.secondary)?b.secondary:'#F2C14E',slogan:str(b.slogan,70),website:str(b.website,60),season:str(b.season,12)}}
 function cleanCrop(c){if(!c||typeof c!=='object')return null;const x=clampN(c.x,0,1,0),y=clampN(c.y,0,1,0),w=clampN(c.w,.01,1,1),h=clampN(c.h,.01,1,1);return x+w<=1.0001&&y+h<=1.0001?{x,y,w,h}:null}
 function cleanPlayer(x){if(!x||typeof x!=='object'||typeof x.id!=='string'||!/^[\w-]{1,64}$/.test(x.id)||typeof x.name!=='string'||!x.name.trim())return null;
   if(x.photo!=null&&!isData(x.photo))return null;const p=blank();p.id=x.id;p.name=str(x.name,60);
@@ -1561,7 +1613,7 @@ $('#fRestore').addEventListener('change',async e=>{const f=e.target.files[0];if(
   busy(true,'');try{await DB.batch({clear:how==='replace',kv:{settings:next,rosters:nextR},players})}catch(x){busy(false);toast(t('tRestoreFail'),true);return}
   S=next;ROSTERS=nextR;PLAYERS=await DB.all().catch(()=>PLAYERS);if(how==='replace'){D=blank();dDirty=false;PD.started=false}procCache.clear();busy(false);
   applyLang();loadSettingsForm();loadCreateForm();pdShow();galleryDirty=true;if(VIEW==='players')renderGallery();toast(t('tRestored',{n:players.length})+(damaged?t('tRestoreSkip',{m:damaged}):''))});
-function liveBrandFrom(st,team){const tp=st.teams.find(x=>x.name===team);return{program:st.programName,logo:st.logo,badge:st.logoBadge,logoScale:st.logoScale,logoPos:st.logoPos,primary:(tp&&tp.primary)||st.primary,secondary:(tp&&tp.secondary)||st.secondary,slogan:st.slogan,website:st.website,season:st.season}}
+function liveBrandFrom(st,team){const tp=st.teams.find(x=>x.name===team);return{program:st.programName,logo:st.logo,badge:st.logoBadge,logoScale:st.logoScale,logoPos:st.logoPos,art:st.art,primary:(tp&&tp.primary)||st.primary,secondary:(tp&&tp.secondary)||st.secondary,slogan:st.slogan,website:st.website,season:st.season}}
 $('#sWipe').onclick=async()=>{const ok=await ask({title:t('wipeT'),text:t('wipeText'),buttons:[{label:t('cancel'),value:null},{label:t('wipe'),value:true,cls:'danger'}]});if(!ok)return;
   const fresh=DEF_SETTINGS();fresh.lang=LANG;try{await DB.batch({clear:true,kv:{settings:fresh}})}catch(e){toast(t('tSaveFail'),true);return}
   S=fresh;ROSTERS={};PLAYERS=[];D=blank();dDirty=false;PD={team:'',category:'',template:'spotlight',heading:'none',headingText:'',autoBg:false,started:false,count:0};procCache.clear();imgCache.clear();
