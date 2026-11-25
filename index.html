@@ -418,9 +418,8 @@ canvas.pv:active{cursor:grabbing}
 <section class="view" id="v-players">
   <div class="card" id="cvCard">
     <h2 data-i="cvT">📲 Coach View</h2>
-    <p class="note" data-i="cvHint">Publish the player cards so your coaches see them in Coach View on their own phones. Only players with parent permission are published.</p>
-    <label class="f hidden" id="cvSchoolWrap"><span class="lbl" data-i="cvSchool">School</span><select id="cvSchool"></select></label>
-    <button type="button" class="btn pri w" id="cvGo"><span data-i="cvBtn">📤 Publish cards to Coach View</span></button>
+    <p class="note" data-i="cvHint">Every player you save with parent permission goes to Coach View by itself. Coaches see the teams you allow them in License Admin.</p>
+    <label class="f hidden" id="cvSchoolWrap"><span class="lbl" data-i="cvSchool">Program</span><select id="cvSchool"></select></label>
     <div class="status" id="cvInfo"></div>
   </div>
   <div class="card">
@@ -652,7 +651,9 @@ const FORMATS={portrait:{w:1080,h:1350},square:{w:1080,h:1080},story:{w:1080,h:1
 const FMT_LIST=['portrait','square','story'];
 const TEMPLATES=['spotlight','elite','hardwood','energy','signature','arena'];
 const TPL_NAMES={spotlight:'Spotlight',elite:'Elite',hardwood:'Hardwood',energy:'Energy',signature:'Signature',arena:'Arena',card:'My card'};
-const DEFAULT_CATS=['Pre-Mini','Mini','Infantil','Juvenil','Junior'];
+const DEFAULT_CATS=Array.from({length:14},(_,i)=>String(i+5));
+const DEFAULT_TEAMS=Array.from({length:14},(_,i)=>'Team '+(i+5));
+const byName=(a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:'base'});
 const SEG_URL='https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@0.1.1675465747/';
 const SB_URL='https://sdaphocueugzfvjovuxd.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkYXBob2N1ZXVnemZ2am92dXhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2MjQyMDgsImV4cCI6MjA5OTIwMDIwOH0.pDAzf4P6dD9eNEBlnP95SdF5BI-R84-Rdc0vKzYcn7M';
@@ -700,7 +701,7 @@ confirmDeleteT:'Delete player?',confirmDelete:'Delete {name}? This cannot be und
 batchT:'Batch export',tpT:'Team page for websites',tpHint:'One web page with the team\'s graphics, your logo and colors. Upload it to the program\'s website. Choose a team above.',tpFirst:'First name and number only',tpBtn:'Download team page',tpWorking:'Building team page {i} of {n}…',tpDone:'Team page downloaded — {n} players',tpNeedTeam:'Choose a team first',tpFail:'The team page could not be made. Try again.',tpPlayers:'{n} players',batchHint:'Download every graphic for a team and category in one ZIP file.',batchBtn:'Download ZIP',bxInfo:'{p} players · {g} graphics',bxSkip:' · {s} without photo permission or logo will be skipped',
 bxNoFmt:'Choose at least one size',bxWorking:'Creating {i} of {n}…',tBatchNone:'No players here can be exported yet (photo permission and logo are required)',tBatchDone:'ZIP downloaded: {n} graphics',tBatchSkipped:' · {n} players skipped',tBatchFail:'The ZIP could not be created — try fewer sizes at a time',
 tplIntro:'Every template uses your logo and colors. Choose the one for new graphics.',useTpl:'Use this template',isDefault:'In use',
-d_spotlight:'Dark stage, dramatic light and bold type.',d_elite:'Recruiting style with elegant type and metallic accents.',d_hardwood:'Court wood, warm tones and athletic banners.',d_energy:'Dynamic shapes in your team colors.',d_signature:'Clean and minimal — the player is the focus.',cvT:'📲 Coach View',cvHint:'Publish the player cards so your coaches see them in Coach View on their own phones. Only players with parent permission are published.',cvSchool:'School',cvAuto:'Each player\'s age (automatic)',cvNoAge:'{n} not published — no age (like "8 años") in their category.',cvBtn:'📤 Publish cards to Coach View',cvWorking:'Publishing {i} of {n}…',cvDone:'{n} cards are in Coach View.',cvDone1:'1 card is in Coach View.',cvSkip:'{n} skipped — missing parent permission, logo or info.',cvFail:'Could not publish — check the connection and try again.',cvNoCode:'Enter your coach code again to publish.',cvNone:'No players with parent permission yet.',cardUp:'⬆ Upload my card',cardDel:'Remove my card',cardName:'My card',tCardSaved:'Your card is saved with this player.',tCardDel:'Your card was removed.',d_arena:'Official trading card: arena lights, gold name plate and the player up close.',
+d_spotlight:'Dark stage, dramatic light and bold type.',d_elite:'Recruiting style with elegant type and metallic accents.',d_hardwood:'Court wood, warm tones and athletic banners.',d_energy:'Dynamic shapes in your team colors.',d_signature:'Clean and minimal — the player is the focus.',cvT:'📲 Coach View',cvHint:'Every player you save with parent permission goes to Coach View by itself. Coaches see the teams you allow them in License Admin.',cvSchool:'Program',cvSending:'Sending cards to Coach View…',cvIn:'{n} cards in Coach View · {prog}',cvIn1:'1 card in Coach View · {prog}',cvNoAge:'{n} not published — no age (like "8 años") in their category.',cvBtn:'📤 Publish cards to Coach View',cvWorking:'Publishing {i} of {n}…',cvDone:'{n} cards are in Coach View.',cvDone1:'1 card is in Coach View.',cvSkip:'{n} skipped — missing parent permission, logo or info.',cvFail:'Could not publish — check the connection and try again.',cvNoCode:'Enter your coach code again to publish.',cvNone:'No players with parent permission yet.',cardUp:'⬆ Upload my card',cardDel:'Remove my card',cardName:'My card',tCardSaved:'Your card is saved with this player.',tCardDel:'Your card was removed.',d_arena:'Official trading card: arena lights, gold name plate and the player up close.',
 setBrand:'Program branding',sProgram:'Program name',sLogo:'Program logo (required)',noLogo:'No logo yet',uploadLogo:'Upload logo',sLogoHint:'PNG, JPG or SVG. It appears on every graphic, with its own proportions and transparency.',
 sLogoBadge:'Logo backing',badgeNone:'None',badgeLight:'Light',badgeDark:'Dark',sLogoSize:'Logo size',sLogoPos:'Logo position',sArt:'Background art',artNone:'Template',artHoops:'Basketball art',artHint:'Basketball art paints a game-night scene in your colors behind every player. It looks best with Photo Day background removal.',posAuto:'Template',posLeft:'Top left',posCenter:'Top center',posRight:'Top right',
 sPrimary:'Primary color',sSecondary:'Secondary color',sSlogan:'Slogan (optional)',sWebsite:'Website (optional)',sSeason:'Current season',
@@ -744,7 +745,7 @@ confirmDeleteT:'¿Borrar jugador?',confirmDelete:'¿Borrar a {name}? No se puede
 batchT:'Exportar en lote',tpT:'Página del equipo para sitios web',tpHint:'Una página web con los gráficos del equipo, tu logo y colores. Súbela al sitio web del programa. Escoge un equipo arriba.',tpFirst:'Solo primer nombre y número',tpBtn:'Descargar página del equipo',tpWorking:'Creando página del equipo {i} de {n}…',tpDone:'Página del equipo descargada — {n} jugadores',tpNeedTeam:'Escoge un equipo primero',tpFail:'No se pudo crear la página del equipo. Inténtalo de nuevo.',tpPlayers:'{n} jugadores',batchHint:'Descarga todos los gráficos de un equipo y categoría en un solo archivo ZIP.',batchBtn:'Descargar ZIP',bxInfo:'{p} jugadores · {g} gráficos',bxSkip:' · se omitirán {s} sin permiso de foto o sin logo',
 bxNoFmt:'Escoge al menos un tamaño',bxWorking:'Creando {i} de {n}…',tBatchNone:'Ningún jugador aquí se puede exportar todavía (se requiere permiso de foto y logo)',tBatchDone:'ZIP descargado: {n} gráficos',tBatchSkipped:' · {n} jugadores omitidos',tBatchFail:'No se pudo crear el ZIP — prueba con menos tamaños a la vez',
 tplIntro:'Cada plantilla usa tu logo y tus colores. Escoge la de los gráficos nuevos.',useTpl:'Usar esta plantilla',isDefault:'En uso',
-d_spotlight:'Escenario oscuro, luz dramática y letra fuerte.',d_elite:'Estilo de reclutamiento con letra elegante y acentos metálicos.',d_hardwood:'Madera de cancha, tonos cálidos y banners atléticos.',d_energy:'Formas dinámicas con los colores del equipo.',d_signature:'Limpio y minimalista — el jugador es el centro.',cvT:'📲 Vista del Coach',cvHint:'Publica las tarjetas para que tus coaches las vean en la Vista del Coach desde su propio teléfono. Solo se publican jugadores con permiso de los padres.',cvSchool:'Escuela',cvAuto:'La edad de cada jugador (automático)',cvNoAge:'{n} sin publicar — su categoría no tiene edad (como "8 años").',cvBtn:'📤 Publicar tarjetas en la Vista del Coach',cvWorking:'Publicando {i} de {n}…',cvDone:'{n} tarjetas están en la Vista del Coach.',cvDone1:'1 tarjeta está en la Vista del Coach.',cvSkip:'{n} sin publicar — falta permiso de los padres, logo o información.',cvFail:'No se pudo publicar — revisa la conexión e intenta otra vez.',cvNoCode:'Entra tu código de coach otra vez para publicar.',cvNone:'Todavía no hay jugadores con permiso de los padres.',cardUp:'⬆ Subir mi tarjeta',cardDel:'Quitar mi tarjeta',cardName:'Mi tarjeta',tCardSaved:'Tu tarjeta quedó guardada con este jugador.',tCardDel:'Se quitó tu tarjeta.',d_arena:'Tarjeta oficial: luces de arena, placa dorada y el jugador de cerca.',
+d_spotlight:'Escenario oscuro, luz dramática y letra fuerte.',d_elite:'Estilo de reclutamiento con letra elegante y acentos metálicos.',d_hardwood:'Madera de cancha, tonos cálidos y banners atléticos.',d_energy:'Formas dinámicas con los colores del equipo.',d_signature:'Limpio y minimalista — el jugador es el centro.',cvT:'📲 Vista del Coach',cvHint:'Cada jugador que guardas con permiso de los padres va solo a la Vista del Coach. Los coaches ven los equipos que les permites en License Admin.',cvSchool:'Programa',cvSending:'Enviando tarjetas a la Vista del Coach…',cvIn:'{n} tarjetas en la Vista del Coach · {prog}',cvIn1:'1 tarjeta en la Vista del Coach · {prog}',cvNoAge:'{n} sin publicar — su categoría no tiene edad (como "8 años").',cvBtn:'📤 Publicar tarjetas en la Vista del Coach',cvWorking:'Publicando {i} de {n}…',cvDone:'{n} tarjetas están en la Vista del Coach.',cvDone1:'1 tarjeta está en la Vista del Coach.',cvSkip:'{n} sin publicar — falta permiso de los padres, logo o información.',cvFail:'No se pudo publicar — revisa la conexión e intenta otra vez.',cvNoCode:'Entra tu código de coach otra vez para publicar.',cvNone:'Todavía no hay jugadores con permiso de los padres.',cardUp:'⬆ Subir mi tarjeta',cardDel:'Quitar mi tarjeta',cardName:'Mi tarjeta',tCardSaved:'Tu tarjeta quedó guardada con este jugador.',tCardDel:'Se quitó tu tarjeta.',d_arena:'Tarjeta oficial: luces de arena, placa dorada y el jugador de cerca.',
 setBrand:'Identidad del programa',sProgram:'Nombre del programa',sLogo:'Logo del programa (obligatorio)',noLogo:'Sin logo',uploadLogo:'Subir logo',sLogoHint:'PNG, JPG o SVG. Sale en cada gráfico, con sus proporciones y transparencia.',
 sLogoBadge:'Fondo del logo',badgeNone:'Ninguno',badgeLight:'Claro',badgeDark:'Oscuro',sLogoSize:'Tamaño del logo',sLogoPos:'Posición del logo',sArt:'Arte de fondo',artNone:'Plantilla',artHoops:'Arte de baloncesto',artHint:'El arte de baloncesto pinta una escena de noche de juego con tus colores detrás de cada jugador. Se ve mejor con el fondo removido del Día de Fotos.',posAuto:'Plantilla',posLeft:'Arriba izq.',posCenter:'Arriba centro',posRight:'Arriba der.',
 sPrimary:'Color principal',sSecondary:'Color secundario',sSlogan:'Lema (opcional)',sWebsite:'Sitio web (opcional)',sSeason:'Temporada actual',
@@ -1337,7 +1338,7 @@ $('#tmCancel').onclick=()=>{$('#mTeam').classList.remove('on');const d=TM&&TM.do
 $('#tmSave').onclick=async()=>{const name=$('#tmName').value.trim().slice(0,40);if(!name){toast(t('tNameReq'),true);return}
   if(S.teams.some(x=>x.name===name&&x.name!==TM.orig)){toast(t('tExists'),true);return}
   const prof={name,logo:TM.logo||null,primary:$('#tmUseProg').checked?null:$('#tmPrimary').value,secondary:$('#tmUseProg').checked?null:$('#tmSecondary').value};
-  const prev=S.teams.slice();if(TM.orig)S.teams=S.teams.map(x=>x.name===TM.orig?prof:x);else S.teams.push(prof);S.teams.sort((a,b)=>a.name.localeCompare(b.name));
+  const prev=S.teams.slice();if(TM.orig)S.teams=S.teams.map(x=>x.name===TM.orig?prof:x);else S.teams.push(prof);S.teams.sort(byName);
   if(!(await saveS())){S.teams=prev;return}
   if(TM.orig&&TM.orig!==name){if(D.team===TM.orig&&!D.id)D.team=name;if(PD.team===TM.orig){PD.team=name;savePD()}}
   $('#mTeam').classList.remove('on');const d=TM.done;TM=null;refreshLists();fillTeam($('#cTeam'),D.team);fillTeam($('#pdTeam'),PD.team);refreshAll();if(d)d(name)};
@@ -1356,7 +1357,7 @@ async function savePlayer(p){const now=new Date().toISOString();const rec=clone(
   try{await DB.put(rec)}catch(e){toast(t('tSaveFail'),true);return null}
   p.id=rec.id;p.createdAt=rec.createdAt;p.updatedAt=now;p.consentAt=rec.consentAt;p.brand=rec.brand;
   const i=PLAYERS.findIndex(x=>x.id===rec.id);if(i>=0)PLAYERS[i]=rec;else PLAYERS.push(rec);
-  if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});return rec}
+  if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});queuePublish([rec]);return rec}
 const savedMsg=()=>DB.ok?t('tSaved'):t('tSavedSession');
 // drafts never keep a player photo until photo permission is confirmed
 function saveDraft(){const c=clone(D);if(!c.consent){c.photo=null;c.card=null;if(c.template==='card')c.template=S.template||'spotlight';c.adj=Object.assign(DEF_ADJ(),{zoom:c.adj.zoom,ox:c.adj.ox,oy:c.adj.oy,bright:c.adj.bright,contrast:c.adj.contrast})}
@@ -1475,7 +1476,7 @@ async function importRosterLink(){if(!/[#&]roster=/.test(location.hash))return;c
   if(!add&&!upd&&known){PD.team=r.team;PD.category=r.cat;PD.started=false;savePD();go('photoday');pdShow();toast(t('rlSame',{what}));return}
   const txt=add?t(add===1?'rlText1':'rlText',{n:add,what})+(cur.length>add?' '+t('rlKeep',{m:cur.length-add}):''):upd?t(upd===1?'rlUpd1':'rlUpd',{n:upd,what}):t(cur.length===1?'rlText1':'rlText',{n:cur.length,what});
   const ok=await ask({title:t('rlT'),text:txt,buttons:[{label:t('cancel'),value:null},{label:t('rlAdd'),value:true,cls:'pri'}]});if(!ok)return;
-  let ch=false;if(!S.teams.some(x=>x.name===r.team)){S.teams.push({name:r.team});S.teams.sort((a,b)=>a.name.localeCompare(b.name));ch=true}
+  let ch=false;if(!S.teams.some(x=>x.name===r.team)){S.teams.push({name:r.team});S.teams.sort(byName);ch=true}
   if(!allCats().includes(r.cat)){S.cats.push(r.cat);ch=true}if(ch)await saveS();
   ROSTERS[k]=cur;saveRosters();PD.team=r.team;PD.category=r.cat;PD.started=false;savePD();
   refreshLists();fillTeam($('#cTeam'),D.team);fillCat($('#cCat'),D.category);go('photoday');pdShow();toast(t('rlDone',{n:cur.length}))}
@@ -1631,7 +1632,7 @@ $('#sLogoDel').onclick=()=>{S.logo=null;showLogo();refreshAll();saveS()};
 $('#sPresets').innerHTML=PRESETS.map(([a,b],i)=>`<button type="button" data-i2="${i}" aria-label="${a} ${b}"><i style="background:${a}"></i><i style="background:${b}"></i></button>`).join('');
 $$('#sPresets button').forEach(b=>b.onclick=()=>{const[a,c]=PRESETS[+b.dataset.i2];S.primary=a;S.secondary=c;saveS();loadSettingsForm();refreshAll()});
 $('#sTeamAdd').onclick=async()=>{const v=$('#sTeamNew').value.trim().slice(0,40);if(!v)return;if(teamP(v)){toast(t('tExists'),true);return}
-  const prev=S.teams.slice();S.teams.push({name:v,logo:null,primary:null,secondary:null});S.teams.sort((a,b)=>a.name.localeCompare(b.name));if(!(await saveS())){S.teams=prev;return}
+  const prev=S.teams.slice();S.teams.push({name:v,logo:null,primary:null,secondary:null});S.teams.sort(byName);if(!(await saveS())){S.teams=prev;return}
   $('#sTeamNew').value='';refreshLists();fillTeam($('#cTeam'),D.team);fillTeam($('#pdTeam'),PD.team);openTeam(v)};
 $('#sCatAdd').onclick=async()=>{const v=$('#sCatNew').value.trim();if(!v)return;if(allCats().includes(v)){toast(t('tExists'),true);return}await addCat(v);$('#sCatNew').value='';refreshLists();fillCat($('#cCat'),D.category);fillCat($('#pdCat'),PD.category)};
 $('#sTeamNew').addEventListener('keydown',e=>{if(e.key==='Enter')$('#sTeamAdd').click()});$('#sCatNew').addEventListener('keydown',e=>{if(e.key==='Enter')$('#sCatAdd').click()});
@@ -1697,39 +1698,39 @@ let raT=0;const refreshAllSoon=()=>{clearTimeout(raT);raT=setTimeout(refreshAll,
 /* ───────── coach access (same coach codes as Coach View) ───────── */
 let COACH=null;
 const sbRpc=(fn,body)=>fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Authorization:'Bearer '+SB_KEY},body:JSON.stringify(body)});
-function cvSchools(){const w=$('#cvSchoolWrap'),sel=$('#cvSchool');if(!COACH||COACH.schools.length<2){w.classList.add('hidden');return}
-  let keep='';try{keep=localStorage.getItem('pss-cv-school')||''}catch(e){}const cur=COACH.schools.includes(keep)?keep:COACH.school;
-  const auto=COACH.schools.some(isAge),pick=keep==='__age'&&auto||(!keep&&auto)?'__age':cur;
-  sel.innerHTML=(auto?`<option value="__age"${pick==='__age'?' selected':''}>${esc(t('cvAuto'))}</option>`:'')+COACH.schools.map(x=>`<option value="${esc(x)}"${x===pick?' selected':''}>${esc(x||'—')}</option>`).join('');w.classList.remove('hidden')}
-const isAge=x=>/^\d{1,2} años$/.test(x||'');
-// the age group a player belongs in: the number in their category (else in their team), e.g. "8 años"
-function ageOf(p){for(const v of [p.category,p.team]){const m=String(v||'').match(/(\d{1,2})\s*a(ñ|n)os?/i)||String(v||'').match(/^\s*(\d{1,2})\s*$/);if(m){const a=m[1]+' años';if(COACH.schools.includes(a))return a}}return null}
-$('#cvSchool').onchange=e=>{try{localStorage.setItem('pss-cv-school',e.target.value)}catch(x){}};
-// which schools each player's card went to, so deleting a player also takes the card off Coach View
-function pubMap(){try{return JSON.parse(localStorage.getItem('pss-pub')||'{}')||{}}catch(e){return{}}}
+// the program the cards go to: the code's own, or the one picked when the code has more than one
+function cvProgram(){if(!COACH)return null;if(COACH.schools.length<2)return COACH.school;let k='';try{k=localStorage.getItem('pss-cv-school')||''}catch(e){}return COACH.schools.includes(k)?k:COACH.school}
+function cvSchools(){const w=$('#cvSchoolWrap'),sel=$('#cvSchool');if(!COACH||COACH.schools.length<2){w.classList.add('hidden');cvStatus();return}const cur=cvProgram();
+  sel.innerHTML=COACH.schools.map(x=>`<option value="${esc(x)}"${x===cur?' selected':''}>${esc(x||'—')}</option>`).join('');w.classList.remove('hidden');cvStatus()}
+$('#cvSchool').onchange=e=>{try{localStorage.setItem('pss-cv-school',e.target.value)}catch(x){}queuePublish(PLAYERS)};
+// what went where: {playerId: {school, at}} — so a change re-sends the card and a delete takes it off
+function pubMap(){let m;try{m=JSON.parse(localStorage.getItem('pss-pub')||'{}')||{}}catch(e){m={}}
+  for(const k in m)if(Array.isArray(m[k]))m[k]={school:m[k][0],at:''};return m}
 function pubSave(m){try{localStorage.setItem('pss-pub',JSON.stringify(m))}catch(e){}}
 async function jpegOf(blob,maxW,q){const im=await createImageBitmap(blob);const k=Math.min(1,maxW/im.width);const cv=document.createElement('canvas');cv.width=Math.round(im.width*k);cv.height=Math.round(im.height*k);
   const x=cv.getContext('2d');x.fillStyle='#000';x.fillRect(0,0,cv.width,cv.height);x.imageSmoothingQuality='high';x.drawImage(im,0,0,cv.width,cv.height);if(im.close)im.close();const u=cv.toDataURL('image/jpeg',q);cv.width=cv.height=0;return u}
-$('#cvGo').onclick=async()=>{let code=null;try{code=localStorage.getItem('pss-coach')}catch(e){}if(!code){toast(t('cvNoCode'),true);return}
-  const info=$('#cvInfo');info.textContent='';
-  try{if(!COACH||COACH.code!==code){if(!await checkCoach(code)){toast(t('cvNoCode'),true);return}}}catch(e){toast(t('cvFail'),true);return}
-  const choice=COACH.schools.length>1?$('#cvSchool').value:COACH.school,auto=choice==='__age';
-  let okL=PLAYERS.filter(p=>canExport(p,true)),skip=PLAYERS.length-okL.length,noAge=0;
-  if(auto){const before=okL.length;okL=okL.filter(p=>ageOf(p));noAge=before-okL.length}
-  if(!okL.length){info.textContent=noAge?t('cvNoAge',{n:noAge}):t('cvNone');return}
-  const m=pubMap();let done=0,i=0;busy(true,'');
-  try{for(const p of okL){i++;$('#busyText').textContent=t('cvWorking',{i,n:okL.length});
-      const b=await exportBlob(p,'portrait');const[image,thumb]=await Promise.all([jpegOf(b,1080,.86),jpegOf(b,360,.8)]);
-      const school=auto?ageOf(p):choice;
-      const r=await sbRpc('spotlight_publish',{p_code:code,p_school:school,p_key:p.id,p_name:p.name,p_team:p.team||'',p_category:p.category||'',p_thumb:thumb,p_image:image});
-      if(!r.ok)throw new Error('net');const d=await r.json();if(!d)throw new Error('code');
-      (m[p.id]||[]).filter(x=>x!==d.school).forEach(x=>sbRpc('spotlight_remove',{p_code:code,p_school:x,p_key:p.id}).catch(()=>{}));m[p.id]=[d.school];done++}}
-  catch(e){toast(t('cvFail'),true)}finally{pubSave(m);busy(false)}
-  const dm=done===1?t('cvDone1'):t('cvDone',{n:done});info.textContent=dm+(skip?' '+t('cvSkip',{n:skip}):'')+(noAge?' '+t('cvNoAge',{n:noAge}):'');if(done===okL.length)toast(dm)};
+/* every player saved with parent permission goes to Coach View by itself — no button */
+const PUBQ=new Map();let pubBusy=false,pubErr=false;
+function queuePublish(list){(list||[]).forEach(p=>p&&p.id&&PUBQ.set(p.id,p.id));runPub()}
+async function runPub(){if(pubBusy)return;pubBusy=true;pubErr=false;cvStatus();
+  try{while(PUBQ.size){const id=PUBQ.keys().next().value;PUBQ.delete(id);try{await pubOne(id)}catch(e){pubErr=true}}}finally{pubBusy=false;cvStatus()}}
+async function pubOne(id){let code=null;try{code=localStorage.getItem('pss-coach')}catch(e){}if(!code)return;
+  if(!COACH||COACH.code!==code){if(!await checkCoach(code))return}
+  const prog=cvProgram(),p=PLAYERS.find(x=>x.id===id),m=pubMap(),was=m[id];if(prog==null||!p)return;
+  if(!canExport(p,true)){if(was)unpublish([id]);return}             // no permission (or missing info): not in Coach View
+  if(was&&was.school===prog&&was.at===(p.updatedAt||''))return;      // already there, unchanged
+  const b=await exportBlob(p,'portrait');const[image,thumb]=await Promise.all([jpegOf(b,1080,.86),jpegOf(b,360,.8)]);
+  const r=await sbRpc('spotlight_publish',{p_code:code,p_school:prog,p_key:p.id,p_name:p.name,p_team:p.team||'',p_category:p.category||'',p_thumb:thumb,p_image:image});
+  if(!r.ok)throw new Error('net');const d=await r.json();if(!d)throw new Error('code');
+  if(was&&was.school!==d.school)sbRpc('spotlight_remove',{p_code:code,p_school:was.school,p_key:id}).catch(()=>{});
+  const m2=pubMap();m2[id]={school:d.school,at:p.updatedAt||''};pubSave(m2)}
+function cvStatus(){const el=$('#cvInfo');if(!el)return;if(!COACH){el.textContent='';return}const prog=cvProgram(),m=pubMap();
+  const n=PLAYERS.filter(p=>m[p.id]&&m[p.id].school===prog).length;
+  el.textContent=pubBusy?t('cvSending'):pubErr?t('cvFail'):t(n===1?'cvIn1':'cvIn',{n,prog:prog||'—'})}
 function unpublish(ids){const m=pubMap();let code=null;try{code=localStorage.getItem('pss-coach')}catch(e){}
-  ids.forEach(id=>{(m[id]||[]).forEach(sc=>{if(code)sbRpc('spotlight_remove',{p_code:code,p_school:sc,p_key:id}).catch(()=>{})});delete m[id]});pubSave(m)}
+  ids.forEach(id=>{const w=m[id];if(w&&code)sbRpc('spotlight_remove',{p_code:code,p_school:w.school,p_key:id}).catch(()=>{});delete m[id]});pubSave(m);cvStatus()}
 async function checkCoach(code){const r=await fetch(SB_URL+'/rest/v1/rpc/hooporia_coach',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Authorization:'Bearer '+SB_KEY},body:JSON.stringify({p_code:code})});
-  if(!r.ok)throw new Error('net');const d=await r.json();if(d){COACH={code,school:d.school||'',schools:Array.isArray(d.schools)?d.schools:[d.school||'']};cvSchools()}return !!d}
+  if(!r.ok)throw new Error('net');const d=await r.json();if(d){const had=COACH&&COACH.code===code;COACH={code,school:d.school||'',schools:Array.isArray(d.schools)?d.schools:[d.school||'']};cvSchools();if(!had&&started)queuePublish(PLAYERS)}return !!d}
 function showApp(on){$('#gate').classList.toggle('hidden',on);$$('main,nav.tabs').forEach(x=>x.classList.toggle('hidden',!on));$('#lockBtn').classList.toggle('hidden',!on)}
 async function gateTry(){const code=$('#gateCode').value.trim().toUpperCase();if(!code)return;$('#gateErr').textContent='';$('#gateOpen').disabled=true;
   try{if(await checkCoach(code)){try{localStorage.setItem('pss-coach',code)}catch(e){}showApp(true);startApp()}else $('#gateErr').textContent=t('gateBad')}
@@ -1744,6 +1745,9 @@ async function startApp(){if(started){refreshAll();return}started=true;
   try{const s=await DB.get('settings');if(s)S=cleanSettings(s);if(s&&s.lang)S.lang=s.lang}catch(e){}
   if(S.lang)LANG=S.lang;
   try{PLAYERS=await DB.all()}catch(e){PLAYERS=[]}
+  // the program's teams Team 5 … Team 18 are always there (teams you added stay)
+  {const miss=DEFAULT_TEAMS.filter(n=>!S.teams.some(x=>x.name===n));if(miss.length){miss.forEach(n=>S.teams.push({name:n,logo:null,primary:null,secondary:null}));S.teams.sort(byName);saveS()}}
+  if(COACH)queuePublish(PLAYERS);
   // graphics saved before branding was kept per player get today's branding, once, so they never shift again
   const legacy=PLAYERS.filter(p=>!p.brand);if(legacy.length){legacy.forEach(p=>{p.brand=liveBrand(p.team);if(!p.heading)p.heading='none'});DB.batch({players:legacy}).catch(()=>{})}
   try{const d=await DB.get('draft');if(d&&d.D){D=Object.assign(blank(),d.D,{adj:Object.assign(DEF_ADJ(),d.D.adj||{}),show:Object.assign(DEF_SHOW(),d.D.show||{})});dDirty=!!d.dDirty;if(D.id&&!PLAYERS.find(p=>p.id===D.id)){D.id=null;D.brand=null}if(!D.consent){D.photo=null}}}catch(e){}
