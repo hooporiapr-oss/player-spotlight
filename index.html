@@ -1727,6 +1727,11 @@ const tms=x=>{const v=Date.parse(x||'');return isNaN(v)?0:v};
 const msg=(en,es)=>LANG==='es'?es:en;
 // A browser's existing IndexedDB is one workspace. Never implicitly move it.
 const BIND_KEY='pss-workspace-program-v1';
+const OWNER_KEY='pss-workspace-coach-v1';
+function workspaceOwner(){try{return localStorage.getItem(OWNER_KEY)||''}catch(e){return ''}}
+function ownerMatches(code){const owner=workspaceOwner();return !owner||owner===code}
+function bindOwner(code){if(!code||!ownerMatches(code))return false;try{localStorage.setItem(OWNER_KEY,code);return workspaceOwner()===code}catch(e){return false}}
+function ownerWarning(){return msg('This workspace belongs to another coach. Use a separate browser profile.','Este estudio pertenece a otro coach. Usa otro perfil del navegador.')}
 function boundProgram(){try{return localStorage.getItem(BIND_KEY)}catch(e){return null}}
 function claimWorkspace(program){
   if(!appLoaded||!program)return false;
@@ -1735,7 +1740,7 @@ function claimWorkspace(program){
   try{localStorage.setItem(BIND_KEY,program);return boundProgram()===program}catch(e){return false}
 }
 function cloudArgs(){let code='';try{code=localStorage.getItem('pss-coach')||''}catch(e){}
-  const prog=cvProgram();return appLoaded&&code&&COACH&&COACH.code===code&&prog&&boundProgram()===prog?{p_code:code,p_school:prog}:null}
+  const prog=cvProgram();return appLoaded&&code&&workspaceOwner()===code&&COACH&&COACH.code===code&&prog&&boundProgram()===prog?{p_code:code,p_school:prog}:null}
 const sameContext=a=>{const b=cloudArgs();return !!(a&&b&&a.p_code===b.p_code&&a.p_school===b.p_school)};
 async function cloudCall(fn,body){const r=await sbRpc(fn,body);if(!r.ok)throw new Error('request failed');return r.json()}
 function requireWrite(v){if(v!==true)throw new Error('write not confirmed')}
@@ -1804,22 +1809,22 @@ function cvStatus(){const el=$('#cvInfo');if(!el)return;if(!COACH){let c='';try{
   const n=PLAYERS.filter(p=>m[p.id]&&m[p.id].school===prog).length;
   el.textContent=!cloudArgs()?msg('Local only','Solo local'):pubBusy?t('cvSending'):pubErr?t('cvFail'):msg('Cards are verified during synchronization.','Las tarjetas se verifican durante la sincronización.')}
 function unpublish(ids){/* deletion is handled by durable studio_del; no physical card deletion */}
-async function checkCoach(code){const r=await fetch(SB_URL+'/rest/v1/rpc/hooporia_coach',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Authorization:'Bearer '+SB_KEY},body:JSON.stringify({p_code:code})});
+async function checkCoach(code){if(!ownerMatches(code))return false;const r=await fetch(SB_URL+'/rest/v1/rpc/hooporia_coach',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Authorization:'Bearer '+SB_KEY},body:JSON.stringify({p_code:code})});
   if(!r.ok)throw new Error('net');const d=await r.json();if(d){const had=COACH&&COACH.code===code;COACH={code,school:d.school||'',schools:Array.isArray(d.schools)?d.schools:[d.school||'']};cvSchools();if(!had&&started){queuePublish(PLAYERS);cloudSync()}}return !!d}
-function showApp(on){$('#gate').classList.toggle('hidden',on);$$('main,nav.tabs').forEach(x=>x.classList.toggle('hidden',!on));$('#lockBtn').classList.add('hidden')}
+function showApp(on){$('#gate').classList.toggle('hidden',on);$$('main,nav.tabs').forEach(x=>x.classList.toggle('hidden',!on));$('#lockBtn').classList.toggle('hidden',!on||!workspaceOwner())}
 async function gateTry(){const code=$('#gateCode').value.trim().toUpperCase();if(!code)return;$('#gateErr').textContent='';$('#gateOpen').disabled=true;
-  try{if(await checkCoach(code)){try{localStorage.setItem('pss-coach',code)}catch(e){}showApp(true);startApp()}else $('#gateErr').textContent=t('gateBad')}
+  try{if(!ownerMatches(code)){$('#gateErr').textContent=ownerWarning();return}if(await checkCoach(code)){if(workspaceOwner()&&!bindOwner(code))throw Error('storage');localStorage.setItem('pss-coach',code);await startApp();showApp(true);ccShow('ok');requestCloudSync()}else $('#gateErr').textContent=t('gateBad')}
   catch(e){$('#gateErr').textContent=t('gateNet')}finally{$('#gateOpen').disabled=false}}
 function ccShow(st){const el=$('#sCoachInfo');if(!el)return;let code='';try{code=localStorage.getItem('pss-coach')||''}catch(e){}if(document.activeElement!==$('#sCoachCode'))$('#sCoachCode').value=code;
   if(st)ccShow.st=st;st=ccShow.st;
   const on=!cloudArgs()?' · '+msg('Local only — confirm program in Settings','Solo local — confirma el programa en Ajustes'):CLOUD.busy?' · '+t('clSync'):CLOUD.ok===false?' · '+CLOUD.error:CLOUD.ok?' · '+t('clOk',{n:CLOUD.n}):'';
   el.textContent=st==='bad'?t('ccBad'):st==='net'?t('ccNet'):st==='none'||!code?t('ccNone'):COACH?t('ccOk',{p:COACH.schools.filter(Boolean).join(' · ')||'—'})+on:'';cvStatus()}
 $('#sCoachSave').onclick=async()=>{const code=$('#sCoachCode').value.trim().toUpperCase();
-  if(!code){try{localStorage.removeItem('pss-coach')}catch(e){}COACH=null;cvSchools();ccShow('none');return}
-  $('#sCoachSave').disabled=true;try{if(await checkCoach(code)){try{localStorage.setItem('pss-coach',code)}catch(e){}if(!claimWorkspace(cvProgram())){ccShow('ok');toast(msg('Local workspace not connected.','Estudio local no conectado.'),true);return}ccShow('ok');requestCloudSync();toast(t('tSaved'))}else ccShow('bad')}
+  if(workspaceOwner()&&!ownerMatches(code)){toast(ownerWarning(),true);ccShow('ok');return}if(!code){try{localStorage.removeItem('pss-coach')}catch(e){}COACH=null;cvSchools();ccShow('none');return}
+  $('#sCoachSave').disabled=true;try{if(await checkCoach(code)){try{localStorage.setItem('pss-coach',code)}catch(e){}if(!claimWorkspace(cvProgram())||!bindOwner(code)){ccShow('ok');toast(msg('Local workspace not connected.','Estudio local no conectado.'),true);return}showApp(true);ccShow('ok');requestCloudSync();toast(t('tSaved'))}else ccShow('bad')}
   catch(e){ccShow('net')}finally{$('#sCoachSave').disabled=false}};
 $('#gateOpen').onclick=gateTry;$('#gateCode').addEventListener('keydown',e=>{if(e.key==='Enter')gateTry()});
-$('#lockBtn').onclick=()=>{try{localStorage.removeItem('pss-coach')}catch(e){}$('#gateCode').value='';showApp(false)};
+$('#lockBtn').onclick=()=>{try{localStorage.removeItem('pss-coach')}catch(e){}location.reload()};
 
 /* ───────── start ───────── */
 let started=false;
@@ -1851,8 +1856,8 @@ async function startApp(){if(started){refreshAll();return}started=true;
 }
 (function boot(){try{const l=localStorage.getItem('pss-lang');LANG=l||((navigator.language||'en').toLowerCase().startsWith('es')?'es':'en')}catch(e){LANG='es'}applyLang();
   let code=null;try{code=localStorage.getItem('pss-coach')}catch(e){}
+  if(workspaceOwner()||boundProgram()){showApp(false);if(!code||!workspaceOwner()||!ownerMatches(code))return;checkCoach(code).then(async okc=>{if(!okc){$('#gateErr').textContent=t('gateBad');return}await startApp();showApp(true);ccShow('ok');requestCloudSync()}).catch(()=>{$('#gateErr').textContent=t('gateNet')});return}
   showApp(true);startApp();ccShow(code?'':'none');
-  // the saved code is checked when online; a code that is no longer valid is dropped (the studio keeps working)
   if(code)checkCoach(code).then(okc=>{if(!okc){try{localStorage.removeItem('pss-coach')}catch(e){}COACH=null;ccShow('bad')}else ccShow('ok')}).catch(()=>{})})();
 })();
 
