@@ -1,0 +1,19 @@
+name: Studio browser regression
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [repair/secure-studio-sync]
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install --no-save --no-package-lock playwright@1.51.1
+      - run: npx playwright install --with-deps chromium
+      - run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 &
+          node repairs/test-browser-lock.cjs

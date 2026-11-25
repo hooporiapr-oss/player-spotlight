@@ -1,0 +1,82 @@
+name: Studio repair database tests
+on:
+  push:
+    branches: [repair/secure-studio-sync]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: synthetic_test_only
+          POSTGRES_DB: studio_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: synthetic_test_only
+      PGDATABASE: studio_test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Mock synchronization tests
+        run: node repairs/test-spotlight-sync.cjs
+      - name: Prepare synthetic database
+        run: |
+          psql -v ON_ERROR_STOP=1 <<'SQL'
+          CREATE ROLE anon;
+          CREATE ROLE authenticated;
+          CREATE TABLE public.studio_players(school text not null,id text not null,data jsonb not null,deleted boolean not null default false,updated_at timestamptz not null,saved_at timestamptz not null default now(),primary key(school,id));
+          CREATE TABLE public.studio_settings(school text primary key,data jsonb not null,updated_at timestamptz not null,saved_at timestamptz not null default now());
+          CREATE TABLE public.spotlight_cards(school text not null,card_key text not null,name text not null,team text not null,category text not null,thumb text not null,image text not null,updated_at timestamptz not null default now(),primary key(school,card_key));
+          CREATE FUNCTION public.spotlight_school(p_code text,p_school text) RETURNS text LANGUAGE sql AS $$ SELECT CASE WHEN p_school='A' AND p_code IN ('ALL','LIMITED') THEN 'A' WHEN p_school='B' AND p_code='OTHER' THEN 'B' END $$;
+          CREATE FUNCTION public.coach_teams(p_code text,p_school text) RETURNS text[] LANGUAGE sql AS $$ SELECT CASE WHEN p_code='LIMITED' THEN ARRAY['Team 5']::text[] ELSE NULL::text[] END $$;
+          CREATE FUNCTION public.spotlight_publish(p_code text,p_school text,p_key text,p_name text,p_team text,p_category text,p_thumb text,p_image text) RETURNS jsonb LANGUAGE sql AS $$ SELECT '{}'::jsonb $$;
+          SQL
+      - name: Apply candidate SQL to disposable database
+        run: psql -v ON_ERROR_STOP=1 -f repairs/spotlight-security-repair.sql
+      - name: Verify permissions, publication, and tombstones
+        run: |
+          psql -v ON_ERROR_STOP=1 <<'SQL'
+          DO $test$
+          DECLARE
+            at1 timestamptz := '2026-11-25T10:00:00Z';
+            at2 timestamptz := '2026-11-25T11:00:00Z';
+            p jsonb := '{"id":"p1","name":"Synthetic Player","team":"Team 6","category":"6","photo":"data:image/jpeg;base64,AA","consent":"guardian","consentAt":"2026-11-25T10:00:00Z","updatedAt":"2026-11-25T10:00:00Z"}';
+            jpg text := 'data:image/jpeg;base64,AA';
+          BEGIN
+            IF public.studio_put('ALL','A','p1',p,at1) IS DISTINCT FROM true THEN RAISE EXCEPTION 'insert failed'; END IF;
+            IF public.studio_put('ALL','A','p1',p,at1) IS DISTINCT FROM true THEN RAISE EXCEPTION 'idempotent write failed'; END IF;
+            IF public.studio_get('LIMITED','A','p1') IS NOT NULL THEN RAISE EXCEPTION 'team read leaked'; END IF;
+            IF jsonb_array_length(public.studio_list('LIMITED','A')->'players') <> 0 THEN RAISE EXCEPTION 'team listing leaked'; END IF;
+            IF public.studio_get('OTHER','A','p1') IS NOT NULL THEN RAISE EXCEPTION 'program read leaked'; END IF;
+            IF public.studio_put('LIMITED','A','p1',p || jsonb_build_object('team','Team 5','updatedAt',at2),at2) IS DISTINCT FROM false THEN RAISE EXCEPTION 'cross-team overwrite allowed'; END IF;
+            IF public.studio_del('LIMITED','A','p1') IS DISTINCT FROM false THEN RAISE EXCEPTION 'cross-team delete allowed'; END IF;
+            BEGIN
+              PERFORM public.studio_put('ALL','A','p1',p - 'consent',at1);
+              RAISE EXCEPTION 'missing consent accepted' USING ERRCODE='XX000';
+            EXCEPTION WHEN raise_exception THEN
+              IF SQLERRM <> 'photo permission required' THEN RAISE; END IF;
+            END;
+            IF public.spotlight_publish_checked('LIMITED','A','p1','Synthetic Player','Team 6','6',jpg,jpg,at1) IS NOT NULL THEN RAISE EXCEPTION 'cross-team publish allowed'; END IF;
+            IF public.spotlight_publish_checked('ALL','A','p1','Synthetic Player','Team 6','6',jpg,jpg,at1) IS NULL THEN RAISE EXCEPTION 'valid publication failed'; END IF;
+            IF public.spotlight_image('LIMITED','A','p1') IS NOT NULL THEN RAISE EXCEPTION 'photo leaked'; END IF;
+            IF public.spotlight_image('ALL','A','p1') IS DISTINCT FROM jpg THEN RAISE EXCEPTION 'valid image missing'; END IF;
+            IF public.studio_del('ALL','A','p1') IS DISTINCT FROM true THEN RAISE EXCEPTION 'delete failed'; END IF;
+            IF public.spotlight_image('ALL','A','p1') IS NOT NULL THEN RAISE EXCEPTION 'deleted image remains visible'; END IF;
+            IF NOT EXISTS(SELECT 1 FROM public.spotlight_cards WHERE card_key='p1' AND NOT visible) THEN RAISE EXCEPTION 'historical card lost'; END IF;
+            IF public.studio_put('ALL','A','p1',p,at1) IS DISTINCT FROM false THEN RAISE EXCEPTION 'tombstone resurrected'; END IF;
+            IF has_function_privilege('anon','public.spotlight_publish(text,text,text,text,text,text,text,text)','EXECUTE') THEN RAISE EXCEPTION 'legacy bypass remains open'; END IF;
+            RAISE NOTICE 'All synthetic PostgreSQL assertions passed';
+          END
+          $test$;
+          SQL
